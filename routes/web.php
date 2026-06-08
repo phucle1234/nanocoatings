@@ -70,6 +70,7 @@ $defineRoutes = function () {
     // ✅ Route cho category news (phải đặt trước route category thường để match trước)
     Route::get('/category/{slug}/news', [CategoryController::class, 'news'])->name('category.news');
     Route::get('/category/{slug?}', [CategoryController::class, 'index'])->name('category');
+    Route::get('/product/{slug}/document', [ProductController::class, 'document'])->name('product.document');
     Route::get('/product/{slug}', [ProductController::class, 'show'])->name('product.detail');
     Route::get('/category-search', [CategorySearchController::class, 'index'])->name('categorysearch');
 

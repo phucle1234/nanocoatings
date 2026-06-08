@@ -152,7 +152,7 @@ class ProductService
         return Product::query()
             ->where('is_active', true)
             ->where('is_bestseller', true)
-            ->with(['translations' => function ($q) use ($locale, $fallbackLocale) {
+            ->with(['documentFile', 'translations' => function ($q) use ($locale, $fallbackLocale) {
                 $q->whereIn('language', [$locale, $fallbackLocale]);
             }])
             ->orderBy('sort_order')
@@ -518,6 +518,14 @@ class ProductService
         $product->has_display_price = $product->hasDisplayablePrice();
         $product->has_sale_promotion = $product->hasValidSalePromotion();
         $product->price_display = $product->priceDisplayLabel();
+
+        if (!$product->relationLoaded('documentFile')) {
+            $product->load('documentFile');
+        }
+
+        $product->pdf_url = ($product->document_file_id && $product->documentFile)
+            ? route('product.document', ['slug' => $product->slug ?? $product->id])
+            : null;
 
         // ✅ Lấy specifications từ attributes có show_detail = 'Y'
         $specificationsFromAttributes = $product->getSpecificationsFromAttributes($locale);

@@ -8,13 +8,18 @@
             </div>
             <div class="products-sales-slider scroll-animate" data-animate="fadeInUp">
                 @forelse($bestsellerProducts as $product)
+                    @php
+                        $linkUrl = $product->pdf_url ?? route('product.detail', ['slug' => $product->slug ?? $product->id]);
+                        $openInNewTab = !empty($product->pdf_url);
+                    @endphp
                     <div class="products-sales-slider-item">
                         <div class="bg-img-cover products-sales-slider-img ratio-1-1"
                             style="background-image: url('{{ $product->image }}');">
-                            <a href="{{ route('product.detail', ['slug' => $product->slug ?? $product->id]) }}"
-                                class="stretched-link"></a>
+                            <a href="{{ $linkUrl }}"
+                                class="stretched-link"
+                                @if($openInNewTab) target="_blank" rel="noopener noreferrer" @endif></a>
                         </div>
-                        {{-- <div class="btn btn-outline-secondary btn-detail shadow">
+                        <!-- <div class="btn btn-outline-secondary btn-detail shadow">
                             <a href="{{ route('product.detail', ['slug' => $product->slug ?? $product->id]) }}"
                                 class="d-flex align-items-center gap-1">
                                 <span class="fs-14 fw-500 text-white">{{ __('messages.detail_uppercase') }}</span>
@@ -26,7 +31,7 @@
                                         stroke-linejoin="round" />
                                 </svg>
                             </a>
-                        </div> --}}
+                        </div> -->
                     </div>
                 @empty
                 @endforelse
