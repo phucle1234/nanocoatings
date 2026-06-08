@@ -7,6 +7,7 @@ return [
     'category' => 'Danh mục',
     'categories' => 'Danh mục',
     'detail' => 'Chi tiết',
+    'watch_video' => 'Xem video',
     'detail_uppercase' => 'CHI TIẾT',
     'news' => 'Tin tức',
     'media' => 'Tin tức và Sự kiện',

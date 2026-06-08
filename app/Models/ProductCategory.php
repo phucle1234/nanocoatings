@@ -92,6 +92,11 @@ class ProductCategory extends Model
             $slugInput = trim($data['slug_' . $lang] ?? '');
             $baseSlug = $slugInput !== '' ? Str::slug($slugInput) : Str::slug($name);
 
+            $linkType = $data['link_type_' . $lang] ?? 'detail';
+            if (!in_array($linkType, ['detail', 'youtube'], true)) {
+                $linkType = 'detail';
+            }
+
             $translationData = [
                 'name' => $name,
                 'description' => $data['description_' . $lang] ?? '',
@@ -99,6 +104,8 @@ class ProductCategory extends Model
                 'meta_title' => $data['meta_title_' . $lang] ?? '',
                 'meta_description' => $data['meta_description_' . $lang] ?? '',
                 'image_urls' => $this->processImageUrls($data['image_urls_' . $lang] ?? ''),
+                'link_type' => $linkType,
+                'youtube_url' => $linkType === 'youtube' ? trim($data['youtube_url_' . $lang] ?? '') : null,
             ];
 
             $this->translations()->updateOrCreate(
@@ -459,8 +466,11 @@ class ProductCategory extends Model
      */
     public function getImageThumbnailHtml(): string
     {
-        if (!empty($this->image_urls) && is_array($this->image_urls)) {
-            $firstImage = $this->image_urls[0];
+        $translation = $this->translations()->where('language', app()->getLocale())->first();
+        $imageUrls = $translation?->image_urls ?? $this->image_urls;
+
+        if (!empty($imageUrls) && is_array($imageUrls)) {
+            $firstImage = $imageUrls[0];
             return sprintf(
                 '<img src="%s" style="max-width: 50px; max-height: 50px; object-fit: cover; border-radius: 4px;">',
                 e($firstImage)
@@ -484,8 +494,11 @@ class ProductCategory extends Model
      */
     public function getImageLargeHtml(): string
     {
-        if (!empty($this->image_urls) && is_array($this->image_urls)) {
-            $firstImage = $this->image_urls[0];
+        $translation = $this->translations()->where('language', app()->getLocale())->first();
+        $imageUrls = $translation?->image_urls ?? $this->image_urls;
+
+        if (!empty($imageUrls) && is_array($imageUrls)) {
+            $firstImage = $imageUrls[0];
             return sprintf(
                 '<img src="%s" style="max-width: 300px; max-height: 300px; object-fit: cover; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">',
                 e($firstImage)

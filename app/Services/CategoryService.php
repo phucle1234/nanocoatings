@@ -146,6 +146,8 @@ class CategoryService
 
         // ✅ Thêm image_urls từ translation
         $category->category_image_urls = $translation->image_urls ?? null;
+        $category->link_type = $translation->link_type ?? 'detail';
+        $category->youtube_url = $translation->youtube_url ?? null;
 
         return $category;
     }

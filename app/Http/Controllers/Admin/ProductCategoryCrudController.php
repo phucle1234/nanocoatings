@@ -376,7 +376,27 @@ class ProductCategoryCrudController extends CrudController
                 ->view('components.multiple-images')
                 ->default($defaultValue)
                 ->data(['value' => $defaultValue])
-                ->hint('Thêm nhiều hình ảnh cho danh mục bằng ' . $langName)
+                ->hint('Thêm nhiều hình ảnh cho danh mục bằng ' . $langName . '. Hình đầu tiên dùng làm ảnh card trên website.')
+                ->tab($langName);
+
+            CRUD::field('link_type_' . $lang)
+                ->label('Hành động khi click ảnh / Detail (' . $langName . ')')
+                ->type('select_from_array')
+                ->options([
+                    'detail' => 'Mở trang chi tiết danh mục',
+                    'youtube' => 'Mở video YouTube (xem ngay)',
+                ])
+                ->default($this->getTranslationValue($lang, 'link_type') ?: 'detail')
+                ->tab($langName);
+
+            CRUD::field('youtube_url_' . $lang)
+                ->label('Link YouTube (' . $langName . ')')
+                ->type('url')
+                ->default($this->getTranslationValue($lang, 'youtube_url'))
+                ->attributes([
+                    'placeholder' => 'https://www.youtube.com/watch?v=...',
+                ])
+                ->hint('Chỉ dùng khi chọn "Mở video YouTube". Hỗ trợ link watch hoặc youtu.be.')
                 ->tab($langName);
 
             // Mô tả với Summernote

@@ -7,6 +7,7 @@ return [
     'category' => 'Category',
     'categories' => 'Categories',
     'detail' => 'Detail',
+    'watch_video' => 'Watch video',
     'detail_uppercase' => 'DETAIL',
     'news' => 'News',
     'media' => 'News and Events',

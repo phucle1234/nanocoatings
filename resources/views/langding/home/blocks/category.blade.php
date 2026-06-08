@@ -46,27 +46,7 @@
                                                 <!-- <div class="product-item-intro fs-16 fw-300 mx-auto line-2 mt-3">
                                             {{ $childCategory->category_description ?? '' }}
                                         </div> -->
-                                                <div class="product-item-img position-relative mx-auto">
-                                                    <a
-                                                        href="{{ route('category', ['slug' => $childCategory->category_translation_slug ?? $childCategory->id]) }}">
-                                                        <img src="{{ $childCategory->category_image ?? asset('langding/imgs/product.png') }}"
-                                                            alt="{{ $childCategory->category_name ?? 'Category' }}"
-                                                            class="img-fluid mx-auto" width="383">
-                                                    </a>
-                                                </div>
-                                                <div class="product-item-view mt-3">
-                                                    <a class="text-white fs-16 d-flex align-items-center justify-content-center gap-2"
-                                                        href="{{ route('category', ['slug' => $childCategory->category_translation_slug ?? $childCategory->id]) }}">
-                                                        <span>{{ __('messages.detail') }}</span>
-                                                        <svg width="11" height="12" viewBox="0 0 11 12"
-                                                            fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                            <path
-                                                                d="M2.00109 1.37635L9.28725 0.738899M9.28725 0.738899L9.92471 8.02506M9.28725 0.738899L0.738909 10.9264"
-                                                                stroke="#ffffff" stroke-width="1.47765"
-                                                                stroke-linecap="round" stroke-linejoin="round" />
-                                                        </svg>
-                                                    </a>
-                                                </div>
+                                                @include('langding.components.category-card-link', ['category' => $childCategory])
                                             </div>
                                         </div>
                                     @endforeach
@@ -104,25 +84,7 @@
                                                         <!-- <div class="product-item-intro fs-16 fw-300 mx-auto line-2 mt-3">
                                             {{ $childCategory->category_description ?? '' }}
                                         </div> -->
-                                                        <div class="product-item-img position-relative mx-auto">
-                                                            <img src="{{ $childCategory->category_image ?? asset('langding/imgs/product.png') }}"
-                                                                alt="{{ $childCategory->category_name ?? 'Category' }}"
-                                                                class="img-fluid mx-auto" width="383">
-                                                        </div>
-
-                                                        <div class="product-item-view mt-3">
-                                                            <a class="text-white fs-16 d-flex align-items-center justify-content-center gap-2"
-                                                                href="{{ route('category', ['slug' => $childCategory->category_translation_slug ?? $childCategory->id]) }}">
-                                                                <span>{{ __('messages.detail') }}</span>
-                                                                <svg width="11" height="12" viewBox="0 0 11 12"
-                                                                    fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                    <path
-                                                                        d="M2.00109 1.37635L9.28725 0.738899M9.28725 0.738899L9.92471 8.02506M9.28725 0.738899L0.738909 10.9264"
-                                                                        stroke="#ffffff" stroke-width="1.47765"
-                                                                        stroke-linecap="round" stroke-linejoin="round" />
-                                                                </svg>
-                                                            </a>
-                                                        </div>
+                                                        @include('langding.components.category-card-link', ['category' => $childCategory])
                                                         
                                                     </div>
                                                 </div>

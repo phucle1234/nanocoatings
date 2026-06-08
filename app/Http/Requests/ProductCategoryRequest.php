@@ -49,6 +49,8 @@ class ProductCategoryRequest extends FormRequest
             $rules['meta_description_' . $lang] = 'nullable|string|max:500';
             $rules['slug_' . $lang] = 'nullable|string|max:255';
             $rules['image_urls_' . $lang] = 'nullable|string';
+            $rules['link_type_' . $lang] = 'nullable|in:detail,youtube';
+            $rules['youtube_url_' . $lang] = 'nullable|string|max:500';
         }
 
         return $rules;

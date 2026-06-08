@@ -19,7 +19,9 @@ class ProductCategoryTranslation extends Model
         'meta_title',
         'meta_description',
         'slug',
-        'image_urls', // Thêm field mới
+        'image_urls',
+        'link_type',
+        'youtube_url',
     ];
 
     protected $casts = [

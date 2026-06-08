@@ -714,6 +714,8 @@ class CategoryApiController extends Controller
                     'meta_title' => $translation->meta_title ?? null,
                     'meta_description' => $translation->meta_description ?? null,
                     'image' => $this->getImageJson($child->category_image_urls),
+                    'link_type' => $child->link_type ?? 'detail',
+                    'youtube_url' => $child->youtube_url ?? null,
                     'products_count' => $this->categoryService->getProductsCount($child),
                     'children_count' => (int) ($child->children_count ?? 0), // ✅ THÊM DÒNG NÀY
                 ];
