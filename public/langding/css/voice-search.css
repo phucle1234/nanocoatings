@@ -1,0 +1,713 @@
+.btn-search-icon.voice {
+    position: relative;
+    transition: all 0.3s ease;
+    border-radius: 8px;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-search-icon.voice:hover {
+    background: linear-gradient(45deg, #45a049, #4CAF50);
+    transform: translateY(-1px) scale(1.03);
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.35);
+}
+
+.btn-search-icon.voice.listening {
+    background: linear-gradient(45deg, #ff6b6b, #ff5252);
+    animation: micPulse 1.5s infinite, micGlow 2s infinite;
+    transform: scale(1.08);
+    box-shadow: 0 0 18px rgba(255, 107, 107, 0.5);
+}
+
+.btn-search-icon.voice.listening img {
+    filter: brightness(0) invert(1);
+    animation: micShake 0.5s infinite alternate;
+}
+
+/* Hiệu ứng pulse cho mic khi đang nghe */
+@keyframes micPulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(255, 107, 107, 0.7);
+        transform: scale(1.08);
+    }
+
+    50% {
+        box-shadow: 0 0 0 10px rgba(255, 107, 107, 0.3);
+        transform: scale(1.12);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(255, 107, 107, 0);
+        transform: scale(1.08);
+    }
+}
+
+/* Hiệu ứng glow cho mic */
+@keyframes micGlow {
+
+    0%,
+    100% {
+        background: linear-gradient(45deg, #ff6b6b, #ff5252);
+    }
+
+    50% {
+        background: linear-gradient(45deg, #ff5252, #ff6b6b);
+    }
+}
+
+/* Hiệu ứng shake cho icon mic */
+@keyframes micShake {
+    0% {
+        transform: translateX(-1px);
+    }
+
+    100% {
+        transform: translateX(1px);
+    }
+}
+
+/* Voice Search Modal Styles - Responsive */
+#voiceSearchModal .modal-dialog {
+    max-width: 95%;
+    margin: 10px auto;
+}
+
+#voiceSearchModal .modal-content {
+    border-radius: 15px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+    border: none;
+}
+
+#voiceSearchModal .modal-header {
+    background: linear-gradient(135deg, #4CAF50, #45a049, #2E7D32);
+    color: white;
+    border-radius: 15px 15px 0 0;
+    padding: 20px 25px;
+    border-bottom: none;
+}
+
+#voiceSearchModal .modal-title {
+    font-weight: 600;
+    font-size: 1.3rem;
+    display: flex;
+    align-items: center;
+}
+
+#voiceSearchModal .modal-title i {
+    margin-right: 10px;
+    font-size: 1.4rem;
+}
+
+#voiceSearchModal .btn-close {
+    filter: invert(1);
+    opacity: 0.8;
+    transition: opacity 0.3s ease;
+}
+
+#voiceSearchModal .btn-close:hover {
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+#voiceSearchModal .modal-body {
+    max-height: 75vh;
+    overflow-y: auto;
+    padding: 25px;
+}
+
+#voiceSearchModal .modal-footer {
+    border-top: 1px solid #e9ecef;
+    padding: 15px 25px;
+    background: #f8f9fa;
+    border-radius: 0 0 15px 15px;
+}
+
+/* Loading spinner */
+.spinner-border {
+    width: 3rem;
+    height: 3rem;
+    border-width: 0.3em;
+}
+
+/* Keywords và tire size trong modal */
+.keywords-section,
+.tire-size-section {
+    margin-bottom: 20px;
+    padding: 18px;
+    background: linear-gradient(135deg, #e8f4fd, #d1ecf1);
+    border: 1px solid #bee5eb;
+    border-radius: 12px;
+    color: #0c5460;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.keywords-section h5,
+.tire-size-section h5 {
+    margin: 0 0 12px 0;
+    color: #0c5460;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.keywords-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.keyword-tag {
+    background: linear-gradient(45deg, #007bff, #0056b3);
+    color: white;
+    padding: 6px 14px;
+    border-radius: 25px;
+    font-size: 13px;
+    font-weight: 500;
+    box-shadow: 0 2px 6px rgba(0, 123, 255, 0.3);
+    transition: transform 0.2s ease;
+}
+
+.keyword-tag:hover {
+    transform: translateY(-2px);
+}
+
+.tire-size {
+    background: linear-gradient(45deg, #28a745, #1e7e34);
+    color: white;
+    padding: 6px 14px;
+    border-radius: 25px;
+    font-weight: bold;
+    box-shadow: 0 2px 6px rgba(40, 167, 69, 0.3);
+}
+
+/* Product items trong modal */
+#voiceSearchModal .product-item {
+    padding: 25px 20px;
+    height: 100%;
+    transition: all 0.3s ease;
+    border-radius: 15px;
+    background: white;
+    border: 1px solid #e9ecef;
+}
+
+#voiceSearchModal .product-item:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    background: #f8f9fa;
+    border-color: #4CAF50;
+}
+
+#voiceSearchModal .product-item h3 {
+    color: #dc3545;
+    font-weight: 700;
+    margin-bottom: 15px;
+    font-size: 1.4rem;
+}
+
+#voiceSearchModal .product-item-intro {
+    color: #666;
+    line-height: 1.6;
+    font-size: 1rem;
+}
+
+#voiceSearchModal .product-item-img {
+    position: relative;
+    margin: 20px 0;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+#voiceSearchModal .product-item-img img {
+    border-radius: 10px;
+    transition: transform 0.3s ease;
+}
+
+#voiceSearchModal .product-item:hover .product-item-img img {
+    transform: scale(1.05);
+}
+
+#voiceSearchModal .cat-link {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 50%;
+    width: 85px;
+    height: 85px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+#voiceSearchModal .product-item:hover .cat-link {
+    transform: translate(-50%, -50%) scale(1.1);
+    background: rgba(255, 255, 255, 1);
+}
+
+#voiceSearchModal .cat-link-number {
+    color: #333;
+    font-weight: 700;
+    font-size: 1.8rem;
+}
+
+#voiceSearchModal .cat-link-text {
+    color: #666;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+#voiceSearchModal .price-info {
+    margin: 15px 0;
+}
+
+#voiceSearchModal .price-info span {
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+
+#voiceSearchModal .product-item-view a {
+    color: #dc3545;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    padding: 8px 20px;
+    border: 2px solid #dc3545;
+    border-radius: 25px;
+    display: inline-block;
+}
+
+#voiceSearchModal .product-item-view a:hover {
+    color: white;
+    background: #dc3545;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+}
+
+/* No results và error */
+.no-results,
+.error-message {
+    text-align: center;
+    padding: 40px 30px;
+    background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+    border: 1px solid #ffeaa7;
+    border-radius: 15px;
+    color: #856404;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.error-message {
+    background: linear-gradient(135deg, #f8d7da, #f5c6cb);
+    border-color: #f5c6cb;
+    color: #721c24;
+}
+
+.no-results h4,
+.error-message h4 {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    #voiceSearchModal .modal-dialog {
+        max-width: 95%;
+    }
+}
+
+@media (max-width: 992px) {
+    #voiceSearchModal .modal-dialog {
+        max-width: 98%;
+        margin: 5px auto;
+    }
+
+    #voiceSearchModal .modal-body {
+        padding: 20px 15px;
+        max-height: 70vh;
+    }
+
+    #voiceSearchModal .col-md-4 {
+        margin-bottom: 25px;
+    }
+
+    #voiceSearchModal .product-item {
+        padding: 20px 15px;
+    }
+
+    #voiceSearchModal .product-item h3 {
+        font-size: 1.2rem;
+    }
+
+    #voiceSearchModal .cat-link {
+        width: 70px;
+        height: 70px;
+    }
+
+    #voiceSearchModal .cat-link-number {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    #voiceSearchModal .modal-dialog {
+        max-width: 100%;
+        margin: 0;
+        height: 100vh;
+    }
+
+    #voiceSearchModal .modal-content {
+        height: 100vh;
+        border-radius: 0;
+    }
+
+    #voiceSearchModal .modal-header {
+        padding: 15px 20px;
+        border-radius: 0;
+    }
+
+    #voiceSearchModal .modal-title {
+        font-size: 1.1rem;
+    }
+
+    #voiceSearchModal .modal-body {
+        padding: 15px 10px;
+        max-height: calc(100vh - 120px);
+    }
+
+    #voiceSearchModal .modal-footer {
+        padding: 10px 20px;
+        border-radius: 0;
+    }
+
+    .keywords-section,
+    .tire-size-section {
+        padding: 15px;
+        margin-bottom: 15px;
+    }
+
+    .keywords-tags {
+        gap: 8px;
+    }
+
+    .keyword-tag {
+        padding: 5px 12px;
+        font-size: 12px;
+    }
+
+    #voiceSearchModal .product-item {
+        padding: 15px 10px;
+        margin-bottom: 15px;
+    }
+
+    #voiceSearchModal .product-item h3 {
+        font-size: 1.1rem;
+        margin-bottom: 10px;
+    }
+
+    #voiceSearchModal .product-item-intro {
+        font-size: 0.9rem;
+    }
+
+    #voiceSearchModal .cat-link {
+        width: 60px;
+        height: 60px;
+    }
+
+    #voiceSearchModal .cat-link-number {
+        font-size: 1.3rem;
+    }
+
+    #voiceSearchModal .cat-link-text {
+        font-size: 10px;
+    }
+
+    .no-results,
+    .error-message {
+        padding: 30px 20px;
+    }
+
+    .no-results h4,
+    .error-message h4 {
+        font-size: 1.3rem;
+    }
+}
+
+@media (max-width: 576px) {
+    #voiceSearchModal .modal-header {
+        padding: 12px 15px;
+    }
+
+    #voiceSearchModal .modal-title {
+        font-size: 1rem;
+    }
+
+    #voiceSearchModal .modal-body {
+        padding: 10px 8px;
+    }
+
+    .keywords-section,
+    .tire-size-section {
+        padding: 12px;
+    }
+
+    .keywords-section h5,
+    .tire-size-section h5 {
+        font-size: 14px;
+    }
+
+    #voiceSearchModal .product-item {
+        padding: 12px 8px;
+    }
+
+    #voiceSearchModal .product-item h3 {
+        font-size: 1rem;
+    }
+
+    #voiceSearchModal .product-item-intro {
+        font-size: 0.85rem;
+    }
+
+    #voiceSearchModal .cat-link {
+        width: 50px;
+        height: 50px;
+    }
+
+    #voiceSearchModal .cat-link-number {
+        font-size: 1.1rem;
+    }
+
+    #voiceSearchModal .cat-link-text {
+        font-size: 9px;
+    }
+
+    #voiceSearchModal .price-info span {
+        font-size: 1rem;
+    }
+
+    #voiceSearchModal .product-item-view a {
+        padding: 6px 15px;
+        font-size: 14px;
+    }
+}
+
+/* Custom scrollbar cho modal */
+#voiceSearchModal .modal-body::-webkit-scrollbar {
+    width: 8px;
+}
+
+#voiceSearchModal .modal-body::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+#voiceSearchModal .modal-body::-webkit-scrollbar-thumb {
+    background: #4CAF50;
+    border-radius: 4px;
+}
+
+#voiceSearchModal .modal-body::-webkit-scrollbar-thumb:hover {
+    background: #45a049;
+}
+
+
+/* .cat-link {
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.9) 0%, rgba(240, 240, 240, 0.95) 100%);
+    border-radius: 12px;
+    padding: 8px 15px;
+    min-width: 100px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12), 0 1px 3px rgba(0, 0, 0, 0.08);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(6px);
+    z-index: 2;
+    overflow: hidden;
+} */
+
+/* Hiệu ứng hover cho badge */
+/* .cat-link:hover {
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15), 0 2px 5px rgba(0, 0, 0, 0.1);
+    background: linear-gradient(145deg, rgba(255, 255, 255, 1) 0%, rgba(245, 245, 245, 0.98) 100%);
+} */
+
+/* Hiệu ứng shine cho badge khi hover */
+/* .cat-link:after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(to right,
+            rgba(255, 255, 255, 0) 0%,
+            rgba(255, 255, 255, 0.3) 50%,
+            rgba(255, 255, 255, 0) 100%);
+    transform: rotate(30deg);
+    opacity: 0;
+    transition: opacity 0.6s;
+    pointer-events: none;
+} */
+
+/* .cat-link:hover:after {
+    opacity: 1;
+    animation: shine 1.5s ease;
+} */
+
+@keyframes shine {
+    0% {
+        left: -50%;
+        opacity: 0;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        left: 150%;
+        opacity: 0;
+    }
+}
+
+/* Style cho số kích thước */
+/* .cat-link-number {
+    font-weight: 800 !important;
+    font-size: 48px !important;
+    line-height: 1;
+    color: #111;
+    text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.8), -1px -1px 0 rgba(0, 0, 0, 0.05);
+    letter-spacing: -1px;
+    transition: all 0.3s ease;
+    background: linear-gradient(to bottom, #333 0%, #111 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+} */
+
+/* .cat-link:hover .cat-link-number {
+    transform: scale(1.05);
+    background: linear-gradient(to bottom, #dc3545 0%, #b02a37 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+} */
+
+/* Style cho text kích thước */
+/* .cat-link-text {
+    font-size: 13px !important;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #6c757d;
+    margin-top: 2px;
+    position: relative;
+    transition: all 0.3s ease;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
+} */
+
+/* .cat-link:hover .cat-link-text {
+    color: #dc3545;
+    letter-spacing: 2px;
+} */
+
+/* Thêm hiệu ứng gạch dưới */
+/* .cat-link-text:after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: -3px;
+    width: 0;
+    height: 2px;
+    background: #dc3545;
+    transform: translateX(-50%);
+    transition: width 0.3s ease;
+    border-radius: 2px;
+} */
+
+/* .cat-link:hover .cat-link-text:after {
+    width: 80%;
+} */
+
+/* Responsive cho badge kích thước */
+/* @media (max-width: 767.98px) {
+    .cat-link {
+        padding: 6px 12px;
+        min-width: 90px;
+        border-radius: 10px;
+    }
+
+    .cat-link-number {
+        font-size: 38px !important;
+    }
+
+    .cat-link-text {
+        font-size: 11px !important;
+    }
+} */
+
+/* @media (max-width: 575.98px) {
+    .cat-link {
+        padding: 5px 10px;
+        min-width: 80px;
+        border-radius: 8px;
+    }
+
+    .cat-link-number {
+        font-size: 32px !important;
+    }
+
+    .cat-link-text {
+        font-size: 10px !important;
+        letter-spacing: 1px;
+    }
+} */
+
+/* Responsive styles cho voice button */
+@media (max-width: 768px) {
+    .btn-search-icon.voice {
+        width: 40px;
+        height: 40px;
+        border-radius: 6px;
+        box-shadow: 0 1px 4px rgba(76, 175, 80, 0.2);
+    }
+
+    .btn-search-icon.voice:hover {
+        transform: translateY(-1px) scale(1.02);
+        box-shadow: 0 3px 8px rgba(76, 175, 80, 0.3);
+    }
+
+    .btn-search-icon.voice.listening {
+        transform: scale(1.05);
+        box-shadow: 0 0 12px rgba(255, 107, 107, 0.4);
+    }
+}
+
+@media (max-width: 480px) {
+    .btn-search-icon.voice {
+        width: 40px;
+        height: 40px;
+        border-radius: 5px;
+        box-shadow: 0 1px 3px rgba(76, 175, 80, 0.18);
+    }
+
+    .btn-search-icon.voice:hover {
+        transform: translateY(-0.5px) scale(1.01);
+        box-shadow: 0 2px 6px rgba(76, 175, 80, 0.25);
+    }
+
+    .btn-search-icon.voice.listening {
+        transform: scale(1.03);
+        box-shadow: 0 0 8px rgba(255, 107, 107, 0.35);
+    }
+}
+
+.search-widget .search-form .box .list-btn-search-icon .btn-search-icon::before {
+    right: -6px !important;
+}

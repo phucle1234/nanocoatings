@@ -1,0 +1,1320 @@
+/* ========================================
+   ADMIN PANEL CONSOLIDATED CSS
+   ========================================
+   CSS tổng hợp cho admin panel - loại bỏ trùng lặp
+   Import tất cả CSS admin vào một file duy nhất
+*/
+
+/* ========================================
+   BASE COMPONENTS - TỪ COMPONENTS.CSS
+   ======================================== */
+
+/* Container với gradient background */
+.admin-container {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+/* Card component - GỘP TỪ ADMIN.CSS VÀ COMPONENTS.CSS */
+.admin-card {
+    background: white;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.admin-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transform: translateY(-1px);
+}
+
+.admin-card-header {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid #dee2e6;
+    font-weight: 600;
+    color: #495057;
+}
+
+.admin-card-body {
+    padding: 1.5rem;
+}
+
+/* ========================================
+   BUTTON COMPONENTS - TỪ COMPONENTS.CSS
+   ======================================== */
+
+/* Primary button với gradient */
+.btn-primary-gradient {
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    border: none;
+    border-radius: 6px;
+    padding: 8px 16px;
+    color: white;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 123, 255, 0.3);
+}
+
+.btn-primary-gradient:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.4);
+    background: linear-gradient(135deg, #0056b3 0%, #004085 100%);
+}
+
+/* Success button với gradient */
+.btn-success-gradient {
+    background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%);
+    border: none;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(40, 167, 69, 0.3);
+}
+
+.btn-success-gradient:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(40, 167, 69, 0.4);
+    background: linear-gradient(135deg, #1e7e34 0%, #155724 100%);
+}
+
+/* Secondary button với gradient */
+.btn-secondary-gradient {
+    background: linear-gradient(135deg, #6c757d 0%, #545b62 100%);
+    border: none;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(108, 117, 125, 0.3);
+}
+
+.btn-secondary-gradient:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(108, 117, 125, 0.4);
+    background: linear-gradient(135deg, #545b62 0%, #3d4043 100%);
+}
+
+/* Danger button với gradient */
+.btn-danger-gradient {
+    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+    border: none;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(220, 53, 69, 0.3);
+}
+
+.btn-danger-gradient:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(220, 53, 69, 0.4);
+    background: linear-gradient(135deg, #c82333 0%, #a71e2a 100%);
+}
+
+/* ========================================
+   FORM COMPONENTS - TỪ COMPONENTS.CSS
+   ======================================== */
+
+/* Form control với gradient */
+.form-control-gradient {
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    padding: 10px 15px;
+    font-size: 14px;
+    color: #495057;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    min-height: 45px;
+}
+
+.form-control-gradient:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    background: #ffffff;
+    outline: none;
+}
+
+.form-control-gradient:hover {
+    border-color: #007bff;
+    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.15);
+}
+
+/* Form label */
+.form-label-custom {
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+/* ========================================
+   BADGE COMPONENTS - TỪ COMPONENTS.CSS
+   ======================================== */
+
+/* Badge container */
+.badge-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+/* Base badge */
+.badge-custom {
+    font-size: 0.8em;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-weight: 500;
+    color: white;
+    border: none;
+    transition: all 0.2s ease;
+}
+
+.badge-custom:hover {
+    transform: translateY(-1px);
+}
+
+/* Badge color variants */
+.badge-primary {
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    box-shadow: 0 2px 4px rgba(0, 123, 255, 0.3);
+}
+
+.badge-primary:hover {
+    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.4);
+}
+
+.badge-success {
+    background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%);
+    box-shadow: 0 2px 4px rgba(40, 167, 69, 0.3);
+}
+
+.badge-success:hover {
+    box-shadow: 0 4px 8px rgba(40, 167, 69, 0.4);
+}
+
+.badge-warning {
+    background: linear-gradient(135deg, #fd7e14 0%, #e8590c 100%);
+    box-shadow: 0 2px 4px rgba(253, 126, 20, 0.3);
+}
+
+.badge-warning:hover {
+    box-shadow: 0 4px 8px rgba(253, 126, 20, 0.4);
+}
+
+.badge-info {
+    background: linear-gradient(135deg, #6f42c1 0%, #5a2d91 100%);
+    box-shadow: 0 2px 4px rgba(111, 66, 193, 0.3);
+}
+
+.badge-info:hover {
+    box-shadow: 0 4px 8px rgba(111, 66, 193, 0.4);
+}
+
+.badge-danger {
+    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+    box-shadow: 0 2px 4px rgba(220, 53, 69, 0.3);
+}
+
+.badge-danger:hover {
+    box-shadow: 0 4px 8px rgba(220, 53, 69, 0.4);
+}
+
+/* ========================================
+   SELECT COMPONENTS - TỪ COMPONENTS.CSS
+   ======================================== */
+
+/* Select option styling */
+.select-option-custom {
+    padding: 8px 12px;
+    background: #ffffff;
+    color: #495057;
+    border: none;
+    transition: all 0.2s ease;
+}
+
+.select-option-custom:hover {
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    color: white;
+}
+
+.select-option-custom:checked {
+    background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%);
+    color: white;
+    font-weight: 600;
+}
+
+.select-option-custom:selected {
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    color: white;
+}
+
+/* Custom scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #0056b3 0%, #004085 100%);
+}
+
+/* ========================================
+   FORM LAYOUT COMPONENTS - TỪ COMPONENTS.CSS
+   ======================================== */
+
+/* Form group spacing */
+.form-group-custom {
+    margin-bottom: 20px;
+}
+
+/* Row spacing */
+.row-custom {
+    margin: 0 -10px;
+}
+
+.row-custom .col-md-6 {
+    padding: 0 10px;
+}
+
+/* ========================================
+   INTERACTION COMPONENTS - TỪ COMPONENTS.CSS
+   ======================================== */
+
+/* Hover scale effect */
+.hover-scale {
+    transition: all 0.2s ease;
+}
+
+.hover-scale:hover {
+    transform: scale(1.1);
+}
+
+/* Hover lift effect */
+.hover-lift {
+    transition: all 0.3s ease;
+}
+
+.hover-lift:hover {
+    transform: translateY(-1px);
+}
+
+/* ========================================
+   UTILITY CLASSES - TỪ COMPONENTS.CSS
+   ======================================== */
+
+/* Text colors */
+.text-primary-custom { color: #007bff; }
+.text-success-custom { color: #28a745; }
+.text-warning-custom { color: #fd7e14; }
+.text-info-custom { color: #6f42c1; }
+.text-danger-custom { color: #dc3545; }
+
+/* Background colors */
+.bg-primary-custom { background-color: #007bff; }
+.bg-success-custom { background-color: #28a745; }
+.bg-warning-custom { background-color: #fd7e14; }
+.bg-info-custom { background-color: #6f42c1; }
+.bg-danger-custom { background-color: #dc3545; }
+
+/* Spacing utilities */
+.mb-custom { margin-bottom: 1rem; }
+.mt-custom { margin-top: 1rem; }
+.p-custom { padding: 1rem; }
+.px-custom { padding-left: 1rem; padding-right: 1rem; }
+.py-custom { padding-top: 1rem; padding-bottom: 1rem; }
+
+/* ========================================
+   ADMIN LAYOUT - TỪ ADMIN.CSS
+   ======================================== */
+
+.admin-layout {
+    min-height: 100vh;
+    background: #f8f9fa;
+}
+
+.admin-header {
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    color: white;
+    padding: 1rem 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.admin-sidebar {
+    background: white;
+    box-shadow: 2px 0 4px rgba(0,0,0,0.1);
+    min-height: calc(100vh - 60px);
+}
+
+.admin-content {
+    padding: 2rem;
+    background: #f8f9fa;
+    min-height: calc(100vh - 60px);
+}
+
+/* ========================================
+   ADMIN FORMS - TỪ ADMIN.CSS
+   ======================================== */
+
+.admin-form {
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.admin-form .form-group {
+    margin-bottom: 1.5rem;
+}
+
+.admin-form .form-label {
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 0.5rem;
+}
+
+/* ========================================
+   ADMIN TABLES - TỪ ADMIN.CSS
+   ======================================== */
+
+.admin-table {
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.admin-table th {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    font-weight: 600;
+    color: #495057;
+    border: none;
+    padding: 1rem;
+}
+
+.admin-table td {
+    padding: 1rem;
+    border-top: 1px solid #dee2e6;
+    vertical-align: middle;
+}
+
+.admin-table tbody tr:hover {
+    background: #f8f9fa;
+}
+
+/* ========================================
+   ADMIN ALERTS - TỪ ADMIN.CSS
+   ======================================== */
+
+.admin-alert {
+    border-radius: 8px;
+    border: none;
+    padding: 1rem 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.admin-alert-success {
+    background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+    color: #155724;
+}
+
+.admin-alert-danger {
+    background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+    color: #721c24;
+}
+
+.admin-alert-warning {
+    background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+    color: #856404;
+}
+
+.admin-alert-info {
+    background: linear-gradient(135deg, #d1ecf1 0%, #bee5eb 100%);
+    color: #0c5460;
+}
+
+/* ========================================
+   ADMIN MODALS - TỪ ADMIN.CSS
+   ======================================== */
+
+.admin-modal .modal-content {
+    border-radius: 8px;
+    border: none;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}
+
+.admin-modal .modal-header {
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    color: white;
+    border-radius: 8px 8px 0 0;
+    border: none;
+}
+
+.admin-modal .modal-footer {
+    border-top: 1px solid #dee2e6;
+    background: #f8f9fa;
+    border-radius: 0 0 8px 8px;
+}
+
+/* ========================================
+   ADMIN NAVIGATION - TỪ ADMIN.CSS
+   ======================================== */
+
+.admin-nav {
+    background: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.admin-nav .nav-link {
+    color: #495057;
+    font-weight: 500;
+    padding: 0.75rem 1rem;
+    transition: all 0.3s ease;
+}
+
+.admin-nav .nav-link:hover {
+    background: #f8f9fa;
+    color: #007bff;
+}
+
+.admin-nav .nav-link.active {
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    color: white;
+}
+
+/* ========================================
+   ADMIN BREADCRUMBS - TỪ ADMIN.CSS
+   ======================================== */
+
+.admin-breadcrumb {
+    background: transparent;
+    padding: 0;
+    margin-bottom: 1rem;
+}
+
+.admin-breadcrumb .breadcrumb-item {
+    color: #6c757d;
+}
+
+.admin-breadcrumb .breadcrumb-item.active {
+    color: #495057;
+    font-weight: 600;
+}
+
+.admin-breadcrumb .breadcrumb-item + .breadcrumb-item::before {
+    content: "›";
+    color: #6c757d;
+}
+
+/* ========================================
+   ADMIN PAGINATION - TỪ ADMIN.CSS
+   ======================================== */
+
+.admin-pagination .page-link {
+    color: #007bff;
+    border: 1px solid #dee2e6;
+    padding: 0.5rem 0.75rem;
+    transition: all 0.3s ease;
+}
+
+.admin-pagination .page-link:hover {
+    background: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+
+.admin-pagination .page-item.active .page-link {
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    border-color: #007bff;
+}
+
+/* ========================================
+   ATTRIBUTES MANAGEMENT - TỪ ATTRIBUTES.CSS
+   ======================================== */
+
+.product-attributes-container {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.attribute-group {
+    background: white;
+    border: 1px solid #dee2e6 !important;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    margin-bottom: 1rem;
+    padding: 1rem;
+}
+
+.attribute-group:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transform: translateY(-1px);
+}
+
+.attribute-group h6 {
+    color: #495057;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.attribute-values {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.attribute-values .badge {
+    font-size: 0.8em;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-weight: 500;
+    color: white;
+    border: none;
+    transition: all 0.2s ease;
+}
+
+.attribute-values .badge:hover {
+    transform: translateY(-1px);
+}
+
+/* Badge color cycling - tạo màu sắc đa dạng */
+.attribute-values .badge:nth-child(1) { 
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    box-shadow: 0 2px 4px rgba(0, 123, 255, 0.3);
+}
+.attribute-values .badge:nth-child(1):hover {
+    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.4);
+}
+
+.attribute-values .badge:nth-child(2) { 
+    background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%);
+    box-shadow: 0 2px 4px rgba(40, 167, 69, 0.3);
+}
+.attribute-values .badge:nth-child(2):hover {
+    box-shadow: 0 4px 8px rgba(40, 167, 69, 0.4);
+}
+
+.attribute-values .badge:nth-child(3) { 
+    background: linear-gradient(135deg, #fd7e14 0%, #e8590c 100%);
+    box-shadow: 0 2px 4px rgba(253, 126, 20, 0.3);
+}
+.attribute-values .badge:nth-child(3):hover {
+    box-shadow: 0 4px 8px rgba(253, 126, 20, 0.4);
+}
+
+.attribute-values .badge:nth-child(4) { 
+    background: linear-gradient(135deg, #6f42c1 0%, #5a2d91 100%);
+    box-shadow: 0 2px 4px rgba(111, 66, 193, 0.3);
+}
+.attribute-values .badge:nth-child(4):hover {
+    box-shadow: 0 4px 8px rgba(111, 66, 193, 0.4);
+}
+
+.attribute-values .badge:nth-child(5) { 
+    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+    box-shadow: 0 2px 4px rgba(220, 53, 69, 0.3);
+}
+.attribute-values .badge:nth-child(5):hover {
+    box-shadow: 0 4px 8px rgba(220, 53, 69, 0.4);
+}
+
+/* Cycle lại từ màu đầu tiên */
+.attribute-values .badge:nth-child(6) { 
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    box-shadow: 0 2px 4px rgba(0, 123, 255, 0.3);
+}
+.attribute-values .badge:nth-child(6):hover {
+    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.4);
+}
+
+#add-attribute-form {
+    background: white;
+    border: 2px dashed #007bff !important;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    padding: 1rem;
+}
+
+#add-attribute-form:hover {
+    border-color: #0056b3 !important;
+    background: #f8f9ff;
+}
+
+#attribute-select, #value-select {
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    padding: 10px 15px;
+    font-size: 14px;
+    color: #495057;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    min-height: 45px;
+}
+
+#attribute-select:focus, #value-select:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    background: #ffffff;
+    outline: none;
+}
+
+#attribute-select:hover, #value-select:hover {
+    border-color: #007bff;
+    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.15);
+}
+
+#attribute-select option, #value-select option {
+    padding: 8px 12px;
+    background: #ffffff;
+    color: #495057;
+    border: none;
+    transition: all 0.2s ease;
+}
+
+#attribute-select option:hover, #value-select option:hover {
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    color: white;
+}
+
+#attribute-select option:checked, #value-select option:checked {
+    background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%);
+    color: white;
+    font-weight: 600;
+}
+
+#attribute-select option:selected, #value-select option:selected {
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    color: white;
+}
+
+#add-attribute-btn {
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    border: none;
+    border-radius: 6px;
+    padding: 8px 16px;
+    color: white;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 123, 255, 0.3);
+}
+
+#add-attribute-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.4);
+    background: linear-gradient(135deg, #0056b3 0%, #004085 100%);
+}
+
+.remove-attribute {
+    transition: all 0.2s ease;
+}
+
+.remove-attribute:hover {
+    transform: scale(1.1);
+    color: #dc3545 !important;
+}
+
+/* ========================================
+   ORDER DETAIL SPECIFIC - TỪ ORDER-DETAIL.CSS
+   ======================================== */
+
+/* Bootstrap utility classes - GỘP TỪ ORDER-DETAIL.CSS */
+.text-primary { color: #007bff !important; }
+.text-success { color: #28a745 !important; }
+.text-info { color: #17a2b8 !important; }
+.text-warning { color: #ffc107 !important; }
+.text-danger { color: #dc3545 !important; }
+.text-secondary { color: #6c757d !important; }
+
+.bg-primary { background-color: #007bff !important; }
+.bg-success { background-color: #28a745 !important; }
+.bg-info { background-color: #17a2b8 !important; }
+.bg-warning { background-color: #ffc107 !important; }
+.bg-secondary { background-color: #6c757d !important; }
+
+.border-primary { border-color: #007bff !important; }
+.border-success { border-color: #28a745 !important; }
+.border-info { border-color: #17a2b8 !important; }
+.border-warning { border-color: #ffc107 !important; }
+.border-secondary { border-color: #6c757d !important; }
+
+.border-left-primary { border-left: 4px solid #007bff !important; }
+.border-left-success { border-left: 4px solid #28a745 !important; }
+.border-left-info { border-left: 4px solid #17a2b8 !important; }
+.border-left-warning { border-left: 4px solid #ffc107 !important; }
+.border-left-secondary { border-left: 4px solid #6c757d !important; }
+.border-left-danger { border-left: 4px solid #dc3545 !important; }
+
+.table-primary { background-color: rgba(0, 123, 255, 0.1) !important; }
+.table-success { background-color: rgba(40, 167, 69, 0.1) !important; }
+.table-info { background-color: rgba(23, 162, 184, 0.1) !important; }
+.table-warning { background-color: rgba(255, 193, 7, 0.1) !important; }
+.table-secondary { background-color: rgba(108, 117, 125, 0.1) !important; }
+
+/* ========================================
+   ORDER DETAIL ENHANCED STYLES
+   ======================================== */
+
+/* Order Header với gradient đẹp và animation */
+.order-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 2.5rem;
+    border-radius: 1rem;
+    margin-bottom: 2rem;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+}
+
+.order-header::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 100%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+    transform: rotate(45deg);
+    animation: shimmer 3s infinite;
+}
+
+@keyframes shimmer {
+    0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+    100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+}
+
+.order-header-content {
+    position: relative;
+    z-index: 2;
+}
+
+.order-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.order-subtitle {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    margin-bottom: 1.5rem;
+}
+
+.order-status-badges {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.order-status-badge {
+    font-size: 0.9rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: 50px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+}
+
+.order-status-badge:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+}
+
+.order-amount {
+    font-size: 2.5rem;
+    font-weight: 700;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    background: linear-gradient(45deg, #fff, #f0f0f0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Summary Cards với hover effects đẹp */
+.summary-card {
+    border-left: 4px solid;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.summary-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    transition: left 0.5s;
+}
+
+.summary-card:hover::before {
+    left: 100%;
+}
+
+.summary-card:hover {
+    transform: translateX(8px) translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.summary-card-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+    color: white;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+/* Address Cards với design đẹp */
+.address-card {
+    border-radius: 1rem;
+    overflow: hidden;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.address-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #007bff, #28a745, #ffc107, #dc3545);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.address-card:hover::before {
+    opacity: 1;
+}
+
+.address-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+}
+
+.address-header {
+    position: relative;
+    padding: 1.5rem;
+    color: white;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.address-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: rgba(255,255,255,0.3);
+}
+
+.address-body {
+    padding: 1.5rem;
+    background: #f8f9fa;
+}
+
+.address-line {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.75rem;
+    padding: 0.5rem;
+    background: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    transition: all 0.2s ease;
+}
+
+.address-line:hover {
+    transform: translateX(5px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.address-line i {
+    width: 20px;
+    margin-right: 0.75rem;
+    text-align: center;
+}
+
+/* Enhanced Tables */
+.items-table, .payment-table, .shipping-table, .history-table {
+    border-radius: 1rem;
+    overflow: hidden;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    border: none;
+}
+
+.items-table thead th {
+    background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+    color: #333;
+    font-weight: 600;
+    border: none;
+    padding: 1.25rem 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-size: 0.9rem;
+}
+
+.payment-table thead th {
+    background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+    color: #333;
+    font-weight: 600;
+    border: none;
+    padding: 1.25rem 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-size: 0.9rem;
+}
+
+.shipping-table thead th {
+    background: linear-gradient(135deg, #d299c2 0%, #fef9d7 100%);
+    color: #333;
+    font-weight: 600;
+    border: none;
+    padding: 1.25rem 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-size: 0.9rem;
+}
+
+.history-table thead th {
+    background: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%);
+    color: #333;
+    font-weight: 600;
+    border: none;
+    padding: 1.25rem 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-size: 0.9rem;
+}
+
+.items-table tbody tr, .payment-table tbody tr, .shipping-table tbody tr, .history-table tbody tr {
+    transition: all 0.2s ease;
+}
+
+.items-table tbody tr:hover, .payment-table tbody tr:hover, .shipping-table tbody tr:hover, .history-table tbody tr:hover {
+    background-color: rgba(0, 123, 255, 0.08);
+    transform: scale(1.01);
+}
+
+.items-table tbody td, .payment-table tbody td, .shipping-table tbody td, .history-table tbody td {
+    padding: 1rem;
+    vertical-align: middle;
+    border-top: 1px solid rgba(0,0,0,0.05);
+}
+
+/* Product badges trong items table */
+.product-badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.product-sku {
+    background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+    color: white;
+    font-family: 'Courier New', monospace;
+}
+
+.product-quantity {
+    background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
+    color: white;
+}
+
+.product-price {
+    background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%);
+    color: white;
+}
+
+.product-total {
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    color: white;
+    font-weight: 600;
+}
+
+/* Action Buttons với design đẹp */
+.action-buttons {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    padding: 2rem;
+    border-radius: 1rem;
+    margin-top: 2rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.action-buttons::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+    animation: rotate 4s linear infinite;
+}
+
+@keyframes rotate {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.btn-action {
+    border-radius: 50px;
+    padding: 1rem 2.5rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 2;
+    border: none;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.btn-action:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.btn-action i {
+    margin-right: 0.5rem;
+}
+
+/* Loading states và animations */
+.loading-shimmer {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+/* Empty states */
+.empty-state {
+    text-align: center;
+    padding: 3rem;
+    color: #6c757d;
+}
+
+.empty-state i {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+}
+
+.empty-state h4 {
+    margin-bottom: 0.5rem;
+    color: #495057;
+}
+
+/* Progress indicators */
+.progress-indicator {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 2rem 0;
+    position: relative;
+}
+
+.progress-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+}
+
+.progress-step::before {
+    content: '';
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    width: 100%;
+    height: 2px;
+    background: #dee2e6;
+    z-index: 1;
+}
+
+.progress-step:last-child::before {
+    display: none;
+}
+
+.progress-step.active::before {
+    background: #007bff;
+}
+
+.progress-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #dee2e6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    position: relative;
+    z-index: 2;
+}
+
+.progress-step.active .progress-circle {
+    background: #007bff;
+    box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.2);
+}
+
+.progress-step.completed .progress-circle {
+    background: #28a745;
+}
+
+.progress-label {
+    font-size: 0.8rem;
+    text-align: center;
+    color: #6c757d;
+}
+
+.progress-step.active .progress-label {
+    color: #007bff;
+    font-weight: 600;
+}
+
+/* Animation for loading states */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in-up {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+/* ========================================
+   RESPONSIVE DESIGN - GỘP TỪ TẤT CẢ FILES
+   ======================================== */
+
+@media (max-width: 768px) {
+    .admin-content {
+        padding: 1rem;
+    }
+    
+    .admin-form {
+        padding: 1rem;
+    }
+    
+    .admin-card-body {
+        padding: 1rem;
+    }
+    
+    .admin-table th,
+    .admin-table td {
+        padding: 0.5rem;
+    }
+    
+    .product-attributes-container {
+        padding: 15px;
+    }
+    
+    .attribute-group {
+        padding: 0.75rem;
+    }
+    
+    .attribute-values {
+        gap: 4px;
+    }
+    
+    .attribute-values .badge {
+        font-size: 0.75em;
+        padding: 4px 8px;
+    }
+    
+    #add-attribute-form {
+        padding: 0.75rem;
+    }
+    
+    .row-custom .col-md-6 {
+        margin-bottom: 1rem;
+    }
+    
+    .order-header {
+        padding: 1rem;
+        text-align: center;
+    }
+    
+    .order-amount {
+        font-size: 1.5rem;
+    }
+    
+    .action-buttons {
+        text-align: center;
+    }
+    
+    .btn-action {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .admin-content {
+        padding: 0.5rem;
+    }
+    
+    .admin-form {
+        padding: 0.75rem;
+    }
+    
+    .admin-card-body {
+        padding: 0.75rem;
+    }
+    
+    .product-attributes-container {
+        padding: 10px;
+    }
+    
+    .attribute-group {
+        padding: 0.5rem;
+    }
+    
+    .attribute-values .badge {
+        font-size: 0.7em;
+        padding: 3px 6px;
+    }
+}

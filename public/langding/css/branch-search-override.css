@@ -1,0 +1,305 @@
+        /* ===== FINAL STABLE RESPONSIVE OVERRIDE FOR BRANCH SEARCH ===== */
+        .page-branch .dealer-search-card {
+            max-width: 100%;
+            margin-inline: auto;
+            padding: 16px;
+            border: 1px solid #e3e6eb;
+            border-radius: 24px;
+            background: #f6f7f8;
+            box-shadow: none;
+        }
+
+        .page-branch .dealer-search-head {
+            display: none !important;
+        }
+
+        .page-branch .dealer-search-tabs {
+            display: flex;
+            gap: 6px;
+            width: 100%;
+            padding: 4px;
+            margin: 0 0 12px;
+            background: #f1f3f5;
+            border: 1px solid #dde2e8;
+            border-radius: 20px;
+            box-shadow: none;
+        }
+
+        .page-branch .dealer-tab {
+            flex: 1 1 0;
+            min-width: 0;
+            min-height: 50px;
+            padding: 0 16px;
+            border: 0 !important;
+            border-radius: 16px;
+            background: transparent;
+            color: #69707c;
+            font-size: 15px;
+            font-weight: 700;
+            box-shadow: none !important;
+        }
+
+        .page-branch .dealer-tab.is-active {
+            background: linear-gradient(180deg, #df1a22 0%, #bf1118 100%);
+            color: #fff;
+            box-shadow: 0 6px 14px rgba(201, 22, 29, 0.18) !important;
+        }
+
+        .page-branch .dealer-search-panels,
+        .page-branch .dealer-panel,
+        .page-branch .dealer-form-grid,
+        .page-branch .area-grid,
+        .page-branch .location-grid {
+            width: 100%;
+        }
+
+        .page-branch .dealer-search-panels {
+            background: transparent !important;
+            border: 0 !important;
+            border-radius: 0 !important;
+            padding: 0 !important;
+            box-shadow: none !important;
+        }
+
+        .page-branch .dealer-panel {
+            display: none;
+        }
+
+        .page-branch .dealer-panel.is-active {
+            display: block;
+        }
+
+        .page-branch .dealer-form-grid {
+            display: grid;
+            gap: 12px;
+            align-items: stretch;
+        }
+
+        .page-branch .area-grid,
+        .page-branch .location-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .page-branch .field {
+            min-width: 0;
+            width: 100%;
+            display: block !important;
+            margin: 0;
+        }
+
+        .page-branch .field-label,
+        .page-branch .desktop-only {
+            position: absolute !important;
+            width: 1px !important;
+            height: 1px !important;
+            padding: 0 !important;
+            margin: -1px !important;
+            overflow: hidden !important;
+            clip: rect(0, 0, 0, 0) !important;
+            white-space: nowrap !important;
+            border: 0 !important;
+        }
+
+        .page-branch .field-control {
+            position: relative;
+            width: 100% !important;
+            min-width: 0;
+            min-height: 54px;
+            background: #fff;
+            border: 1px solid #d8dde5;
+            border-radius: 16px;
+            box-shadow: none;
+        }
+
+        .page-branch .field-control.has-leading-icon .field-select {
+            padding-left: 46px;
+        }
+
+        .page-branch .field-leading-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 2;
+            width: 16px;
+            height: 16px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .page-branch .field-leading-icon img {
+            width: 16px;
+            height: 16px;
+            object-fit: contain;
+        }
+
+        .page-branch .field-select {
+            width: 100% !important;
+            min-width: 0;
+            min-height: 54px;
+            padding: 0 14px;
+            padding-right: 38px;
+            border: 0;
+            border-radius: 16px;
+            background-position: right 14px center;
+            background-size: 12px auto;
+            font-size: 15px;
+            font-weight: 600;
+            color: #5d6570;
+            box-shadow: none;
+        }
+
+        .page-branch .action-field {
+            width: 100%;
+            justify-self: stretch !important;
+            align-self: stretch !important;
+        }
+
+        .page-branch .btn-search,
+        .page-branch .btn-go,
+        .page-branch #btnGetLocation {
+            width: 100% !important;
+            min-width: 0 !important;
+            min-height: 54px;
+            padding: 0 18px;
+            border: 0;
+            border-radius: 16px;
+            font-size: 13px;
+            font-weight: 800;
+            letter-spacing: 0;
+            text-transform: none;
+            background: linear-gradient(180deg, #df141c 0%, #c60f17 100%);
+            color: #fff;
+            box-shadow: none;
+            transform: none !important;
+        }
+
+        .page-branch .dealer-search-note {
+            margin: 10px 2px 0;
+            font-size: 12px;
+            line-height: 1.5;
+            color: #737b87;
+        }
+
+        .page-branch .select2-container,
+        .page-branch .select2-container .selection,
+        .page-branch .select2-container .select2-selection {
+            width: 100% !important;
+            min-width: 0 !important;
+        }
+
+        /* ===== tablet ===== */
+        @media (min-width: 768px) {
+            .page-branch .dealer-search-card {
+                padding: 18px;
+                border-radius: 28px;
+            }
+
+            .page-branch .dealer-search-tabs {
+                width: fit-content;
+                min-width: 320px;
+            }
+
+            .page-branch .dealer-tab {
+                min-height: 52px;
+                padding: 0 22px;
+                font-size: 16px;
+                border-radius: 18px;
+            }
+
+            .page-branch .area-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .page-branch .location-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .page-branch .area-grid .action-field,
+            .page-branch .location-grid .action-field {
+                grid-column: 1 / -1;
+            }
+
+            .page-branch .field-control,
+            .page-branch .field-select,
+            .page-branch .btn-search,
+            .page-branch .btn-go,
+            .page-branch #btnGetLocation {
+                min-height: 58px;
+                border-radius: 18px;
+            }
+        }
+
+        /* ===== desktop ổn định ===== */
+        @media (min-width: 1200px) {
+            .page-branch .dealer-search-card {
+                display: flex;
+                flex-wrap: wrap;
+                align-items: center;
+                gap: 14px;
+                padding: 18px 20px;
+                border-radius: 40px;
+            }
+
+            .page-branch .dealer-search-tabs {
+                flex: 0 0 420px;
+                width: 420px;
+                margin: 0;
+                border-radius: 28px;
+            }
+
+            .page-branch .dealer-search-panels {
+                flex: 1 1 700px;
+                min-width: 0;
+            }
+
+            .page-branch .area-grid {
+                grid-template-columns: repeat(3, minmax(180px, 1fr)) minmax(190px, 240px);
+                gap: 14px;
+                align-items: center;
+            }
+
+            .page-branch .location-grid {
+                grid-template-columns: minmax(220px, 1fr) minmax(190px, 240px);
+                gap: 14px;
+                align-items: center;
+            }
+
+            .page-branch .area-grid .action-field,
+            .page-branch .location-grid .action-field {
+                grid-column: auto;
+            }
+
+            .page-branch .field-control,
+            .page-branch .field-select,
+            .page-branch .btn-search,
+            .page-branch .btn-go,
+            .page-branch #btnGetLocation {
+                min-height: 54px;
+                border-radius: 22px;
+                font-size: 15px;
+            }
+
+            .page-branch .dealer-tab {
+                min-height: 62px;
+                font-size: 16px;
+                border-radius: 24px;
+            }
+
+            .page-branch .dealer-search-note {
+                display: none;
+            }
+        }
+
+        /* ===== desktop hẹp hơn: tránh ép 1 hàng quá sớm ===== */
+        @media (min-width: 1200px) and (max-width: 1399.98px) {
+            .page-branch .dealer-search-card {
+                display: block;
+            }
+
+            .page-branch .dealer-search-tabs {
+                width: fit-content;
+                margin-bottom: 12px;
+            }
+        }

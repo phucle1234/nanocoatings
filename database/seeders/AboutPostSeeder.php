@@ -1,0 +1,1005 @@
+<?php
+
+namespace Database\Seeders;
+
+use Illuminate\Database\Seeder;
+use App\Models\Post;
+use App\Models\PostCategory;
+
+class AboutPostSeeder extends Seeder
+{
+    public function run(): void
+    {
+        // Lấy danh mục "Giới thiệu Casumina"
+        $category = PostCategory::whereHas('translations', function ($query) {
+            $query->where('slug', 'gioi-thieu-cong-ty')->where('language', 'vi');
+        })->first();
+
+        if (!$category) {
+            $this->command->error('❌ Không tìm thấy danh mục "Giới thiệu Casumina"');
+            return;
+        }
+
+        // Danh sách 7 bài viết
+        $posts = [
+            [
+                'is_active' => true,
+                'is_featured' => true,
+                'status' => 'published',
+                'sort_order' => 1,
+                'published_at' => now(),
+                'translations' => [
+                    'title_vi' => 'Giới thiệu công ty',
+                    'title_en' => 'Introduction about company',
+                    'description_vi' => 'Giới thiệu về công ty Casumina',
+                    'description_en' => 'Introduction about Casumina company',
+                    'content_vi' => <<<HTML
+                            <div class="about-content">
+                                <div class="font-hanzel fs-38 fw-400 text-center sub-title">Về CASUMINA</div>
+                                <div class="about-content-wrap row">
+                                    <div class="col-lg-5">
+                                        <div class="about-content-img-wrap position-relative">
+                                            <div class="about-content-img position-relative">
+                                                <img src="/langding/imgs/img-about.png" alt="About Company"
+                                                    class="img-fluid w-100">
+                                            </div>
+                                            <div class="d-flex align-items-center gap-2 mt-2">
+                                                <svg width="24" height="36" viewBox="0 0 24 36" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <path
+                                                        d="M11.7751 2.75515C11.3943 2.75239 11.0837 3.05886 11.0809 3.43901C11.0781 3.81917 11.3839 4.12977 11.7648 4.13252C12.1449 4.13528 12.4555 3.8295 12.4583 3.44934C12.461 3.06919 12.1553 2.75859 11.7751 2.75515ZM11.7438 6.88721C9.08467 6.86834 6.90697 9.01354 6.88686 11.6718C6.86682 14.3299 9.01318 16.5087 11.6715 16.5287L11.7084 16.5289C14.3497 16.5289 16.5084 14.3901 16.5284 11.7441C16.5484 9.08612 14.4021 6.90725 11.7438 6.88721ZM11.7082 15.1515L11.6818 15.1514C9.783 15.1371 8.24984 13.5808 8.26417 11.6821C8.27842 9.79203 9.82026 8.26438 11.707 8.26438L11.7334 8.26452C13.6322 8.27884 15.1654 9.83514 15.1511 11.7338C15.1367 13.6239 13.595 15.1515 11.7082 15.1515ZM14.7124 3.27745C14.3542 3.15032 13.9603 3.33798 13.8332 3.69651C13.7061 4.05505 13.8938 4.44863 14.2522 4.57576C17.2857 5.65088 19.3074 8.53999 19.2831 11.7649C19.2803 12.1452 19.5863 12.4559 19.9666 12.4588H19.9719C20.3498 12.4588 20.6576 12.1538 20.6605 11.7752C20.6891 7.96356 18.2988 4.54856 14.7124 3.27745Z"
+                                                        fill="black" />
+                                                    <path
+                                                        d="M15.9336 25.9251C20.5142 20.0289 23.3769 16.9543 23.4155 11.7957C23.464 5.30531 18.1968 0 11.7069 0C5.29269 0 0.0491534 5.19464 0.000394203 11.6201C-0.0389988 16.9185 2.87684 19.989 7.48913 25.9242C2.90074 26.6098 0.000394203 28.3327 0.000394203 30.44C0.000394203 31.8517 1.30518 33.1184 3.67448 34.0068C5.83097 34.8154 8.684 35.2608 11.708 35.2608C14.7319 35.2608 17.585 34.8154 19.7415 34.0068C22.1108 33.1183 23.4155 31.8516 23.4155 30.44C23.4155 28.3338 20.5179 26.6113 15.9336 25.9251ZM1.3777 11.6305C1.42068 5.9606 6.04694 1.37738 11.707 1.37738C17.4341 1.37738 22.0809 6.05964 22.0382 11.7855C22.0016 16.6844 18.9657 19.7034 14.1189 26.0216C13.2544 27.148 12.4605 28.213 11.709 29.2548C10.9597 28.2124 10.1816 27.1665 9.30417 26.0212C4.25704 19.4384 1.34038 16.6476 1.3777 11.6305ZM11.708 33.8835C5.79551 33.8835 1.3777 32.0656 1.3777 30.44C1.3777 29.2346 4.01869 27.7117 8.45922 27.1844C9.4408 28.4723 10.3014 29.6424 11.1454 30.8374C11.209 30.9274 11.2932 31.0008 11.3909 31.0515C11.4887 31.1022 11.5972 31.1287 11.7073 31.1287H11.708C11.818 31.1287 11.9264 31.1024 12.0242 31.0518C12.1219 31.0013 12.2062 30.9281 12.2698 30.8383C13.1059 29.6589 13.99 28.4599 14.9632 27.1852C19.3996 27.713 22.0382 29.2354 22.0382 30.4401C22.0382 32.0656 17.6204 33.8835 11.708 33.8835Z"
+                                                        fill="black" />
+                                                </svg>
+                                                <span class="fs-18">Văn phòng giao dịch: 146 Nguyễn Biểu, phường Chợ Quán,
+                                                    TP.Hồ Chí
+                                                    Minh</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-7">
+                                        <div class="about-content-text fs-16 fw-300">
+                                            Công ty cổ phần Công nghiệp Cao su Miền Nam – CASUMINA – được thành lập từ những năm
+                                            đầu sau giải phóng đất nước (19/04/1976), hiện nay là nhà sản xuất săm lốp xe hàng
+                                            đầu Việt Nam và là đơn vị dẫn đầu nghành công nghiệp cao su. Với ban lãnh đạo tâm
+                                            huyết và ngày càng trẻ hóa, cùng đội ngũ nhân viên sáng tạo, trình độ chuyên môn
+                                            vững vàng, CASUMINA đã đề ra tầm nhìn mới rõ ràng : “ Trở thành nhà sản xuất săm lốp
+                                            hàng đầu Đông Nam Á”
+                                            <ul class="ul-about mt-5">
+                                                <li class="d-flex align-items-start gap-2 gap-lg-3">
+                                                    <img src="/langding/imgs/about-img-1.svg" alt="Check Icon">
+                                                    <div class="content">
+                                                        <div class="fs-16 fw-bold text-uppercase mb-2">Ngành nghề kinh doanh
+                                                        </div>
+                                                        <p>- Sản xuất, kinh doanh các sản phẩm cao su công nghiệp, cao su tiêu
+                                                            dùng.</p>
+                                                        <p>- Kinh doanh, xuất nhập khẩu nguyện liệu, hóa chất, thiết bị ngành
+                                                            công nghiệp cao su.</p>
+                                                        <p>- Kinh doanh thương mại dịch vụ.</p>
+                                                        <p>- Kinh doanh bất động sản.</p>
+                                                        <p>- Kinh doanh các ngành nghề khác hợp với qui định của pháp luật.</p>
+                                                    </div>
+                                                </li>
+                                                <li class="d-flex align-items-start gap-2 gap-lg-3">
+                                                    <img src="/langding/imgs/about-img-2.svg" alt="Check Icon">
+                                                    <div class="content">
+                                                        <div class="fs-16 fw-bold text-uppercase mb-2">TẦM NHÌN VÀ SỨ MỆNH
+                                                        </div>
+                                                        <p>- Nhà sản xuất săm lốp hàng đầu Đông Nam Á.</p>
+                                                    </div>
+                                                </li>
+                                                <li class="d-flex align-items-start gap-2 gap-lg-3">
+                                                    <img src="/langding/imgs/about-img-3.svg" alt="Check Icon">
+                                                    <div class="content">
+                                                        <div class="fs-16 fw-bold text-uppercase mb-2">Sứ mệnh của Casumina
+                                                        </div>
+                                                        <p>- Cống hiến cho xã hội sự an toàn, hạnh phúc, hiệu quả và thân thiện.
+                                                        </p>
+                                                    </div>
+                                                </li>
+                                                <li class="d-flex align-items-start gap-2 gap-lg-3">
+                                                    <img src="/langding/imgs/about-img-4.svg" alt="Check Icon">
+                                                    <div class="content">
+                                                        <div class="fs-16 fw-bold text-uppercase mb-2">Giá trị cốt lõi</div>
+                                                        <p>- Tin cậy: Sản phẩm, dịch vụ, con người.</p>
+                                                        <p>- Hiệu quả: Mọi hoạt động luôn hướng đến hiệu quả.</p>
+                                                        <p>- Hợp tác: Sẵn sàn hợp tác cùng phát triển và có lợi.</p>
+                                                        <p>- Năng động: Luôn sáng tạo va đổi mới.</p>
+                                                        <p>- Nhân bản: Vì con người.</p>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        HTML,
+                    'content_en' => <<<HTML
+                            <div class="about-content">
+                                <div class="font-hanzel fs-38 fw-400 text-center sub-title">Về CASUMINA</div>
+                                <div class="about-content-wrap row">
+                                    <div class="col-lg-5">
+                                        <div class="about-content-img-wrap position-relative">
+                                            <div class="about-content-img position-relative">
+                                                <img src="/langding/imgs/img-about.png" alt="About Company"
+                                                    class="img-fluid w-100">
+                                            </div>
+                                            <div class="d-flex align-items-center gap-2 mt-2">
+                                                <svg width="24" height="36" viewBox="0 0 24 36" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <path
+                                                        d="M11.7751 2.75515C11.3943 2.75239 11.0837 3.05886 11.0809 3.43901C11.0781 3.81917 11.3839 4.12977 11.7648 4.13252C12.1449 4.13528 12.4555 3.8295 12.4583 3.44934C12.461 3.06919 12.1553 2.75859 11.7751 2.75515ZM11.7438 6.88721C9.08467 6.86834 6.90697 9.01354 6.88686 11.6718C6.86682 14.3299 9.01318 16.5087 11.6715 16.5287L11.7084 16.5289C14.3497 16.5289 16.5084 14.3901 16.5284 11.7441C16.5484 9.08612 14.4021 6.90725 11.7438 6.88721ZM11.7082 15.1515L11.6818 15.1514C9.783 15.1371 8.24984 13.5808 8.26417 11.6821C8.27842 9.79203 9.82026 8.26438 11.707 8.26438L11.7334 8.26452C13.6322 8.27884 15.1654 9.83514 15.1511 11.7338C15.1367 13.6239 13.595 15.1515 11.7082 15.1515ZM14.7124 3.27745C14.3542 3.15032 13.9603 3.33798 13.8332 3.69651C13.7061 4.05505 13.8938 4.44863 14.2522 4.57576C17.2857 5.65088 19.3074 8.53999 19.2831 11.7649C19.2803 12.1452 19.5863 12.4559 19.9666 12.4588H19.9719C20.3498 12.4588 20.6576 12.1538 20.6605 11.7752C20.6891 7.96356 18.2988 4.54856 14.7124 3.27745Z"
+                                                        fill="black" />
+                                                    <path
+                                                        d="M15.9336 25.9251C20.5142 20.0289 23.3769 16.9543 23.4155 11.7957C23.464 5.30531 18.1968 0 11.7069 0C5.29269 0 0.0491534 5.19464 0.000394203 11.6201C-0.0389988 16.9185 2.87684 19.989 7.48913 25.9242C2.90074 26.6098 0.000394203 28.3327 0.000394203 30.44C0.000394203 31.8517 1.30518 33.1184 3.67448 34.0068C5.83097 34.8154 8.684 35.2608 11.708 35.2608C14.7319 35.2608 17.585 34.8154 19.7415 34.0068C22.1108 33.1183 23.4155 31.8516 23.4155 30.44C23.4155 28.3338 20.5179 26.6113 15.9336 25.9251ZM1.3777 11.6305C1.42068 5.9606 6.04694 1.37738 11.707 1.37738C17.4341 1.37738 22.0809 6.05964 22.0382 11.7855C22.0016 16.6844 18.9657 19.7034 14.1189 26.0216C13.2544 27.148 12.4605 28.213 11.709 29.2548C10.9597 28.2124 10.1816 27.1665 9.30417 26.0212C4.25704 19.4384 1.34038 16.6476 1.3777 11.6305ZM11.708 33.8835C5.79551 33.8835 1.3777 32.0656 1.3777 30.44C1.3777 29.2346 4.01869 27.7117 8.45922 27.1844C9.4408 28.4723 10.3014 29.6424 11.1454 30.8374C11.209 30.9274 11.2932 31.0008 11.3909 31.0515C11.4887 31.1022 11.5972 31.1287 11.7073 31.1287H11.708C11.818 31.1287 11.9264 31.1024 12.0242 31.0518C12.1219 31.0013 12.2062 30.9281 12.2698 30.8383C13.1059 29.6589 13.99 28.4599 14.9632 27.1852C19.3996 27.713 22.0382 29.2354 22.0382 30.4401C22.0382 32.0656 17.6204 33.8835 11.708 33.8835Z"
+                                                        fill="black" />
+                                                </svg>
+                                                <span class="fs-18">Văn phòng giao dịch: 146 Nguyễn Biểu, phường Chợ Quán,
+                                                    TP.Hồ Chí
+                                                    Minh</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-7">
+                                        <div class="about-content-text fs-16 fw-300">
+                                            Công ty cổ phần Công nghiệp Cao su Miền Nam – CASUMINA – được thành lập từ những năm
+                                            đầu sau giải phóng đất nước (19/04/1976), hiện nay là nhà sản xuất săm lốp xe hàng
+                                            đầu Việt Nam và là đơn vị dẫn đầu nghành công nghiệp cao su. Với ban lãnh đạo tâm
+                                            huyết và ngày càng trẻ hóa, cùng đội ngũ nhân viên sáng tạo, trình độ chuyên môn
+                                            vững vàng, CASUMINA đã đề ra tầm nhìn mới rõ ràng : “ Trở thành nhà sản xuất săm lốp
+                                            hàng đầu Đông Nam Á”
+                                            <ul class="ul-about mt-5">
+                                                <li class="d-flex align-items-start gap-2 gap-lg-3">
+                                                    <img src="/langding/imgs/about-img-1.svg" alt="Check Icon">
+                                                    <div class="content">
+                                                        <div class="fs-16 fw-bold text-uppercase mb-2">Ngành nghề kinh doanh
+                                                        </div>
+                                                        <p>- Sản xuất, kinh doanh các sản phẩm cao su công nghiệp, cao su tiêu
+                                                            dùng.</p>
+                                                        <p>- Kinh doanh, xuất nhập khẩu nguyện liệu, hóa chất, thiết bị ngành
+                                                            công nghiệp cao su.</p>
+                                                        <p>- Kinh doanh thương mại dịch vụ.</p>
+                                                        <p>- Kinh doanh bất động sản.</p>
+                                                        <p>- Kinh doanh các ngành nghề khác hợp với qui định của pháp luật.</p>
+                                                    </div>
+                                                </li>
+                                                <li class="d-flex align-items-start gap-2 gap-lg-3">
+                                                    <img src="/langding/imgs/about-img-2.svg" alt="Check Icon">
+                                                    <div class="content">
+                                                        <div class="fs-16 fw-bold text-uppercase mb-2">TẦM NHÌN VÀ SỨ MỆNH
+                                                        </div>
+                                                        <p>- Nhà sản xuất săm lốp hàng đầu Đông Nam Á.</p>
+                                                    </div>
+                                                </li>
+                                                <li class="d-flex align-items-start gap-2 gap-lg-3">
+                                                    <img src="/langding/imgs/about-img-3.svg" alt="Check Icon">
+                                                    <div class="content">
+                                                        <div class="fs-16 fw-bold text-uppercase mb-2">Sứ mệnh của Casumina
+                                                        </div>
+                                                        <p>- Cống hiến cho xã hội sự an toàn, hạnh phúc, hiệu quả và thân thiện.
+                                                        </p>
+                                                    </div>
+                                                </li>
+                                                <li class="d-flex align-items-start gap-2 gap-lg-3">
+                                                    <img src="/langding/imgs/about-img-4.svg" alt="Check Icon">
+                                                    <div class="content">
+                                                        <div class="fs-16 fw-bold text-uppercase mb-2">Giá trị cốt lõi</div>
+                                                        <p>- Tin cậy: Sản phẩm, dịch vụ, con người.</p>
+                                                        <p>- Hiệu quả: Mọi hoạt động luôn hướng đến hiệu quả.</p>
+                                                        <p>- Hợp tác: Sẵn sàn hợp tác cùng phát triển và có lợi.</p>
+                                                        <p>- Năng động: Luôn sáng tạo va đổi mới.</p>
+                                                        <p>- Nhân bản: Vì con người.</p>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        HTML,
+                    'image_urls' => ['/langding/imgs/img-about.png'],
+                ],
+            ],
+            [
+                'is_active' => true,
+                'is_featured' => false,
+                'status' => 'published',
+                'sort_order' => 2,
+                'published_at' => now(),
+                'translations' => [
+                    'title_vi' => 'Lịch sử hình thành',
+                    'title_en' => 'History',
+                    'description_vi' => 'Lịch sử hình thành và phát triển của Casumina',
+                    'description_en' => 'History and development of Casumina',
+                    'content_vi' => <<<HTML
+                            <div class="about-content">
+                                <div style="max-width: 1200px; margin: 0 auto; padding: 40px 20px;">
+                                    <div style="position: relative; padding-left: 60px;">
+
+                                        <div style="position: absolute; left: 20px; top: 0; bottom: 0; width: 3px; background: linear-gradient(to bottom, #d6232c 0%, #d6232c 50%, rgba(214, 35, 44, 0.3) 100%);"></div>
+
+
+                                        <div style="margin-bottom: 40px; position: relative;">
+                                            <div style="position: absolute; left: -50px; top: 5px; width: 16px; height: 16px; background-color: #d6232c; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 0 3px #d6232c;"></div>
+                                            <div style="margin-bottom: 8px;">
+                                                <span style="font-size: 20px; font-weight: 700; color: #d6232c; font-family: 'Hanzel', sans-serif;">Năm 1976</span>
+                                            </div>
+                                            <div style="font-size: 16px; line-height: 1.8; color: #333; padding-left: 20px; border-left: 2px solid #e0e0e0; margin-left: 10px;">
+                                                Công Ty Công Nghiệp Cao Su Miền Nam được thành lập theo quyết định 427-HC/QĐ ngày 19/04/1976 của Nhà Nước Việt Nam
+                                            </div>
+                                        </div>
+
+                                        <div style="margin-bottom: 40px; position: relative;">
+                                            <div style="position: absolute; left: -50px; top: 5px; width: 16px; height: 16px; background-color: #d6232c; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 0 3px #d6232c;"></div>
+                                            <div style="margin-bottom: 8px;">
+                                                <span style="font-size: 20px; font-weight: 700; color: #d6232c; font-family: 'Hanzel', sans-serif;">Năm 1977</span>
+                                            </div>
+                                            <div style="font-size: 16px; line-height: 1.8; color: #333; padding-left: 20px; border-left: 2px solid #e0e0e0; margin-left: 10px;">
+                                                Trụ sở chính của công ty chính thức được đặt tại số 180 Nguyễn Thị Minh Khai quận 3.
+                                            </div>
+                                        </div>
+
+                                        <div style="margin-bottom: 40px; position: relative;">
+                                            <div style="position: absolute; left: -50px; top: 5px; width: 16px; height: 16px; background-color: #d6232c; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 0 3px #d6232c;"></div>
+                                            <div style="margin-bottom: 8px;">
+                                                <span style="font-size: 20px; font-weight: 700; color: #d6232c; font-family: 'Hanzel', sans-serif;">Năm 1978</span>
+                                            </div>
+                                            <div style="font-size: 16px; line-height: 1.8; color: #333; padding-left: 20px; border-left: 2px solid #e0e0e0; margin-left: 10px;">
+                                                Công ty tiếp quản 5 xí nghiệp là Hóc Môn, Đại Thắng, Bình Lợi, Bình Triệu, Đồng Nai; trưng mua cơ sở Đồng Tâm; quản lý luôn XN Điện Biên vào năm 1979.
+                                            </div>
+                                        </div>
+
+                                        <div style="margin-bottom: 40px; position: relative;">
+                                            <div style="position: absolute; left: -50px; top: 5px; width: 16px; height: 16px; background-color: #d6232c; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 0 3px #d6232c;"></div>
+                                            <div style="margin-bottom: 8px;">
+                                                <span style="font-size: 20px; font-weight: 700; color: #d6232c; font-family: 'Hanzel', sans-serif;">Năm 1985</span>
+                                            </div>
+                                            <div style="font-size: 16px; line-height: 1.8; color: #333; padding-left: 20px; border-left: 2px solid #e0e0e0; margin-left: 10px;">
+                                                <p style="margin-bottom: 12px;">Công ty thành lập "Trung tâm xuất nhập khẩu" với tên giao dịch quốc tế là RUBCHIMEX</p>
+                                                <p style="margin-bottom: 0;">Công ty ký hợp đồng gia công với Công ty Taurus – Hungary Thành lập Xưởng Việt – Hung, đặt tại Xí nghiệp Cao su Hốc Môn để sản xuất săm lốp xe đạp xuất khẩu theo nghị định thư sang Hungary và các nước Đông Âu.</p>
+                                            </div>
+                                        </div>
+
+                                        <div style="margin-bottom: 40px; position: relative;">
+                                            <div style="position: absolute; left: -50px; top: 5px; width: 16px; height: 16px; background-color: #d6232c; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 0 3px #d6232c;"></div>
+                                            <div style="margin-bottom: 8px;">
+                                                <span style="font-size: 20px; font-weight: 700; color: #d6232c; font-family: 'Hanzel', sans-serif;">Năm 1986</span>
+                                            </div>
+                                            <div style="font-size: 16px; line-height: 1.8; color: #333; padding-left: 20px; border-left: 2px solid #e0e0e0; margin-left: 10px;">
+                                                Biểu tượng con sư tử chính thức được chọn làm Logo Công ty.
+                                            </div>
+                                        </div>
+
+                                        <div style="margin-bottom: 40px; position: relative;">
+                                            <div style="position: absolute; left: -50px; top: 5px; width: 16px; height: 16px; background-color: #d6232c; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 0 3px #d6232c;"></div>
+                                            <div style="margin-bottom: 8px;">
+                                                <span style="font-size: 20px; font-weight: 700; color: #d6232c; font-family: 'Hanzel', sans-serif;">Năm 1988</span>
+                                            </div>
+                                            <div style="font-size: 16px; line-height: 1.8; color: #333; padding-left: 20px; border-left: 2px solid #e0e0e0; margin-left: 10px;">
+                                                Chuyển Công ty Công nghiệp Cao su Miền Nam thành Xí nghiệp liên hợp Cao su Miền Nam.
+                                            </div>
+                                        </div>
+
+                                        <div style="margin-bottom: 40px; position: relative;">
+                                            <div style="position: absolute; left: -50px; top: 5px; width: 16px; height: 16px; background-color: #d6232c; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 0 3px #d6232c;"></div>
+                                            <div style="margin-bottom: 8px;">
+                                                <span style="font-size: 20px; font-weight: 700; color: #d6232c; font-family: 'Hanzel', sans-serif;">Năm 1989</span>
+                                            </div>
+                                            <div style="font-size: 16px; line-height: 1.8; color: #333; padding-left: 20px; border-left: 2px solid #e0e0e0; margin-left: 10px;">
+                                                Thương hiệu Casumina chính thức được chứng nhận đăng ký, tên gọi Casumina chính thức ra đời với logo sư tử & dòng chữ Casumina màu đỏ nằm dưới bên trong vòng tròn nền vàng.
+                                            </div>
+                                        </div>
+
+                                        <div style="margin-bottom: 40px; position: relative;">
+                                            <div style="position: absolute; left: -50px; top: 5px; width: 16px; height: 16px; background-color: #d6232c; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 0 3px #d6232c;"></div>
+                                            <div style="margin-bottom: 8px;">
+                                                <span style="font-size: 20px; font-weight: 700; color: #d6232c; font-family: 'Hanzel', sans-serif;">Năm 1990</span>
+                                            </div>
+                                            <div style="font-size: 16px; line-height: 1.8; color: #333; padding-left: 20px; border-left: 2px solid #e0e0e0; margin-left: 10px;">
+                                                Trung tâm nghiên cứu cao su ra đời Kim nghạch xuất khẩu đạt mức hơn 2 triệu rúp chuyển nhượng/ năm.
+                                            </div>
+                                        </div>
+
+                                        <div style="margin-bottom: 40px; position: relative;">
+                                            <div style="position: absolute; left: -50px; top: 5px; width: 16px; height: 16px; background-color: #d6232c; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 0 3px #d6232c;"></div>
+                                            <div style="margin-bottom: 8px;">
+                                                <span style="font-size: 20px; font-weight: 700; color: #d6232c; font-family: 'Hanzel', sans-serif;">Năm 1991</span>
+                                            </div>
+                                            <div style="font-size: 16px; line-height: 1.8; color: #333; padding-left: 20px; border-left: 2px solid #e0e0e0; margin-left: 10px;">
+                                                Bắt đầu sản xuất lốp xe máy, xây dựng mạng lưới bán hàng cả nước.
+                                            </div>
+                                        </div>
+
+                                        <div style="margin-bottom: 40px; position: relative;">
+                                            <div style="position: absolute; left: -50px; top: 5px; width: 16px; height: 16px; background-color: #d6232c; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 0 3px #d6232c;"></div>
+                                            <div style="margin-bottom: 8px;">
+                                                <span style="font-size: 20px; font-weight: 700; color: #d6232c; font-family: 'Hanzel', sans-serif;">Năm 1993</span>
+                                            </div>
+                                            <div style="font-size: 16px; line-height: 1.8; color: #333; padding-left: 20px; border-left: 2px solid #e0e0e0; margin-left: 10px;">
+                                                Công ty chính thức đổi tên từ Xí nghiệp Liên hợp Cao su thành Công ty công nghiệp Cao su Miền Nam.
+                                            </div>
+                                        </div>
+
+                                        <div style="margin-bottom: 40px; position: relative;">
+                                            <div style="position: absolute; left: -50px; top: 5px; width: 16px; height: 16px; background-color: #d6232c; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 0 3px #d6232c;"></div>
+                                            <div style="margin-bottom: 8px;">
+                                                <span style="font-size: 20px; font-weight: 700; color: #d6232c; font-family: 'Hanzel', sans-serif;">Năm 1995</span>
+                                            </div>
+                                            <div style="font-size: 16px; line-height: 1.8; color: #333; padding-left: 20px; border-left: 2px solid #e0e0e0; margin-left: 10px;">
+                                                Sử dụng thương hiệu Casumina thay cho Rubchimex để làm tên giao dịch quốc tế của công ty.
+                                            </div>
+                                        </div>
+
+                                        <div style="margin-bottom: 40px; position: relative;">
+                                            <div style="position: absolute; left: -50px; top: 5px; width: 16px; height: 16px; background-color: #d6232c; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 0 3px #d6232c;"></div>
+                                            <div style="margin-bottom: 8px;">
+                                                <span style="font-size: 20px; font-weight: 700; color: #d6232c; font-family: 'Hanzel', sans-serif;">Năm 1996</span>
+                                            </div>
+                                            <div style="font-size: 16px; line-height: 1.8; color: #333; padding-left: 20px; border-left: 2px solid #e0e0e0; margin-left: 10px;">
+                                                Casumina trở thành nhà sản xuất săm lốp xe máy số 1 Việt Nam với Slogan "Bạn đường tin cậy".
+                                            </div>
+                                        </div>
+
+                                        <div style="margin-bottom: 40px; position: relative;">
+                                            <div style="position: absolute; left: -50px; top: 5px; width: 16px; height: 16px; background-color: #d6232c; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 0 3px #d6232c;"></div>
+                                            <div style="margin-bottom: 8px;">
+                                                <span style="font-size: 20px; font-weight: 700; color: #d6232c; font-family: 'Hanzel', sans-serif;">Năm 1997</span>
+                                            </div>
+                                            <div style="font-size: 16px; line-height: 1.8; color: #333; padding-left: 20px; border-left: 2px solid #e0e0e0; margin-left: 10px;">
+                                                Thành lập Công ty Liên doanh lốp Yokohama Việt Nam với các đối tác: Yokohama và Mitsuibishi Nhật Bản để sản xuất săm lốp ô tô và xe máy.
+                                            </div>
+                                        </div>
+
+                                        <div style="margin-bottom: 40px; position: relative;">
+                                            <div style="position: absolute; left: -50px; top: 5px; width: 16px; height: 16px; background-color: #d6232c; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 0 3px #d6232c;"></div>
+                                            <div style="margin-bottom: 8px;">
+                                                <span style="font-size: 20px; font-weight: 700; color: #d6232c; font-family: 'Hanzel', sans-serif;">Năm 1999</span>
+                                            </div>
+                                            <div style="font-size: 16px; line-height: 1.8; color: #333; padding-left: 20px; border-left: 2px solid #e0e0e0; margin-left: 10px;">
+                                                <p style="margin-bottom: 12px;">Đầu tư một nhà máy chuyên sản xuất lốp ôtô tải với công nghệ hiện đại.</p>
+                                                <p style="margin-bottom: 0;">Công ty nhận chứng chỉ ISO 9002 – 1994.</p>
+                                            </div>
+                                        </div>
+
+                                        <div style="margin-bottom: 40px; position: relative;">
+                                            <div style="position: absolute; left: -50px; top: 5px; width: 16px; height: 16px; background-color: #d6232c; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 0 3px #d6232c;"></div>
+                                            <div style="margin-bottom: 8px;">
+                                                <span style="font-size: 20px; font-weight: 700; color: #d6232c; font-family: 'Hanzel', sans-serif;">Năm 2000</span>
+                                            </div>
+                                            <div style="font-size: 16px; line-height: 1.8; color: #333; padding-left: 20px; border-left: 2px solid #e0e0e0; margin-left: 10px;">
+                                                Công ty nhận chứng nhận sản phẩm săm lốp xe máy đạt tiêu chuẩn Nhật Bản JIS K6366/ JIS K6367.
+                                            </div>
+                                        </div>
+
+                                        <div style="margin-bottom: 40px; position: relative;">
+                                            <div style="position: absolute; left: -50px; top: 5px; width: 16px; height: 16px; background-color: #d6232c; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 0 3px #d6232c;"></div>
+                                            <div style="margin-bottom: 8px;">
+                                                <span style="font-size: 20px; font-weight: 700; color: #d6232c; font-family: 'Hanzel', sans-serif;">Năm 2001</span>
+                                            </div>
+                                            <div style="font-size: 16px; line-height: 1.8; color: #333; padding-left: 20px; border-left: 2px solid #e0e0e0; margin-left: 10px;">
+                                                Công ty nhận chứng chỉ ISO 9001 - 2000.
+                                            </div>
+                                        </div>
+
+                                        <div style="margin-bottom: 40px; position: relative;">
+                                            <div style="position: absolute; left: -50px; top: 5px; width: 16px; height: 16px; background-color: #d6232c; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 0 3px #d6232c;"></div>
+                                            <div style="margin-bottom: 8px;">
+                                                <span style="font-size: 20px; font-weight: 700; color: #d6232c; font-family: 'Hanzel', sans-serif;">Năm 2002</span>
+                                            </div>
+                                            <div style="font-size: 16px; line-height: 1.8; color: #333; padding-left: 20px; border-left: 2px solid #e0e0e0; margin-left: 10px;">
+                                                Công ty nhận chứng nhận sản phẩm lốp ôtô đạt tiêu chuẩn Nhật Bản JIS K4230.
+                                            </div>
+                                        </div>
+
+                                        <div style="margin-bottom: 40px; position: relative;">
+                                            <div style="position: absolute; left: -50px; top: 5px; width: 16px; height: 16px; background-color: #d6232c; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 0 3px #d6232c;"></div>
+                                            <div style="margin-bottom: 8px;">
+                                                <span style="font-size: 20px; font-weight: 700; color: #d6232c; font-family: 'Hanzel', sans-serif;">Năm 2003</span>
+                                            </div>
+                                            <div style="font-size: 16px; line-height: 1.8; color: #333; padding-left: 20px; border-left: 2px solid #e0e0e0; margin-left: 10px;">
+                                                Lốp ôtô tải nặng đầu tiên được sản xuất và sau đó sản lượng lốp tải nặng của công ty đã tăng lên nhanh chóng và về năng lực sản xuất lẫn khả năng tiêu thụ.
+                                            </div>
+                                        </div>
+
+                                        <div style="margin-bottom: 40px; position: relative;">
+                                            <div style="position: absolute; left: -50px; top: 5px; width: 16px; height: 16px; background-color: #d6232c; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 0 3px #d6232c;"></div>
+                                            <div style="margin-bottom: 8px;">
+                                                <span style="font-size: 20px; font-weight: 700; color: #d6232c; font-family: 'Hanzel', sans-serif;">Năm 2004</span>
+                                            </div>
+                                            <div style="font-size: 16px; line-height: 1.8; color: #333; padding-left: 20px; border-left: 2px solid #e0e0e0; margin-left: 10px;">
+                                                Thực hiện dự án cấp quốc gia KC06 DA01, chiếc lốp ôtô radial bán thép đầu tiên của Việt Nam ra đời và vinh dự nhận giải thưởng Khoa học sáng tạo Việt Nam Vifotech.
+                                            </div>
+                                        </div>
+
+                                        <div style="margin-bottom: 40px; position: relative;">
+                                            <div style="position: absolute; left: -50px; top: 5px; width: 16px; height: 16px; background-color: #d6232c; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 0 3px #d6232c;"></div>
+                                            <div style="margin-bottom: 8px;">
+                                                <span style="font-size: 20px; font-weight: 700; color: #d6232c; font-family: 'Hanzel', sans-serif;">Năm 2005</span>
+                                            </div>
+                                            <div style="font-size: 16px; line-height: 1.8; color: #333; padding-left: 20px; border-left: 2px solid #e0e0e0; margin-left: 10px;">
+                                                Công ty đạt doanh số trên 1000 tỷ đồng và được xếp hạng 59/70 nhà sản xuất lốp trên toàn thế giới.
+                                            </div>
+                                        </div>
+
+                                        <div style="margin-bottom: 40px; position: relative;">
+                                            <div style="position: absolute; left: -50px; top: 5px; width: 16px; height: 16px; background-color: #d6232c; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 0 3px #d6232c;"></div>
+                                            <div style="margin-bottom: 8px;">
+                                                <span style="font-size: 20px; font-weight: 700; color: #d6232c; font-family: 'Hanzel', sans-serif;">Năm 2006</span>
+                                            </div>
+                                            <div style="font-size: 16px; line-height: 1.8; color: #333; padding-left: 20px; border-left: 2px solid #e0e0e0; margin-left: 10px;">
+                                                Công ty Cổ phần Công nghiệp Cao su Miền Nam chính thức đi vào hoạt động với vốn điều lệ ban đầu là 90 tỷ đồng. Tháng 11/2006 tăng vốn điều lệ lên 120 tỷ đồng.
+                                            </div>
+                                        </div>
+
+                                        <div style="margin-bottom: 40px; position: relative;">
+                                            <div style="position: absolute; left: -50px; top: 5px; width: 16px; height: 16px; background-color: #d6232c; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 0 3px #d6232c;"></div>
+                                            <div style="margin-bottom: 8px;">
+                                                <span style="font-size: 20px; font-weight: 700; color: #d6232c; font-family: 'Hanzel', sans-serif;">Năm 2007</span>
+                                            </div>
+                                            <div style="font-size: 16px; line-height: 1.8; color: #333; padding-left: 20px; border-left: 2px solid #e0e0e0; margin-left: 10px;">
+                                                <p style="margin-bottom: 12px;">CASUMINA được xếp hạng thứ 59/75 các nhà sản xuất lốp lớn trên thế giới.</p>
+                                                <p style="margin-bottom: 0;">Tháng 03/2007 tăng vốn điều lệ lên 150 tỷ đồng.</p>
+                                            </div>
+                                        </div>
+
+                                        <div style="margin-bottom: 40px; position: relative;">
+                                            <div style="position: absolute; left: -50px; top: 5px; width: 16px; height: 16px; background-color: #d6232c; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 0 3px #d6232c;"></div>
+                                            <div style="margin-bottom: 8px;">
+                                                <span style="font-size: 20px; font-weight: 700; color: #d6232c; font-family: 'Hanzel', sans-serif;">Năm 2008</span>
+                                            </div>
+                                            <div style="font-size: 16px; line-height: 1.8; color: #333; padding-left: 20px; border-left: 2px solid #e0e0e0; margin-left: 10px;">
+                                                Tăng vốn điều lệ lên 200 tỷ đồng.
+                                            </div>
+                                        </div>
+
+                                        <div style="margin-bottom: 40px; position: relative;">
+                                            <div style="position: absolute; left: -50px; top: 5px; width: 16px; height: 16px; background-color: #d6232c; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 0 3px #d6232c;"></div>
+                                            <div style="margin-bottom: 8px;">
+                                                <span style="font-size: 20px; font-weight: 700; color: #d6232c; font-family: 'Hanzel', sans-serif;">Năm 2009</span>
+                                            </div>
+                                            <div style="font-size: 16px; line-height: 1.8; color: #333; padding-left: 20px; border-left: 2px solid #e0e0e0; margin-left: 10px;">
+                                                <p style="margin-bottom: 12px;">Tháng 08/2009 Công ty chính thức niêm yết 25.000.000 cổ phiếu trên Sở giao dịch Chứng khoán Tp.HCM với mã chứng khoán CSM.</p>
+                                                <p style="margin-bottom: 0;">Tăng vốn điều lệ lên 250 tỷ đồng.</p>
+                                            </div>
+                                        </div>
+
+                                        <div style="margin-bottom: 40px; position: relative;">
+                                            <div style="position: absolute; left: -50px; top: 5px; width: 16px; height: 16px; background-color: #d6232c; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 0 3px #d6232c;"></div>
+                                            <div style="margin-bottom: 8px;">
+                                                <span style="font-size: 20px; font-weight: 700; color: #d6232c; font-family: 'Hanzel', sans-serif;">Năm 2010</span>
+                                            </div>
+                                            <div style="font-size: 16px; line-height: 1.8; color: #333; padding-left: 20px; border-left: 2px solid #e0e0e0; margin-left: 10px;">
+                                                Vốn điều lệ tăng 425 tỷ đồng, đồng thời doanh thu và lợi nhuận cũng tăng trưởng vượt bậc.
+                                            </div>
+                                        </div>
+
+                                        <div style="margin-bottom: 40px; position: relative;">
+                                            <div style="position: absolute; left: -50px; top: 5px; width: 16px; height: 16px; background-color: #d6232c; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 0 3px #d6232c;"></div>
+                                            <div style="margin-bottom: 8px;">
+                                                <span style="font-size: 20px; font-weight: 700; color: #d6232c; font-family: 'Hanzel', sans-serif;">Năm 2011</span>
+                                            </div>
+                                            <div style="font-size: 16px; line-height: 1.8; color: #333; padding-left: 20px; border-left: 2px solid #e0e0e0; margin-left: 10px;">
+                                                Kỉ niệm 35 năm (19/04/1976 – 19/04/2011) Công y tiếp tục vinh dự đón nhận huân chương độc lập hạng 3 do nhà nước trao tặng.
+                                            </div>
+                                        </div>
+
+                                        <div style="margin-bottom: 40px; position: relative;">
+                                            <div style="position: absolute; left: -50px; top: 5px; width: 16px; height: 16px; background-color: #d6232c; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 0 3px #d6232c;"></div>
+                                            <div style="margin-bottom: 8px;">
+                                                <span style="font-size: 20px; font-weight: 700; color: #d6232c; font-family: 'Hanzel', sans-serif;">Năm 2012</span>
+                                            </div>
+                                            <div style="font-size: 16px; line-height: 1.8; color: #333; padding-left: 20px; border-left: 2px solid #e0e0e0; margin-left: 10px;">
+                                                Casumina khởi công xây dựng nhà máy sản xuất lốp ôtô toàn thép công suất 1 triệu lốp tại huyện Tân Uyên, tỉnh Bình Dương.
+                                            </div>
+                                        </div>
+
+                                        <div style="margin-bottom: 40px; position: relative;">
+                                            <div style="position: absolute; left: -50px; top: 5px; width: 16px; height: 16px; background-color: #d6232c; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 0 3px #d6232c;"></div>
+                                            <div style="margin-bottom: 8px;">
+                                                <span style="font-size: 20px; font-weight: 700; color: #d6232c; font-family: 'Hanzel', sans-serif;">Năm 2013</span>
+                                            </div>
+                                            <div style="font-size: 16px; line-height: 1.8; color: #333; padding-left: 20px; border-left: 2px solid #e0e0e0; margin-left: 10px;">
+                                                Casumina hợp tác với đối tác Camso – công ty đứng đầu thế giới về sản xuất lốp xe nâng.
+                                            </div>
+                                        </div>
+
+                                        <div style="margin-bottom: 40px; position: relative;">
+                                            <div style="position: absolute; left: -50px; top: 5px; width: 16px; height: 16px; background-color: #d6232c; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 0 3px #d6232c;"></div>
+                                            <div style="margin-bottom: 8px;">
+                                                <span style="font-size: 20px; font-weight: 700; color: #d6232c; font-family: 'Hanzel', sans-serif;">Năm 2014</span>
+                                            </div>
+                                            <div style="font-size: 16px; line-height: 1.8; color: #333; padding-left: 20px; border-left: 2px solid #e0e0e0; margin-left: 10px;">
+                                                Khánh thành nhà máy Casumina Radial – Công suất 1 triệu lốp/năm.
+                                            </div>
+                                        </div>
+
+                                        <div style="margin-bottom: 40px; position: relative;">
+                                            <div style="position: absolute; left: -50px; top: 5px; width: 16px; height: 16px; background-color: #d6232c; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 0 3px #d6232c;"></div>
+                                            <div style="margin-bottom: 8px;">
+                                                <span style="font-size: 20px; font-weight: 700; color: #d6232c; font-family: 'Hanzel', sans-serif;">Năm 2015</span>
+                                            </div>
+                                            <div style="font-size: 16px; line-height: 1.8; color: #333; padding-left: 20px; border-left: 2px solid #e0e0e0; margin-left: 10px;">
+                                                <p style="margin-bottom: 12px;">Trở thành nhà máy sản xuất lốp xe máy tubeless đứng đầu Việt Nam.</p>
+                                                <p style="margin-bottom: 12px;">Doanh thu công ty đạt 3.600 tỷ, lợi nhuận 370 tỷ đồng, giữ vững vị trí Top 5 về doanh thu và hiệu quả trong Tập đoàn 2 năm liền 2014 – 2015.</p>
+                                                <p style="margin-bottom: 0;">Vốn điều lệ tăng trên 740 tỉ đồng.</p>
+                                            </div>
+                                        </div>
+
+                                        <div style="margin-bottom: 40px; position: relative;">
+                                            <div style="position: absolute; left: -50px; top: 5px; width: 16px; height: 16px; background-color: #d6232c; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 0 3px #d6232c;"></div>
+                                            <div style="margin-bottom: 8px;">
+                                                <span style="font-size: 20px; font-weight: 700; color: #d6232c; font-family: 'Hanzel', sans-serif;">Năm 2016</span>
+                                            </div>
+                                            <div style="font-size: 16px; line-height: 1.8; color: #333; padding-left: 20px; border-left: 2px solid #e0e0e0; margin-left: 10px;">
+                                                Kỷ niệm 40 năm thành lập Công ty (1976-2016), Với nhiều thách thức và triển vọng, công ty đã đặt ra nhiều mục tiêu lớn hơn nhằm chinh phục tầm cao mới: doanh thu 3.800 tỷ, lợi nhuận 380 tỷ, triển khai thành công hệ thống bảo trì năng suất toàn diện – TPM, thực hiện dự án đầu tư 500.000 lốp ôtô bán thép xuất sang thị trường Bắc Mỹ.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        HTML,
+                    'content_en' => <<<HTML
+                            <div class="about-content">
+                                <div style="max-width: 1200px; margin: 0 auto; padding: 40px 20px;">
+                                    <div style="position: relative; padding-left: 60px;">
+
+                                        <div style="position: absolute; left: 20px; top: 0; bottom: 0; width: 3px; background: linear-gradient(to bottom, #d6232c 0%, #d6232c 50%, rgba(214, 35, 44, 0.3) 100%);"></div>
+
+
+                                        <div style="margin-bottom: 40px; position: relative;">
+                                            <div style="position: absolute; left: -50px; top: 5px; width: 16px; height: 16px; background-color: #d6232c; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 0 3px #d6232c;"></div>
+                                            <div style="margin-bottom: 8px;">
+                                                <span style="font-size: 20px; font-weight: 700; color: #d6232c; font-family: 'Hanzel', sans-serif;">Năm 1976</span>
+                                            </div>
+                                            <div style="font-size: 16px; line-height: 1.8; color: #333; padding-left: 20px; border-left: 2px solid #e0e0e0; margin-left: 10px;">
+                                                Công Ty Công Nghiệp Cao Su Miền Nam được thành lập theo quyết định 427-HC/QĐ ngày 19/04/1976 của Nhà Nước Việt Nam
+                                            </div>
+                                        </div>
+
+                                        <div style="margin-bottom: 40px; position: relative;">
+                                            <div style="position: absolute; left: -50px; top: 5px; width: 16px; height: 16px; background-color: #d6232c; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 0 3px #d6232c;"></div>
+                                            <div style="margin-bottom: 8px;">
+                                                <span style="font-size: 20px; font-weight: 700; color: #d6232c; font-family: 'Hanzel', sans-serif;">Năm 1977</span>
+                                            </div>
+                                            <div style="font-size: 16px; line-height: 1.8; color: #333; padding-left: 20px; border-left: 2px solid #e0e0e0; margin-left: 10px;">
+                                                Trụ sở chính của công ty chính thức được đặt tại số 180 Nguyễn Thị Minh Khai quận 3.
+                                            </div>
+                                        </div>
+
+                                        <div style="margin-bottom: 40px; position: relative;">
+                                            <div style="position: absolute; left: -50px; top: 5px; width: 16px; height: 16px; background-color: #d6232c; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 0 3px #d6232c;"></div>
+                                            <div style="margin-bottom: 8px;">
+                                                <span style="font-size: 20px; font-weight: 700; color: #d6232c; font-family: 'Hanzel', sans-serif;">Năm 1978</span>
+                                            </div>
+                                            <div style="font-size: 16px; line-height: 1.8; color: #333; padding-left: 20px; border-left: 2px solid #e0e0e0; margin-left: 10px;">
+                                                Công ty tiếp quản 5 xí nghiệp là Hóc Môn, Đại Thắng, Bình Lợi, Bình Triệu, Đồng Nai; trưng mua cơ sở Đồng Tâm; quản lý luôn XN Điện Biên vào năm 1979.
+                                            </div>
+                                        </div>
+
+                                        <div style="margin-bottom: 40px; position: relative;">
+                                            <div style="position: absolute; left: -50px; top: 5px; width: 16px; height: 16px; background-color: #d6232c; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 0 3px #d6232c;"></div>
+                                            <div style="margin-bottom: 8px;">
+                                                <span style="font-size: 20px; font-weight: 700; color: #d6232c; font-family: 'Hanzel', sans-serif;">Năm 1985</span>
+                                            </div>
+                                            <div style="font-size: 16px; line-height: 1.8; color: #333; padding-left: 20px; border-left: 2px solid #e0e0e0; margin-left: 10px;">
+                                                <p style="margin-bottom: 12px;">Công ty thành lập "Trung tâm xuất nhập khẩu" với tên giao dịch quốc tế là RUBCHIMEX</p>
+                                                <p style="margin-bottom: 0;">Công ty ký hợp đồng gia công với Công ty Taurus – Hungary Thành lập Xưởng Việt – Hung, đặt tại Xí nghiệp Cao su Hốc Môn để sản xuất săm lốp xe đạp xuất khẩu theo nghị định thư sang Hungary và các nước Đông Âu.</p>
+                                            </div>
+                                        </div>
+
+                                        <div style="margin-bottom: 40px; position: relative;">
+                                            <div style="position: absolute; left: -50px; top: 5px; width: 16px; height: 16px; background-color: #d6232c; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 0 3px #d6232c;"></div>
+                                            <div style="margin-bottom: 8px;">
+                                                <span style="font-size: 20px; font-weight: 700; color: #d6232c; font-family: 'Hanzel', sans-serif;">Năm 1986</span>
+                                            </div>
+                                            <div style="font-size: 16px; line-height: 1.8; color: #333; padding-left: 20px; border-left: 2px solid #e0e0e0; margin-left: 10px;">
+                                                Biểu tượng con sư tử chính thức được chọn làm Logo Công ty.
+                                            </div>
+                                        </div>
+
+                                        <div style="margin-bottom: 40px; position: relative;">
+                                            <div style="position: absolute; left: -50px; top: 5px; width: 16px; height: 16px; background-color: #d6232c; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 0 3px #d6232c;"></div>
+                                            <div style="margin-bottom: 8px;">
+                                                <span style="font-size: 20px; font-weight: 700; color: #d6232c; font-family: 'Hanzel', sans-serif;">Năm 1988</span>
+                                            </div>
+                                            <div style="font-size: 16px; line-height: 1.8; color: #333; padding-left: 20px; border-left: 2px solid #e0e0e0; margin-left: 10px;">
+                                                Chuyển Công ty Công nghiệp Cao su Miền Nam thành Xí nghiệp liên hợp Cao su Miền Nam.
+                                            </div>
+                                        </div>
+
+                                        <div style="margin-bottom: 40px; position: relative;">
+                                            <div style="position: absolute; left: -50px; top: 5px; width: 16px; height: 16px; background-color: #d6232c; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 0 3px #d6232c;"></div>
+                                            <div style="margin-bottom: 8px;">
+                                                <span style="font-size: 20px; font-weight: 700; color: #d6232c; font-family: 'Hanzel', sans-serif;">Năm 1989</span>
+                                            </div>
+                                            <div style="font-size: 16px; line-height: 1.8; color: #333; padding-left: 20px; border-left: 2px solid #e0e0e0; margin-left: 10px;">
+                                                Thương hiệu Casumina chính thức được chứng nhận đăng ký, tên gọi Casumina chính thức ra đời với logo sư tử & dòng chữ Casumina màu đỏ nằm dưới bên trong vòng tròn nền vàng.
+                                            </div>
+                                        </div>
+
+                                        <div style="margin-bottom: 40px; position: relative;">
+                                            <div style="position: absolute; left: -50px; top: 5px; width: 16px; height: 16px; background-color: #d6232c; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 0 3px #d6232c;"></div>
+                                            <div style="margin-bottom: 8px;">
+                                                <span style="font-size: 20px; font-weight: 700; color: #d6232c; font-family: 'Hanzel', sans-serif;">Năm 1990</span>
+                                            </div>
+                                            <div style="font-size: 16px; line-height: 1.8; color: #333; padding-left: 20px; border-left: 2px solid #e0e0e0; margin-left: 10px;">
+                                                Trung tâm nghiên cứu cao su ra đời Kim nghạch xuất khẩu đạt mức hơn 2 triệu rúp chuyển nhượng/ năm.
+                                            </div>
+                                        </div>
+
+                                        <div style="margin-bottom: 40px; position: relative;">
+                                            <div style="position: absolute; left: -50px; top: 5px; width: 16px; height: 16px; background-color: #d6232c; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 0 3px #d6232c;"></div>
+                                            <div style="margin-bottom: 8px;">
+                                                <span style="font-size: 20px; font-weight: 700; color: #d6232c; font-family: 'Hanzel', sans-serif;">Năm 1991</span>
+                                            </div>
+                                            <div style="font-size: 16px; line-height: 1.8; color: #333; padding-left: 20px; border-left: 2px solid #e0e0e0; margin-left: 10px;">
+                                                Bắt đầu sản xuất lốp xe máy, xây dựng mạng lưới bán hàng cả nước.
+                                            </div>
+                                        </div>
+
+                                        <div style="margin-bottom: 40px; position: relative;">
+                                            <div style="position: absolute; left: -50px; top: 5px; width: 16px; height: 16px; background-color: #d6232c; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 0 3px #d6232c;"></div>
+                                            <div style="margin-bottom: 8px;">
+                                                <span style="font-size: 20px; font-weight: 700; color: #d6232c; font-family: 'Hanzel', sans-serif;">Năm 1993</span>
+                                            </div>
+                                            <div style="font-size: 16px; line-height: 1.8; color: #333; padding-left: 20px; border-left: 2px solid #e0e0e0; margin-left: 10px;">
+                                                Công ty chính thức đổi tên từ Xí nghiệp Liên hợp Cao su thành Công ty công nghiệp Cao su Miền Nam.
+                                            </div>
+                                        </div>
+
+                                        <div style="margin-bottom: 40px; position: relative;">
+                                            <div style="position: absolute; left: -50px; top: 5px; width: 16px; height: 16px; background-color: #d6232c; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 0 3px #d6232c;"></div>
+                                            <div style="margin-bottom: 8px;">
+                                                <span style="font-size: 20px; font-weight: 700; color: #d6232c; font-family: 'Hanzel', sans-serif;">Năm 1995</span>
+                                            </div>
+                                            <div style="font-size: 16px; line-height: 1.8; color: #333; padding-left: 20px; border-left: 2px solid #e0e0e0; margin-left: 10px;">
+                                                Sử dụng thương hiệu Casumina thay cho Rubchimex để làm tên giao dịch quốc tế của công ty.
+                                            </div>
+                                        </div>
+
+                                        <div style="margin-bottom: 40px; position: relative;">
+                                            <div style="position: absolute; left: -50px; top: 5px; width: 16px; height: 16px; background-color: #d6232c; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 0 3px #d6232c;"></div>
+                                            <div style="margin-bottom: 8px;">
+                                                <span style="font-size: 20px; font-weight: 700; color: #d6232c; font-family: 'Hanzel', sans-serif;">Năm 1996</span>
+                                            </div>
+                                            <div style="font-size: 16px; line-height: 1.8; color: #333; padding-left: 20px; border-left: 2px solid #e0e0e0; margin-left: 10px;">
+                                                Casumina trở thành nhà sản xuất săm lốp xe máy số 1 Việt Nam với Slogan "Bạn đường tin cậy".
+                                            </div>
+                                        </div>
+
+                                        <div style="margin-bottom: 40px; position: relative;">
+                                            <div style="position: absolute; left: -50px; top: 5px; width: 16px; height: 16px; background-color: #d6232c; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 0 3px #d6232c;"></div>
+                                            <div style="margin-bottom: 8px;">
+                                                <span style="font-size: 20px; font-weight: 700; color: #d6232c; font-family: 'Hanzel', sans-serif;">Năm 1997</span>
+                                            </div>
+                                            <div style="font-size: 16px; line-height: 1.8; color: #333; padding-left: 20px; border-left: 2px solid #e0e0e0; margin-left: 10px;">
+                                                Thành lập Công ty Liên doanh lốp Yokohama Việt Nam với các đối tác: Yokohama và Mitsuibishi Nhật Bản để sản xuất săm lốp ô tô và xe máy.
+                                            </div>
+                                        </div>
+
+                                        <div style="margin-bottom: 40px; position: relative;">
+                                            <div style="position: absolute; left: -50px; top: 5px; width: 16px; height: 16px; background-color: #d6232c; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 0 3px #d6232c;"></div>
+                                            <div style="margin-bottom: 8px;">
+                                                <span style="font-size: 20px; font-weight: 700; color: #d6232c; font-family: 'Hanzel', sans-serif;">Năm 1999</span>
+                                            </div>
+                                            <div style="font-size: 16px; line-height: 1.8; color: #333; padding-left: 20px; border-left: 2px solid #e0e0e0; margin-left: 10px;">
+                                                <p style="margin-bottom: 12px;">Đầu tư một nhà máy chuyên sản xuất lốp ôtô tải với công nghệ hiện đại.</p>
+                                                <p style="margin-bottom: 0;">Công ty nhận chứng chỉ ISO 9002 – 1994.</p>
+                                            </div>
+                                        </div>
+
+                                        <div style="margin-bottom: 40px; position: relative;">
+                                            <div style="position: absolute; left: -50px; top: 5px; width: 16px; height: 16px; background-color: #d6232c; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 0 3px #d6232c;"></div>
+                                            <div style="margin-bottom: 8px;">
+                                                <span style="font-size: 20px; font-weight: 700; color: #d6232c; font-family: 'Hanzel', sans-serif;">Năm 2000</span>
+                                            </div>
+                                            <div style="font-size: 16px; line-height: 1.8; color: #333; padding-left: 20px; border-left: 2px solid #e0e0e0; margin-left: 10px;">
+                                                Công ty nhận chứng nhận sản phẩm săm lốp xe máy đạt tiêu chuẩn Nhật Bản JIS K6366/ JIS K6367.
+                                            </div>
+                                        </div>
+
+                                        <div style="margin-bottom: 40px; position: relative;">
+                                            <div style="position: absolute; left: -50px; top: 5px; width: 16px; height: 16px; background-color: #d6232c; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 0 3px #d6232c;"></div>
+                                            <div style="margin-bottom: 8px;">
+                                                <span style="font-size: 20px; font-weight: 700; color: #d6232c; font-family: 'Hanzel', sans-serif;">Năm 2001</span>
+                                            </div>
+                                            <div style="font-size: 16px; line-height: 1.8; color: #333; padding-left: 20px; border-left: 2px solid #e0e0e0; margin-left: 10px;">
+                                                Công ty nhận chứng chỉ ISO 9001 - 2000.
+                                            </div>
+                                        </div>
+
+                                        <div style="margin-bottom: 40px; position: relative;">
+                                            <div style="position: absolute; left: -50px; top: 5px; width: 16px; height: 16px; background-color: #d6232c; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 0 3px #d6232c;"></div>
+                                            <div style="margin-bottom: 8px;">
+                                                <span style="font-size: 20px; font-weight: 700; color: #d6232c; font-family: 'Hanzel', sans-serif;">Năm 2002</span>
+                                            </div>
+                                            <div style="font-size: 16px; line-height: 1.8; color: #333; padding-left: 20px; border-left: 2px solid #e0e0e0; margin-left: 10px;">
+                                                Công ty nhận chứng nhận sản phẩm lốp ôtô đạt tiêu chuẩn Nhật Bản JIS K4230.
+                                            </div>
+                                        </div>
+
+                                        <div style="margin-bottom: 40px; position: relative;">
+                                            <div style="position: absolute; left: -50px; top: 5px; width: 16px; height: 16px; background-color: #d6232c; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 0 3px #d6232c;"></div>
+                                            <div style="margin-bottom: 8px;">
+                                                <span style="font-size: 20px; font-weight: 700; color: #d6232c; font-family: 'Hanzel', sans-serif;">Năm 2003</span>
+                                            </div>
+                                            <div style="font-size: 16px; line-height: 1.8; color: #333; padding-left: 20px; border-left: 2px solid #e0e0e0; margin-left: 10px;">
+                                                Lốp ôtô tải nặng đầu tiên được sản xuất và sau đó sản lượng lốp tải nặng của công ty đã tăng lên nhanh chóng và về năng lực sản xuất lẫn khả năng tiêu thụ.
+                                            </div>
+                                        </div>
+
+                                        <div style="margin-bottom: 40px; position: relative;">
+                                            <div style="position: absolute; left: -50px; top: 5px; width: 16px; height: 16px; background-color: #d6232c; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 0 3px #d6232c;"></div>
+                                            <div style="margin-bottom: 8px;">
+                                                <span style="font-size: 20px; font-weight: 700; color: #d6232c; font-family: 'Hanzel', sans-serif;">Năm 2004</span>
+                                            </div>
+                                            <div style="font-size: 16px; line-height: 1.8; color: #333; padding-left: 20px; border-left: 2px solid #e0e0e0; margin-left: 10px;">
+                                                Thực hiện dự án cấp quốc gia KC06 DA01, chiếc lốp ôtô radial bán thép đầu tiên của Việt Nam ra đời và vinh dự nhận giải thưởng Khoa học sáng tạo Việt Nam Vifotech.
+                                            </div>
+                                        </div>
+
+                                        <div style="margin-bottom: 40px; position: relative;">
+                                            <div style="position: absolute; left: -50px; top: 5px; width: 16px; height: 16px; background-color: #d6232c; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 0 3px #d6232c;"></div>
+                                            <div style="margin-bottom: 8px;">
+                                                <span style="font-size: 20px; font-weight: 700; color: #d6232c; font-family: 'Hanzel', sans-serif;">Năm 2005</span>
+                                            </div>
+                                            <div style="font-size: 16px; line-height: 1.8; color: #333; padding-left: 20px; border-left: 2px solid #e0e0e0; margin-left: 10px;">
+                                                Công ty đạt doanh số trên 1000 tỷ đồng và được xếp hạng 59/70 nhà sản xuất lốp trên toàn thế giới.
+                                            </div>
+                                        </div>
+
+                                        <div style="margin-bottom: 40px; position: relative;">
+                                            <div style="position: absolute; left: -50px; top: 5px; width: 16px; height: 16px; background-color: #d6232c; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 0 3px #d6232c;"></div>
+                                            <div style="margin-bottom: 8px;">
+                                                <span style="font-size: 20px; font-weight: 700; color: #d6232c; font-family: 'Hanzel', sans-serif;">Năm 2006</span>
+                                            </div>
+                                            <div style="font-size: 16px; line-height: 1.8; color: #333; padding-left: 20px; border-left: 2px solid #e0e0e0; margin-left: 10px;">
+                                                Công ty Cổ phần Công nghiệp Cao su Miền Nam chính thức đi vào hoạt động với vốn điều lệ ban đầu là 90 tỷ đồng. Tháng 11/2006 tăng vốn điều lệ lên 120 tỷ đồng.
+                                            </div>
+                                        </div>
+
+                                        <div style="margin-bottom: 40px; position: relative;">
+                                            <div style="position: absolute; left: -50px; top: 5px; width: 16px; height: 16px; background-color: #d6232c; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 0 3px #d6232c;"></div>
+                                            <div style="margin-bottom: 8px;">
+                                                <span style="font-size: 20px; font-weight: 700; color: #d6232c; font-family: 'Hanzel', sans-serif;">Năm 2007</span>
+                                            </div>
+                                            <div style="font-size: 16px; line-height: 1.8; color: #333; padding-left: 20px; border-left: 2px solid #e0e0e0; margin-left: 10px;">
+                                                <p style="margin-bottom: 12px;">CASUMINA được xếp hạng thứ 59/75 các nhà sản xuất lốp lớn trên thế giới.</p>
+                                                <p style="margin-bottom: 0;">Tháng 03/2007 tăng vốn điều lệ lên 150 tỷ đồng.</p>
+                                            </div>
+                                        </div>
+
+                                        <div style="margin-bottom: 40px; position: relative;">
+                                            <div style="position: absolute; left: -50px; top: 5px; width: 16px; height: 16px; background-color: #d6232c; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 0 3px #d6232c;"></div>
+                                            <div style="margin-bottom: 8px;">
+                                                <span style="font-size: 20px; font-weight: 700; color: #d6232c; font-family: 'Hanzel', sans-serif;">Năm 2008</span>
+                                            </div>
+                                            <div style="font-size: 16px; line-height: 1.8; color: #333; padding-left: 20px; border-left: 2px solid #e0e0e0; margin-left: 10px;">
+                                                Tăng vốn điều lệ lên 200 tỷ đồng.
+                                            </div>
+                                        </div>
+
+                                        <div style="margin-bottom: 40px; position: relative;">
+                                            <div style="position: absolute; left: -50px; top: 5px; width: 16px; height: 16px; background-color: #d6232c; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 0 3px #d6232c;"></div>
+                                            <div style="margin-bottom: 8px;">
+                                                <span style="font-size: 20px; font-weight: 700; color: #d6232c; font-family: 'Hanzel', sans-serif;">Năm 2009</span>
+                                            </div>
+                                            <div style="font-size: 16px; line-height: 1.8; color: #333; padding-left: 20px; border-left: 2px solid #e0e0e0; margin-left: 10px;">
+                                                <p style="margin-bottom: 12px;">Tháng 08/2009 Công ty chính thức niêm yết 25.000.000 cổ phiếu trên Sở giao dịch Chứng khoán Tp.HCM với mã chứng khoán CSM.</p>
+                                                <p style="margin-bottom: 0;">Tăng vốn điều lệ lên 250 tỷ đồng.</p>
+                                            </div>
+                                        </div>
+
+                                        <div style="margin-bottom: 40px; position: relative;">
+                                            <div style="position: absolute; left: -50px; top: 5px; width: 16px; height: 16px; background-color: #d6232c; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 0 3px #d6232c;"></div>
+                                            <div style="margin-bottom: 8px;">
+                                                <span style="font-size: 20px; font-weight: 700; color: #d6232c; font-family: 'Hanzel', sans-serif;">Năm 2010</span>
+                                            </div>
+                                            <div style="font-size: 16px; line-height: 1.8; color: #333; padding-left: 20px; border-left: 2px solid #e0e0e0; margin-left: 10px;">
+                                                Vốn điều lệ tăng 425 tỷ đồng, đồng thời doanh thu và lợi nhuận cũng tăng trưởng vượt bậc.
+                                            </div>
+                                        </div>
+
+                                        <div style="margin-bottom: 40px; position: relative;">
+                                            <div style="position: absolute; left: -50px; top: 5px; width: 16px; height: 16px; background-color: #d6232c; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 0 3px #d6232c;"></div>
+                                            <div style="margin-bottom: 8px;">
+                                                <span style="font-size: 20px; font-weight: 700; color: #d6232c; font-family: 'Hanzel', sans-serif;">Năm 2011</span>
+                                            </div>
+                                            <div style="font-size: 16px; line-height: 1.8; color: #333; padding-left: 20px; border-left: 2px solid #e0e0e0; margin-left: 10px;">
+                                                Kỉ niệm 35 năm (19/04/1976 – 19/04/2011) Công y tiếp tục vinh dự đón nhận huân chương độc lập hạng 3 do nhà nước trao tặng.
+                                            </div>
+                                        </div>
+
+                                        <div style="margin-bottom: 40px; position: relative;">
+                                            <div style="position: absolute; left: -50px; top: 5px; width: 16px; height: 16px; background-color: #d6232c; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 0 3px #d6232c;"></div>
+                                            <div style="margin-bottom: 8px;">
+                                                <span style="font-size: 20px; font-weight: 700; color: #d6232c; font-family: 'Hanzel', sans-serif;">Năm 2012</span>
+                                            </div>
+                                            <div style="font-size: 16px; line-height: 1.8; color: #333; padding-left: 20px; border-left: 2px solid #e0e0e0; margin-left: 10px;">
+                                                Casumina khởi công xây dựng nhà máy sản xuất lốp ôtô toàn thép công suất 1 triệu lốp tại huyện Tân Uyên, tỉnh Bình Dương.
+                                            </div>
+                                        </div>
+
+                                        <div style="margin-bottom: 40px; position: relative;">
+                                            <div style="position: absolute; left: -50px; top: 5px; width: 16px; height: 16px; background-color: #d6232c; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 0 3px #d6232c;"></div>
+                                            <div style="margin-bottom: 8px;">
+                                                <span style="font-size: 20px; font-weight: 700; color: #d6232c; font-family: 'Hanzel', sans-serif;">Năm 2013</span>
+                                            </div>
+                                            <div style="font-size: 16px; line-height: 1.8; color: #333; padding-left: 20px; border-left: 2px solid #e0e0e0; margin-left: 10px;">
+                                                Casumina hợp tác với đối tác Camso – công ty đứng đầu thế giới về sản xuất lốp xe nâng.
+                                            </div>
+                                        </div>
+
+                                        <div style="margin-bottom: 40px; position: relative;">
+                                            <div style="position: absolute; left: -50px; top: 5px; width: 16px; height: 16px; background-color: #d6232c; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 0 3px #d6232c;"></div>
+                                            <div style="margin-bottom: 8px;">
+                                                <span style="font-size: 20px; font-weight: 700; color: #d6232c; font-family: 'Hanzel', sans-serif;">Năm 2014</span>
+                                            </div>
+                                            <div style="font-size: 16px; line-height: 1.8; color: #333; padding-left: 20px; border-left: 2px solid #e0e0e0; margin-left: 10px;">
+                                                Khánh thành nhà máy Casumina Radial – Công suất 1 triệu lốp/năm.
+                                            </div>
+                                        </div>
+
+                                        <div style="margin-bottom: 40px; position: relative;">
+                                            <div style="position: absolute; left: -50px; top: 5px; width: 16px; height: 16px; background-color: #d6232c; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 0 3px #d6232c;"></div>
+                                            <div style="margin-bottom: 8px;">
+                                                <span style="font-size: 20px; font-weight: 700; color: #d6232c; font-family: 'Hanzel', sans-serif;">Năm 2015</span>
+                                            </div>
+                                            <div style="font-size: 16px; line-height: 1.8; color: #333; padding-left: 20px; border-left: 2px solid #e0e0e0; margin-left: 10px;">
+                                                <p style="margin-bottom: 12px;">Trở thành nhà máy sản xuất lốp xe máy tubeless đứng đầu Việt Nam.</p>
+                                                <p style="margin-bottom: 12px;">Doanh thu công ty đạt 3.600 tỷ, lợi nhuận 370 tỷ đồng, giữ vững vị trí Top 5 về doanh thu và hiệu quả trong Tập đoàn 2 năm liền 2014 – 2015.</p>
+                                                <p style="margin-bottom: 0;">Vốn điều lệ tăng trên 740 tỉ đồng.</p>
+                                            </div>
+                                        </div>
+
+                                        <div style="margin-bottom: 40px; position: relative;">
+                                            <div style="position: absolute; left: -50px; top: 5px; width: 16px; height: 16px; background-color: #d6232c; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 0 3px #d6232c;"></div>
+                                            <div style="margin-bottom: 8px;">
+                                                <span style="font-size: 20px; font-weight: 700; color: #d6232c; font-family: 'Hanzel', sans-serif;">Năm 2016</span>
+                                            </div>
+                                            <div style="font-size: 16px; line-height: 1.8; color: #333; padding-left: 20px; border-left: 2px solid #e0e0e0; margin-left: 10px;">
+                                                Kỷ niệm 40 năm thành lập Công ty (1976-2016), Với nhiều thách thức và triển vọng, công ty đã đặt ra nhiều mục tiêu lớn hơn nhằm chinh phục tầm cao mới: doanh thu 3.800 tỷ, lợi nhuận 380 tỷ, triển khai thành công hệ thống bảo trì năng suất toàn diện – TPM, thực hiện dự án đầu tư 500.000 lốp ôtô bán thép xuất sang thị trường Bắc Mỹ.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        HTML,
+                    'image_urls' => [],
+                ],
+            ],
+            [
+                'is_active' => true,
+                'is_featured' => false,
+                'status' => 'published',
+                'sort_order' => 3,
+                'published_at' => now(),
+                'translations' => [
+                    'title_vi' => 'Quan hệ cổ đông',
+                    'title_en' => 'Shareholder Relations',
+                    'description_vi' => 'Thông tin về quan hệ cổ đông của Casumina',
+                    'description_en' => 'Information about Casumina shareholder relations',
+                    'content_vi' => '',
+                    'content_en' => '',
+                    'image_urls' => [],
+                ],
+            ],
+            [
+                'is_active' => true,
+                'is_featured' => false,
+                'status' => 'published',
+                'sort_order' => 4,
+                'published_at' => now(),
+                'translations' => [
+                    'title_vi' => 'Thư viện',
+                    'title_en' => 'Library',
+                    'description_vi' => 'Thư viện hình ảnh và tài liệu của Casumina',
+                    'description_en' => 'Casumina image and document library',
+                    'content_vi' => '',
+                    'content_en' => '',
+                    'image_urls' => [],
+                ],
+            ],
+            [
+                'is_active' => true,
+                'is_featured' => false,
+                'status' => 'published',
+                'sort_order' => 5,
+                'published_at' => now(),
+                'translations' => [
+                    'title_vi' => 'Xí nghiệp thành viên',
+                    'title_en' => 'Member Enterprises',
+                    'description_vi' => 'Danh sách các xí nghiệp thành viên của Casumina',
+                    'description_en' => 'List of Casumina member enterprises',
+                    'content_vi' => '',
+                    'content_en' => '',
+                    'image_urls' => [],
+                ],
+            ],
+            [
+                'is_active' => true,
+                'is_featured' => false,
+                'status' => 'published',
+                'sort_order' => 6,
+                'published_at' => now(),
+                'translations' => [
+                    'title_vi' => 'Cộng đồng',
+                    'title_en' => 'Community',
+                    'description_vi' => 'Hoạt động cộng đồng và trách nhiệm xã hội của Casumina',
+                    'description_en' => 'Community activities and social responsibility of Casumina',
+                    'content_vi' => '',
+                    'content_en' => '',
+                    'image_urls' => [],
+                ],
+            ],
+            [
+                'is_active' => true,
+                'is_featured' => false,
+                'status' => 'published',
+                'sort_order' => 7,
+                'published_at' => now(),
+                'translations' => [
+                    'title_vi' => 'Quan hệ đầu tư',
+                    'title_en' => 'Investment Relations',
+                    'description_vi' => 'Thông tin về quan hệ đầu tư của Casumina',
+                    'description_en' => 'Information about Casumina investment relations',
+                    'content_vi' => '',
+                    'content_en' => '',
+                    'image_urls' => [],
+                ],
+            ],
+        ];
+
+        // Tạo 7 bài viết
+        foreach ($posts as $postData) {
+            $this->createPost($postData, $category->id);
+        }
+
+        $this->command->info('✅ Đã tạo 7 bài viết giới thiệu');
+    }
+
+    /**
+     * Helper method để tạo post
+     */
+    private function createPost(array $postData, ?int $categoryId): void
+    {
+        $translations = $postData['translations'];
+        unset($postData['translations']);
+
+        $post = Post::create($postData);
+
+        // Gán danh mục cho bài viết
+        if ($categoryId) {
+            $post->postcategories()->attach($categoryId, [
+                'is_primary' => true,
+                'sort_order' => $postData['sort_order'] ?? 1
+            ]);
+        }
+
+        // Xử lý image_urls
+        $imageUrlsTextarea = is_array($translations['image_urls'])
+            ? implode("\n", $translations['image_urls'])
+            : ($translations['image_urls'] ?? '');
+
+        $post->handleTranslations([
+            'title_vi' => $translations['title_vi'] ?? '',
+            'title_en' => $translations['title_en'] ?? '',
+            'description_vi' => $translations['description_vi'] ?? '',
+            'description_en' => $translations['description_en'] ?? '',
+            'excerpt_vi' => '',
+            'excerpt_en' => '',
+            'canonical_url_vi' => '',
+            'canonical_url_en' => '',
+            'meta_title_vi' => $translations['title_vi'] ?? '',
+            'meta_title_en' => $translations['title_en'] ?? '',
+            'meta_description_vi' => $translations['description_vi'] ?? '',
+            'meta_description_en' => $translations['description_en'] ?? '',
+            'content_vi' => $translations['content_vi'] ?? '',
+            'content_en' => $translations['content_en'] ?? '',
+            'image_urls_vi' => $imageUrlsTextarea,
+            'image_urls_en' => $imageUrlsTextarea,
+        ]);
+    }
+}

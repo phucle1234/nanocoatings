@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Embed 360° Car Viewer — Demo</title>
+  <script src="./360-viewer.js" defer></script>
+  <style>body{margin:0;background:#0e1013;color:#e9eef5;font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto;padding:20px}h1{font-size:18px;font-weight:600}a{color:#8fe3ff}</style>
+</head>
+<body>
+  <h1>Demo nhúng 360° vào website (dùng ảnh mẫu công khai)</h1>
+  <p>Chỉ cần nhúng <code>&lt;script src="360-viewer.js"&gt;</code> rồi thêm một <code>&lt;div class="spin360"&gt;</code> với cấu hình data-*. Ở đây mình dùng bộ mẫu 73 khung từ Scaleflex.</p>
+
+  <div class="spin360"
+       data-total="73"
+       data-template="https://scaleflex.cloudimg.io/v7/demo/suv-orange-car-360/orange-{i}.jpg"
+       data-autoplay="true"
+       data-speed="0.6"
+       style="width:100%;max-width:1100px;aspect-ratio:16/9;margin:16px auto">
+  </div>
+
+  <h2>Cách dùng với ảnh của bạn</h2>
+  <pre style="white-space:pre-wrap;background:#0f1114;padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,.08)">
+&lt;!-- 1) Tải 36 ảnh vào /assets/car360/ với tên car_0001.png → car_0036.png --&gt;
+&lt;script src="/js/360-viewer.js" defer&gt;&lt;/script&gt;
+&lt;div class="spin360"
+     data-total="36"
+     data-folder="/assets/car360"
+     data-prefix="car_"
+     data-pad="4"
+     data-ext="png"
+     data-autoplay="true"
+     data-speed="0.6"
+     style="width:100%;max-width:1100px;aspect-ratio:16/9"&gt;
+&lt;/div&gt;
+  </pre>
+</body>
+</html>

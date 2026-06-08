@@ -1,0 +1,8 @@
+
+@font-face {
+  font-family: 'HelveticaNeue-CondensedBlack';
+  src: url('HelveticaNeue-CondensedBlack.eot?#iefix') format('embedded-opentype'),  url('HelveticaNeue-CondensedBlack.otf')  format('opentype'),
+	     url('HelveticaNeue-CondensedBlack.woff') format('woff'), url('HelveticaNeue-CondensedBlack.ttf')  format('truetype'), url('HelveticaNeue-CondensedBlack.svg#HelveticaNeue-CondensedBlack') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}

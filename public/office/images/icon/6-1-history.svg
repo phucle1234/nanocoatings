@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="20.5" height="20.5" viewBox="0 0 20.5 20.5">
+  <defs>
+    <linearGradient id="linear-gradient" y1="1" x2="1" y2="0.5" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#6b400c"/>
+      <stop offset="0.217" stop-color="#c89b37"/>
+      <stop offset="0.414" stop-color="#be9232"/>
+      <stop offset="0.666" stop-color="#ffcb50"/>
+      <stop offset="0.903" stop-color="#d98735"/>
+      <stop offset="1" stop-color="#f79a41"/>
+    </linearGradient>
+  </defs>
+  <path id="Icon_awesome-history" data-name="Icon awesome-history" d="M21.063,10.793a10.25,10.25,0,0,1-16.683,8A.991.991,0,0,1,4.3,17.321l.466-.466a.994.994,0,0,1,1.318-.082A7.605,7.605,0,1,0,5.6,5.271l2.1,2.1A.661.661,0,0,1,7.232,8.5H1.224a.661.661,0,0,1-.661-.661V1.828a.661.661,0,0,1,1.129-.468L3.732,3.4a10.25,10.25,0,0,1,17.331,7.392Zm-7.477,3.256.406-.522a.992.992,0,0,0-.174-1.392l-1.682-1.308V6.514a.992.992,0,0,0-.992-.992h-.661a.992.992,0,0,0-.992.992v5.607l2.7,2.1a.992.992,0,0,0,1.392-.174Z" transform="translate(-0.563 -0.563)" fill="url(#linear-gradient)"/>
+</svg>

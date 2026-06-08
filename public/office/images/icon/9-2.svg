@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="34.232" height="27.382" viewBox="0 0 34.232 27.382">
+  <defs>
+    <linearGradient id="linear-gradient" y1="1" x2="1" y2="0.5" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#6b400c"/>
+      <stop offset="0.217" stop-color="#c89b37"/>
+      <stop offset="0.414" stop-color="#be9232"/>
+      <stop offset="0.666" stop-color="#ffcb50"/>
+      <stop offset="0.903" stop-color="#d98735"/>
+      <stop offset="1" stop-color="#f79a41"/>
+    </linearGradient>
+  </defs>
+  <path id="Icon_awesome-code" data-name="Icon awesome-code" d="M14.916,27.358l-3.263-.947a.643.643,0,0,1-.439-.8L18.516.466a.643.643,0,0,1,.8-.439l3.263.947a.643.643,0,0,1,.439.8l-7.3,25.148a.641.641,0,0,1-.8.439Zm-6.1-6,2.327-2.482a.642.642,0,0,0-.043-.92L6.257,13.692,11.1,9.43a.637.637,0,0,0,.043-.92L8.819,6.028A.642.642,0,0,0,7.91,6L.2,13.222a.638.638,0,0,0,0,.936L7.91,21.383A.638.638,0,0,0,8.819,21.357Zm17.5.032,7.707-7.226a.638.638,0,0,0,0-.936L26.319,6a.648.648,0,0,0-.909.027L23.083,8.5a.642.642,0,0,0,.043.92l4.846,4.268-4.846,4.263a.637.637,0,0,0-.043.92l2.327,2.482A.643.643,0,0,0,26.319,21.389Z" transform="translate(0.002 -0.003)" fill="url(#linear-gradient)"/>
+</svg>

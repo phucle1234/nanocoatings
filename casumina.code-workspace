@@ -1,0 +1,42 @@
+{
+    "folders": [
+        {
+            "name": "Casumina E-commerce",
+            "path": "."
+        }
+    ],
+    "settings": {
+        "cursor.chat.projectContext": "Casumina E-commerce Platform - Laravel 12.x + Backpack CRUD with EAV Product Model",
+        "cursor.chat.projectDescription": "B2C E-commerce platform specializing in tire products with flexible attribute system",
+        "cursor.chat.techStack": "Laravel 12.28.0, Backpack CRUD 6.8.6, MySQL, Elasticsearch 8.x, Blade Templates, Bootstrap 5, TailwindCSS, Livewire, Vite",
+        "cursor.chat.architecture": "EAV (Entity-Attribute-Value) model for products, Multi-language support, Elasticsearch integration",
+        "cursor.chat.developer": "minhthanh",
+        "cursor.chat.branch": "minhthanh",
+        "cursor.chat.recentWork": "Fixed CSRF 419 error, configured Laravel 12.x middleware, set up Backpack CRUD",
+        
+        "files.exclude": {
+            "**/node_modules": true,
+            "**/vendor": true,
+            "**/storage/logs": true,
+            "**/storage/framework/cache": true,
+            "**/storage/framework/sessions": true,
+            "**/storage/framework/views": true,
+            "**/bootstrap/cache": true
+        },
+        
+        "search.exclude": {
+            "**/node_modules": true,
+            "**/vendor": true,
+            "**/storage": true,
+            "**/bootstrap/cache": true
+        }
+    },
+    "extensions": {
+        "recommendations": [
+            "bmewburn.vscode-intelephense-client",
+            "onecentlin.laravel-blade",
+            "ryannaddy.laravel-artisan",
+            "ms-vscode.vscode-json"
+        ]
+    }
+}

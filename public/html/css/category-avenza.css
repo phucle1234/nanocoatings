@@ -1,0 +1,480 @@
+/* Category avenza banner */
+.category-avenza-banner {
+    height: 100vh;
+}
+
+.category-avenza-banner .category-avenza-banner-info {
+    padding-top: 110px;
+}
+
+.category-avenza-banner .category-avenza-banner-info .category-avenza-banner-content {
+    margin-top: 85px;
+}
+
+/* Category avenza cat */
+.category-avenza-cat {
+    padding-top: 7.29vw;
+    padding-bottom: 4vw;
+}
+
+.category-avenza-cat .category-avenza-cat-items {
+    margin-top: 30px;
+}
+
+.category-avenza-cat .category-avenza-cat-item {
+    padding-top: 3.125vw;
+    padding-bottom: 8.702vw;
+}
+
+.category-avenza-cat .category-avenza-cat-item .intro {
+    max-width: 390px;
+}
+
+.category-avenza-cat .category-avenza-cat-item:hover a {
+    color: var(--text-red) !important;
+}
+
+/* Category avenza product highlight */
+.category-avenza-product-highlight {
+    padding-top: 8.389vw;
+    padding-bottom: 8.389vw;
+}
+
+.category-avenza-product-highlight .highlight-item {
+    margin-left: 15px;
+    margin-right: 15px;
+}
+
+.category-avenza-product-highlight .product-item {
+    padding: 10px 20px 15px 20px;
+    border: 1px solid var(--bs-light-border-subtle);
+}
+
+.category-avenza-product-highlight .product-item .product-attr {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    z-index: 1;
+}
+
+.category-avenza-product-highlight .product-item .product-attr .product-new,
+.category-avenza-product-highlight .product-item .product-attr .product-sale {
+    width: 70px;
+    height: 24px;
+    display: block;
+    text-align: center;
+    border-radius: 5px;
+    line-height: 24px;
+}
+
+.category-avenza-product-highlight .product-item .product-attr .product-new {
+    background-color: var(--bs-white);
+    box-shadow: 2px -1px 15px 5px #EFEFEF;
+    font-size: var(--fs-16);
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.category-avenza-product-highlight .product-item .product-attr .product-sale {
+    background-color: var(--color-light-red);
+    font-size: var(--fs-16);
+    color: var(--bs-white);
+    font-weight: 600;
+    margin-bottom: 10px;
+    opacity: .7;
+}
+
+.category-avenza-product-highlight .product-item .product-item-img {
+    max-width: 13.54vw;
+    margin: auto;
+    aspect-ratio: 0.765 / 1;
+}
+
+.category-avenza-product-highlight .product-item .product-favourite {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 1;
+    cursor: pointer;
+}
+
+.category-avenza-product-highlight .product-item .product-favourite .bi.bi-heart-fill {
+    display: none;
+}
+
+.category-avenza-product-highlight .product-item .product-favourite:hover svg {
+    fill: var(--color-red);
+}
+
+.category-avenza-product-highlight .product-item .product-favourite.actived .bi.bi-heart {
+    display: none;
+}
+
+.category-avenza-product-highlight .product-item .product-favourite.actived .bi.bi-heart-fill {
+    display: block;
+    fill: var(--color-red);
+}
+
+.category-avenza-product-highlight .product-item .product-item-line {
+    margin: 0 auto 14px auto;
+    height: 1px;
+    background: rgb(0 0 0 / 10%);
+    width: 70%;
+}
+
+.category-avenza-product-highlight .product-item .product-item-category a {
+    background-color: #dfdfdf;
+    font-size: var(--fs-12);
+    height: 24px;
+    text-align: center;
+    border-radius: 5px;
+    line-height: 24px;
+    color: var(--bs-black);
+    text-transform: uppercase;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.category-avenza-product-highlight .product-item .product-item-star {
+    line-height: 1;
+}
+
+.category-avenza-product-highlight .product-item .product-item-star i {
+    color: var(--primary-yellow);
+    font-size: var(--fs-22);
+}
+
+.category-avenza-product-highlight .product-item .cat-link {
+    width: 84px;
+    height: 84px;
+    background-color: var(--color-red);
+    border-radius: 50%;
+    text-align: center;
+    align-items: center;
+    transition: transform 0.3s ease;
+}
+
+.category-avenza-product-highlight .product-item .cat-link:hover {
+    transform: translateY(-5px);
+}
+
+.category-avenza-product-highlight .product-item .cat-link img {
+    margin: auto;
+}
+
+.category-avenza-product-highlight .product-item .product-item-view a:hover {
+    color: var(--color-red) !important;
+}
+
+.category-avenza-product-highlight .slick-dots {
+    display: flex;
+    position: absolute;
+    bottom: -7%;
+    padding: 0;
+    margin: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.category-avenza-product-highlight .slick-dots li {
+    list-style: none;
+    margin: 0 5px;
+    line-height: 0;
+}
+
+.category-avenza-product-highlight .slick-dots li button {
+    font-size: 0;
+    border: 0px;
+    width: 30px;
+    height: 6px;
+    border-radius: 1px;
+}
+
+.category-avenza-product-highlight .slick-dots li.slick-active button {
+    background-color: var(--primary-yellow);
+}
+
+.category-avenza-video {
+    padding-top: 8.333vw;
+    padding-bottom: 8.275vw;
+}
+
+.category-avenza-video .video-slider {
+    max-width: 58.70vw;
+    z-index: 1;
+    margin-top: 2.86vw;
+}
+
+.category-avenza-video .slick-dots {
+    display: flex;
+    position: absolute;
+    bottom: -4.958vw;
+    padding: 0;
+    margin: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.category-avenza-video .slick-dots li {
+    list-style: none;
+    margin: 0 5px;
+    line-height: 0;
+}
+
+.category-avenza-video .slick-dots li button {
+    font-size: 0;
+    border: 0px;
+    width: 30px;
+    height: 6px;
+    border-radius: 1px;
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+.category-avenza-video .slick-dots li.slick-active button {
+    background-color: var(--primary-yellow);
+}
+
+.category-avenza-video .slick-dots li button:focus-visible {
+    outline: none;
+    box-shadow: none;
+}
+
+.category-avenza-video .video-slider .video-play-btn {
+    position: absolute;
+    z-index: 2;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.category-avenza-video .video-slider .video-play-btn {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.category-avenza-video .video-slider .video-play-btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    animation: pulse 2s infinite;
+}
+
+.category-avenza-video .video-slider .video-play-btn:hover::before {
+    animation: pulse-fast 1s infinite;
+}
+
+.category-avenza-video .video-slider .video-play-btn img {
+    transition: transform 0.3s ease;
+    z-index: 2;
+    position: relative;
+}
+
+.category-avenza-video .video-slider .video-play-btn:hover {
+    transform: translate(-50%, -50%) scale(1.1);
+    background: rgba(255, 255, 255, 1);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+}
+
+.category-avenza-video .video-slider .video-play-btn:hover img {
+    transform: scale(1.2);
+}
+
+.category-avenza-video .video-slider .video-play-btn:active {
+    transform: translate(-50%, -50%) scale(0.95);
+}
+
+.category-avenza-video .video-slider .video-slider-item {
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+}
+
+.category-avenza-video .video-slider .video-slider-item .bg-img-cover {
+    aspect-ratio: 1.87 / 1;
+}
+
+.category-avenza-video .video-slider .video-slider-item:hover {
+    transform: translateY(-5px);
+}
+
+.category-avenza-video .video-slider .video-slider-item::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.category-avenza-video .video-slider .video-slider-item:hover::after {
+    opacity: 1;
+}
+
+.category-avenza-about {
+    padding-top: 8.33333vw;
+    padding-bottom: 9.1525vw;
+}
+
+.category-avenza-about::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgb(0 0 0 / 25%);
+}
+
+.category-avenza-about .about-content {
+    position: relative;
+    z-index: 1;
+}
+
+.category-avenza-about .about-content .intro {
+    max-width: 905px;
+    margin-top: 5px;
+}
+
+.category-avenza-about .about-items {
+    max-width: 82.6vw;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 15vw;
+}
+
+.category-avenza-about .about-item .intro {
+    max-width: 253px;
+}
+
+.category-avenza-news.box-news-info {
+    padding-bottom: 12.775vw;
+}
+
+.category-avenza-partner.box-partner {
+    padding-top: 8.4vw;
+    padding-bottom: 13.3vw;
+    background: url(../imgs/avenza-partner-bg.png) no-repeat center center;
+    background-size: cover;
+}
+
+.category-avenza-partner.box-partner .intro {
+    margin-top: 25px;
+}
+
+.category-avenza-partner.box-partner .partner-slider-items {
+    gap: 30px 50px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    /* Căn giữa các item */
+    align-items: center;
+}
+
+.category-avenza-partner.box-partner .partner-slider-item {
+    aspect-ratio: unset;
+    flex: 0 0 calc(14.28% - 1.25vw);
+}
+
+.category-avenza-partner.box-partner .slick-dots {
+    bottom: -3.125vw;
+}
+
+@media (max-width: 1440px) {
+
+    .category-avenza-banner {
+        font-size: var(--fs-16);
+    }
+
+    .category-avenza-banner .banner-title {
+        font-size: var(--fs-38);
+    }
+
+    .category-avenza-banner .banner-sub-title {
+        font-size: var(--fs-28);
+    }
+
+    .category-avenza-about .about-items {
+        max-width: 100%;
+    }
+
+    .category-avenza-about .about-items .about-item-content .title {
+        font-size: var(--fs-16);
+    }
+
+    .category-avenza-about .about-items .about-item-content .intro {
+        font-size: var(--fs-14);
+    }
+
+    .category-avenza-product-highlight .row {
+        margin-right: calc(-.5 * var(--bs-gutter-x)) !important;
+        margin-left: calc(-.5 * var(--bs-gutter-x)) !important;
+    }
+}
+
+@media (max-width: 1199.98px) {
+    .category-avenza-banner .category-avenza-banner-info {
+        padding-top: 85px;
+    }
+
+    .category-avenza-about .about-items .about-item-content {
+        margin-top: 30px;
+    }
+}
+
+@media (max-width: 991.98px) {
+    .category-avenza-product-highlight .product-item .product-item-img {
+        max-width: 22vw;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .category-avenza-banner .category-avenza-banner-info .category-avenza-banner-content .title-with-line {
+        font-size: var(--fs-16);
+    }
+
+    .category-avenza-banner .category-avenza-banner-info .category-avenza-banner-content .banner-title {
+        font-size: var(--fs-36);
+    }
+
+    .category-avenza-banner .category-avenza-banner-info .category-avenza-banner-content .banner-sub-title {
+        font-size: var(--fs-32);
+    }
+
+    .category-avenza-product-highlight {
+        padding-top: 9vw;
+        padding-bottom: 11.5vw;
+    }
+
+    .category-avenza-product-highlight .product-item .product-item-img {
+        max-width: 26vw;
+    }
+
+    .category-avenza-video .video-slider {
+        max-width: 100%;
+        margin-top: 3.86vw;
+    }
+
+    .category-avenza-video .video-slider .video-play-btn {
+        transform: translate(-50%, -50%) scale(.4);
+    }
+
+}

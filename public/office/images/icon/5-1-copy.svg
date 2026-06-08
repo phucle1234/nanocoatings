@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="20.383" height="23.295" viewBox="0 0 20.383 23.295">
+  <defs>
+    <linearGradient id="linear-gradient" y1="0.217" x2="1" y2="1" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#f7941d"/>
+      <stop offset="1" stop-color="#ffcb05"/>
+    </linearGradient>
+  </defs>
+  <path id="Icon_awesome-copy" data-name="Icon awesome-copy" d="M14.559,20.383V22.2a1.092,1.092,0,0,1-1.092,1.092H1.092A1.092,1.092,0,0,1,0,22.2V5.46A1.092,1.092,0,0,1,1.092,4.368H4.368V17.835a2.551,2.551,0,0,0,2.548,2.548Zm0-15.651V0H6.916A1.092,1.092,0,0,0,5.824,1.092V17.835a1.092,1.092,0,0,0,1.092,1.092H19.291a1.092,1.092,0,0,0,1.092-1.092V5.824H15.651A1.1,1.1,0,0,1,14.559,4.732Zm5.5-1.412-3-3A1.092,1.092,0,0,0,16.291,0h-.276V4.368h4.368V4.092a1.092,1.092,0,0,0-.32-.772Z" fill="url(#linear-gradient)"/>
+</svg>

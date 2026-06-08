@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="56.083" height="56.083" viewBox="0 0 56.083 56.083">
+  <g id="Group_362" data-name="Group 362" transform="translate(-3013.072 235.128)">
+    <circle id="Ellipse_1" data-name="Ellipse 1" cx="28.042" cy="28.042" r="28.042" transform="translate(3013.072 -235.128)" fill="#f3ba2f"/>
+    <g id="Group_347" data-name="Group 347" transform="translate(3023.722 -224.469)">
+      <path id="Path_2504" data-name="Path 2504" d="M3068.361-199.886l6.772,6.751,3.931-3.907-10.7-10.692-10.7,10.692,3.93,3.907Z" transform="translate(-3050.958 207.734)" fill="#fff"/>
+      <path id="Path_2505" data-name="Path 2505" d="M3068.361-149.165l-6.772-6.751-3.93,3.907,10.7,10.692,10.7-10.692-3.931-3.907Z" transform="translate(-3050.958 176.08)" fill="#fff"/>
+      <rect id="Rectangle_307" data-name="Rectangle 307" width="5.577" height="5.577" transform="matrix(0.707, -0.707, 0.707, 0.707, 0, 17.382)" fill="#fff"/>
+      <rect id="Rectangle_308" data-name="Rectangle 308" width="5.577" height="5.577" transform="translate(13.459 17.382) rotate(-45)" fill="#fff"/>
+      <rect id="Rectangle_309" data-name="Rectangle 309" width="5.577" height="5.577" transform="translate(26.897 17.382) rotate(-45)" fill="#fff"/>
+    </g>
+  </g>
+</svg>
