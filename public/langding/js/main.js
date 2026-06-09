@@ -320,6 +320,18 @@ window.dealerApp = {
       }
     });
 
+    var boxCategoryTabs = document.getElementById("box-category-title");
+    if (boxCategoryTabs) {
+      boxCategoryTabs.addEventListener("shown.bs.tab", function (e) {
+        var targetSelector = e.target.getAttribute("data-bs-target");
+        if (!targetSelector) return;
+        var pane = document.querySelector(targetSelector);
+        if (pane && pane.classList.contains("category-tab-pane-scroll")) {
+          pane.scrollTop = 0;
+        }
+      });
+    }
+
     $(".box-partner-slider").slick({
       slidesToShow: 1,
       slidesToScroll: 1,

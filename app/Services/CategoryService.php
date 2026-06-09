@@ -140,11 +140,11 @@ class CategoryService
         $translation = $category->translations->firstWhere('language', $locale);
 
         $category->category_name = $translation->name ?? null;
-        // ✅ Strip HTML tags từ description
         $category->category_description = $translation->description ? strip_tags($translation->description) : null;
+        $category->category_description_html = $translation->description ?? null;
+        $category->category_meta_title = $translation->meta_title ?? null;
+        $category->category_meta_description = $translation->meta_description ?? null;
         $category->category_translation_slug = $translation->slug ?? null;
-
-        // ✅ Thêm image_urls từ translation
         $category->category_image_urls = $translation->image_urls ?? null;
         $category->link_type = $translation->link_type ?? 'detail';
         $category->youtube_url = $translation->youtube_url ?? null;

@@ -59,45 +59,9 @@ class HomeController extends Controller
 		// Nhóm danh mục gốc thành các hàng (mỗi hàng 6 danh mục)
 		$allCategoryRows = $this->groupCategoriesInRows($rootCategories);
 
-		// Lấy child categories cho từng parent category và nhóm thành các hàng
-		$categoryChildRows = [];
-
 		foreach ($categories as $category) {
-			$childCategories = $this->categoryService->getChildCategories($category->id, $currentLocale);
-
-			// ✅ Xử lý hình ảnh cho child categories sử dụng HasImage trait
-			foreach ($childCategories as $childCategory) {
-				$childCategory->category_image = $this->getImageJson($childCategory->category_image_urls);
-			}
-
-			// Lưu danh sách child categories đã được nhóm theo parent
-			$category->children = $childCategories;
-
-			// Nhóm child categories của parent thành các hàng (6 danh mục/hàng)
-			$categoryChildRows[$category->id] = $this->groupCategoriesInRows($childCategories);
+			$category->category_image = $this->getImageJson($category->category_image_urls);
 		}
-
-		// Lấy tất cả sản phẩm
-		$allProducts = $this->productService->getAllProducts(15, $currentLocale);
-
-
-		////////////
-		// Nhóm tất cả sản phẩm thành các hàng (mỗi hàng 6 sản phẩm)
-		$allProductRows = $this->groupProductsInRows($allProducts);
-
-		// Lấy products cho từng category và nhóm thành các hàng
-		$categoryProductRows = [];
-
-		foreach ($categories as $category) {
-			$categoryProducts = $this->productService->getProductsByCategoryId($category->id, $currentLocale);
-
-			// Lưu danh sách sản phẩm đã được nhóm theo danh mục
-			$category->products = $categoryProducts;
-
-			// Nhóm sản phẩm của danh mục thành các hàng (6 sản phẩm/hàng)
-			$categoryProductRows[$category->id] = $this->groupProductsInRows($categoryProducts);
-		}
-		/////////////
 
 		// Lấy danh mục tin tức (children của "truyen-thong")
 		$tinTucCategory = $this->postCategoryService->getCategoryBySlugOrId('truyen-thong', $currentLocale);
@@ -163,7 +127,6 @@ class HomeController extends Controller
 			'categories',
 			'rootCategories',
 			'allCategoryRows',
-			'categoryChildRows',
 			'newsCategories',
 			// 'tireSizeData',
 			// 'carSearchData',
@@ -173,35 +136,6 @@ class HomeController extends Controller
 		));
 	}
 
-	/**
-	 * Nhóm sản phẩm thành các hàng, mỗi hàng 6 sản phẩm
-	 * @param object|array $products Danh sách sản phẩm
-	 * @return array Mảng chứa các hàng sản phẩm
-	 */
-	private function groupProductsInRows($products)
-	{
-		// Số sản phẩm mỗi hàng
-		$productsPerRow = 6;
-
-		// Nhóm sản phẩm thành các hàng
-		$rows = [];
-		$currentRow = [];
-		$index = 0;
-		$total = count($products);
-
-		foreach ($products as $product) {
-			$currentRow[] = $product;
-			$index++;
-
-			// Khi đạt đủ 6 sản phẩm hoặc đã xử lý sản phẩm cuối cùng
-			if ($index % $productsPerRow == 0 || $index == $total) {
-				$rows[] = $currentRow;
-				$currentRow = [];
-			}
-		}
-
-		return $rows;
-	}
 	private function groupCategoriesInRows($categories)
 	{
 		// Số danh mục mỗi hàng

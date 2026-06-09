@@ -63,44 +63,11 @@
                 </div>
             </div>
 
-            {{-- Tab cho từng parent category - hiển thị child categories của parent đó --}}
+            {{-- Tab con: nội dung tĩnh từ danh mục sản phẩm (ảnh, video, mô tả) --}}
             @foreach ($categories as $category)
-                <div class="tab-pane fade" id="cat-{{ $category->id }}-pane" role="tabpanel"
+                <div class="tab-pane fade category-tab-pane-scroll" id="cat-{{ $category->id }}-pane" role="tabpanel"
                     aria-labelledby="cat-{{ $category->id }}" tabindex="0">
-                    <div class="box-category-slider">
-                        @if (isset($categoryChildRows[$category->id]) && count($categoryChildRows[$category->id]) > 0)
-                            @foreach ($categoryChildRows[$category->id] as $rowIndex => $categoryRow)
-                                <div class="box-category-slider-item">
-                                    <div class="container-fluid">
-                                        <div class="row">
-                                            @foreach ($categoryRow as $childCategory)
-                                                <div class="col-md-6 col-lg-4">
-                                                    <div class="product-item text-center scroll-animate"
-                                                        data-animate="fadeInUp">
-                                                        <h3
-                                                            class="media-item-big-content px-4 text-uppercase text-red fs-18 font-hanzel">
-                                                            {{ $childCategory->category_name ?? $childCategory->code }}
-                                                        </h3>
-                                                        <!-- <div class="product-item-intro fs-16 fw-300 mx-auto line-2 mt-3">
-                                            {{ $childCategory->category_description ?? '' }}
-                                        </div> -->
-                                                        @include('langding.components.category-card-link', ['category' => $childCategory])
-                                                        
-                                                    </div>
-                                                </div>
-                                            @endforeach
-                                        </div>
-                                    </div>
-                                </div>
-                            @endforeach
-                        @else
-                            <div class="container-fluid">
-                                <div class="text-center py-5">
-                                    <p class="fs-18 text-white">{{ __('messages.no_categories') }}</p>
-                                </div>
-                            </div>
-                        @endif
-                    </div>
+                    @include('langding.components.category-tab-content', ['category' => $category])
                 </div>
             @endforeach
         </div>
