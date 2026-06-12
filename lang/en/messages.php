@@ -41,6 +41,7 @@ return [
     'introduction_description' => 'Nanocoatings provides advanced nano coating solutions for surface protection, waterproofing, anti-corrosion, easy-clean performance and long-lasting material durability for residential, commercial and industrial projects.',
     'top_tire_manufacturer' => 'Leading Nano Coating Solutions Provider',
     'all_products' => 'All Products',
+    'all_fields' => 'All Fields',
     'no_products' => 'No products available.',
     'no_products_in_category' => 'No products available in this category.',
     'product' => 'Product',
@@ -53,6 +54,7 @@ return [
     // News
     'news_and_events' => 'News and Events',
     'no_categories' => 'No categories available',
+    'related_categories' => 'Related Categories',
     'news_title' => 'News Title',
     'no_news' => 'No news available',
     'no_news_in_category' => 'Currently there are no news items in this category.',

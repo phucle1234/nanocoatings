@@ -9,7 +9,7 @@
                     <li class="nav-item" role="presentation">
                         <button class="nav-link active fs-14 font-hanzel" id="cat-all" data-bs-toggle="tab"
                             data-bs-target="#cat-all-pane" type="button" role="tab" aria-controls="cat-all-pane"
-                            aria-selected="true">{{ __('messages.all_products') }}</button>
+                            aria-selected="true">{{ __('messages.all_fields') }}</button>
                     </li>
                     @foreach ($categories as $index => $category)
                         <li class="nav-item" role="presentation">

@@ -5,26 +5,32 @@ namespace App\Http\Controllers\langding;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Api\CategoryApiController;
 use App\Http\Controllers\Api\PostCategoryApiController;
+use App\Services\CategoryService;
 use App\Services\ProductService;
 use App\Traits\CarSearch;
+use App\Traits\HasImage;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
     use CarSearch;
+    use HasImage;
 
     protected CategoryApiController $categoryApiController;
     protected PostCategoryApiController $postCategoryApiController;
     protected ProductService $productService;
+    protected CategoryService $categoryService;
 
     public function __construct(
         CategoryApiController $categoryApiController,
         PostCategoryApiController $postCategoryApiController,
-        ProductService $productService
+        ProductService $productService,
+        CategoryService $categoryService
     ) {
         $this->categoryApiController = $categoryApiController;
         $this->postCategoryApiController = $postCategoryApiController;
         $this->productService = $productService;
+        $this->categoryService = $categoryService;
     }
 
     public function index(Request $request, $slug = null)
@@ -172,8 +178,17 @@ class CategoryController extends Controller
             // dd($selectedRootCategory);
             $bestsellerProducts = $this->productService->getBestsellerProducts(10, app()->getLocale());
 
+            $currentLocale = app()->getLocale();
+            $relatedCategories = $this->categoryService->getRootCategories($currentLocale)
+                ->filter(fn ($cat) => $cat->id != ($selectedRootCategory['id'] ?? null));
+
+            foreach ($relatedCategories as $category) {
+                $category->category_image = $this->getImageJson($category->category_image_urls);
+            }
+
             $viewData = [
                 'siblingCategories' => $siblingCategories,
+                'relatedCategories' => $relatedCategories,
                 'selectedRootCategory' => $selectedRootCategory,
                 'childCategories' => $childCategories,
                 'allProducts' => $allProducts,

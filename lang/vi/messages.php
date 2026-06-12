@@ -41,6 +41,7 @@ return [
     'introduction_description' => 'Nanocoatings cung cấp các giải pháp phủ nano tiên tiến giúp bảo vệ bề mặt, chống thấm, chống ăn mòn, dễ vệ sinh và tăng độ bền vật liệu cho công trình dân dụng, thương mại và công nghiệp.',
     'top_tire_manufacturer' => 'Nhà cung cấp giải pháp phủ nano hàng đầu',
     'all_products' => 'Tất cả sản phẩm',
+    'all_fields' => 'Tất cả lĩnh vực',
     'no_products' => 'Chưa có sản phẩm nào.',
     'no_products_in_category' => 'Chưa có sản phẩm nào trong danh mục này.',
     'product' => 'Sản phẩm',
@@ -53,6 +54,7 @@ return [
     // News
     'news_and_events' => 'Tin tức và Sự kiện',
     'no_categories' => 'Chưa có danh mục',
+    'related_categories' => 'Danh mục liên quan',
     'news_title' => 'Tiêu đề tin tức',
     'no_news' => 'Chưa có tin tức',
     'no_news_in_category' => 'Hiện tại chưa có tin tức nào trong danh mục này.',
