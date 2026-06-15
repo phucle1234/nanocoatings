@@ -174,48 +174,7 @@
                     </div>
                     @if (!Auth()->user() || Auth()->user()->role !== 'dealer')
                     <!-- Language Switcher -->
-                    <div class="language-switcher" x-data="{ open: false }">
-                        <button @click="open = !open" class="btn-language">
-                            @if (app()->getLocale() === 'en')
-                            <img src="{{ asset('langding/imgs/en.svg') }}" alt="English">
-                            <span>EN</span>
-                            @else
-                            <img src="{{ asset('langding/imgs/vi.svg') }}" alt="Vietnamese">
-                            <span>VI</span>
-                            @endif
-                            <svg class="dropdown-icon" :class="{ 'rotate': open }" width="12" height="12"
-                                viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M6 9L1 4L11 4L6 9Z" fill="currentColor" />
-                            </svg>
-                        </button>
-
-                        <div x-show="open" @click.away="open = false" class="language-dropdown" x-transition
-                            style="display: none;">
-                            <a href="{{ url('/language/vi') }}"
-                                class="language-option {{ app()->getLocale() === 'vi' ? 'active' : '' }}">
-                                <img src="{{ asset('langding/imgs/vi.svg') }}" alt="Vietnamese">
-                                <span>Tiếng Việt</span>
-                                @if (app()->getLocale() === 'vi')
-                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M6 12L2 8L3.5 6.5L6 9L12.5 2.5L14 4L6 12Z" fill="#4CAF50" />
-                                </svg>
-                                @endif
-                            </a>
-
-                            <a href="{{ url('/language/en') }}"
-                                class="language-option {{ app()->getLocale() === 'en' ? 'active' : '' }}">
-                                <img src="{{ asset('langding/imgs/en.svg') }}" alt="English">
-                                <span>English</span>
-                                @if (app()->getLocale() === 'en')
-                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M6 12L2 8L3.5 6.5L6 9L12.5 2.5L14 4L6 12Z" fill="#4CAF50" />
-                                </svg>
-                                @endif
-                            </a>
-                        </div>
-                    </div>
+                    @include('langding.components.language-switcher')
                     @endif
                 </div>
             </div>

@@ -258,12 +258,15 @@
         </div>
     </div>
 
+    @php
+        $sidebarImgLocale = in_array(app()->getLocale(), ['en', 'vi'], true) ? app()->getLocale() : 'en';
+    @endphp
     <div class="social-sidebar">
         <div class="social-sidebar-group position-relative">
             <div class="social-sidebar-group-item position-relative">
                 <div class="social-sidebar-item position-relative" id="supplierSidebarItem">
                     <div class="social-sidebar-item-icon">
-                        <img src="{{ asset('langding/imgs/support-tim-shop_' . app()->getLocale() . '.svg') }}"
+                        <img src="{{ asset('langding/imgs/support-tim-shop_' . $sidebarImgLocale . '.svg') }}"
                             alt="">
                     </div>
                     <div class="social-sidebar-item-box text-nowrap shadow-sm">
@@ -308,7 +311,7 @@
                 </div>
                 <div class="social-sidebar-item position-relative" id="socialSidebarItem">
                     <div class="social-sidebar-item-icon">
-                        <img src="{{ asset('langding/imgs/support-connect_' . app()->getLocale() . '.svg') }}"
+                        <img src="{{ asset('langding/imgs/support-connect_' . $sidebarImgLocale . '.svg') }}"
                             alt="">
                     </div>
                     <div class="social-sidebar-item-box text-nowrap shadow-sm">
@@ -436,7 +439,7 @@
                 </div>
                 <div class="social-sidebar-item position-relative" id="contactSidebarItem">
                     <div class="social-sidebar-item-icon">
-                        <img src="{{ asset('langding/imgs/support-lien-he_' . app()->getLocale() . '.svg') }}"
+                        <img src="{{ asset('langding/imgs/support-lien-he_' . $sidebarImgLocale . '.svg') }}"
                             alt="{{ __('messages.contact') }}">
                     </div>
                     <div class="social-sidebar-item-box text-nowrap shadow-sm">
@@ -562,7 +565,7 @@
             </div>
             <div class="position-relative" id="support-show-sidebar">
                 <div class="social-sidebar-item-icon-show mb-0">
-                    <img src="{{ asset('langding/imgs/support-lien-he_' . app()->getLocale() . '.svg') }}" class="shake-animation">
+                    <img src="{{ asset('langding/imgs/support-lien-he_' . $sidebarImgLocale . '.svg') }}" class="shake-animation">
                     <span class="support-show-sidebar-close d-none text-white"><i class="bi bi-x-lg"></i></span>
                 </div>
             </div>
