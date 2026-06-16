@@ -13,10 +13,10 @@ return [
     'supported' => [
         'en' => 'English',
         'vi' => 'Tiếng Việt',
-        'fi' => 'Finland',    // Phần Lan
-        'ge' => 'Germany',    // Đức
-        'po' => 'Poland',     // Ba Lan
-        'sw' => 'Sweden',     // Thụy Điển
+        'fi' => 'Finnish',    // Phần Lan
+        'ge' => 'German',    // Đức
+        'po' => 'Polish',     // Ba Lan
+        'sw' => 'Swedish',     // Thụy Điển
     ],
 
     /*
