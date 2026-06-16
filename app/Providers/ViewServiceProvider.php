@@ -84,44 +84,18 @@ class ViewServiceProvider extends ServiceProvider
             }
 
 
-            $dangKiemCategories = [];
+            $caseStudyPosts = [];
             $HeThongPhanPhoiCategories = [];
             $gioiThieuCasuminaPosts = [];
             $truyenThongCategories = [];
             try {
-                // ✅ Lấy children của "Thông tin đăng kiểm" (post category)
-                $dangKiemResponse = $postCategoryApiController->show($request, 'thong-tin-dang-kiem');
-                $dangKiemData = json_decode($dangKiemResponse->getContent(), true);
-                if ($dangKiemData['success'] ?? false) {
-                    $dangKiemCategory = $dangKiemData['data'];
-
-                    if (($dangKiemCategory['children'] ?? 0) > 0) {
-                        $identifier = $dangKiemCategory['slug'] ?? $dangKiemCategory['id'];
-                        $childrenResponse = $postCategoryApiController->children($request, $identifier);
-                        $childrenData = json_decode($childrenResponse->getContent(), true);
-
-                        if ($childrenData['success'] ?? false) {
-                            $children = $childrenData['data']['children'] ?? [];
-
-                            foreach ($children as $index => $child) {
-                                if (($child['id'] ?? null) != null) {
-                                    $childIdentifier = $child['slug'] ?? $child['id'];
-                                    $grandchildrenResponse = $postCategoryApiController->children($request, $childIdentifier);
-                                    $grandchildrenData = json_decode($grandchildrenResponse->getContent(), true);
-
-                                    if ($grandchildrenData['success'] ?? false) {
-                                        $children[$index]['children'] = $grandchildrenData['data']['children'] ?? [];
-                                    } else {
-                                        $children[$index]['children'] = [];
-                                    }
-                                } else {
-                                    $children[$index]['children'] = [];
-                                }
-                            }
-
-                            $dangKiemCategories = $children;
-                        }
-                    }
+                // Case Study: menu con = bài viết trong danh mục (không phải subcategory)
+                $caseStudyRequest = new Request(['per_page' => 50]);
+                $caseStudyResponse = $postCategoryApiController->posts($caseStudyRequest, 'case-study');
+                
+                $caseStudyData = json_decode($caseStudyResponse->getContent(), true);
+                if ($caseStudyData['success'] ?? false) {
+                    $caseStudyPosts = $caseStudyData['data']['posts'] ?? [];
                 }
 
                 // ✅ Lấy children của "Hệ thống phân phối" (post category)
@@ -175,7 +149,7 @@ class ViewServiceProvider extends ServiceProvider
                     $truyenThongCategories = $truyenThongData['data']['children'];
                 }
             } catch (\Exception $e) {
-                $dangKiemCategories = [];
+                $caseStudyPosts = [];
                 $HeThongPhanPhoiCategories = [];
                 $gioiThieuCasuminaPosts = [];
                 $truyenThongCategories = [];
@@ -184,7 +158,7 @@ class ViewServiceProvider extends ServiceProvider
             ///sản phầm
             $view->with('menuCategories', $categoriesWithChildren);
             ///đăng kiêm
-            $view->with('dangKiemCategories', $dangKiemCategories);
+            $view->with('caseStudyPosts', $caseStudyPosts);
             ///hệ thống phân phối
             $view->with('HeThongPhanPhoiCategories', $HeThongPhanPhoiCategories);
 

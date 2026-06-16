@@ -22,20 +22,73 @@
                         </defs>
                     </svg>
                 </div>
-                <a href="tel:02838362369" class="menu-hot-phone d-flex align-items-center gap-1" title=" Gọi Hotline">
-                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path
-                            d="M20.6465 18.1082C20.2743 17.736 19.6653 17.736 19.327 18.1082L17.1955 20.2059C16.2144 21.187 14.0152 20.5104 12.2559 18.751C10.4966 16.9917 9.81991 14.7587 10.8011 13.8114L12.8987 11.7137C13.2709 11.3416 13.2709 10.7326 12.8987 10.3943L8.06059 5.52229C7.68843 5.15012 7.07943 5.15012 6.7411 5.52229L5.32011 6.94328C2.47813 9.75142 4.37278 16.2474 9.58308 21.4238C14.7595 26.6003 21.2555 28.5288 24.0975 25.6868L25.5185 24.2658C25.8906 23.8937 25.8906 23.2847 25.5185 22.9463L20.6465 18.1082Z"
-                            stroke="white" stroke-width="1.5" stroke-miterlimit="1" stroke-linecap="round"
-                            stroke-linejoin="round" />
-                        <path d="M15.4365 4C21.831 4 27.0074 9.17646 27.0074 15.5709" stroke="white" stroke-width="1.5"
-                            stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
-                        <path d="M15.4365 7.82288C19.6995 7.82288 23.1843 11.3077 23.1843 15.5707" stroke="white"
-                            stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
-                    </svg>
-                    <span class="text-white font-hanzel fs-18">02838 362 369</span>
-                </a>
+                <div class="menu-hot-phone-wrapper" x-data="{ openHotline: false }">
+                    <div class="menu-hot-phone d-flex align-items-center gap-2">
+                        <button type="button"
+                            class="menu-hot-phone-mobile-trigger d-sm-none border-0 bg-transparent p-0"
+                            :class="{ 'is-open': openHotline }"
+                            @click="openHotline = !openHotline"
+                            aria-label="{{ __('messages.call_hotline') }}">
+                            <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M20.6465 18.1082C20.2743 17.736 19.6653 17.736 19.327 18.1082L17.1955 20.2059C16.2144 21.187 14.0152 20.5104 12.2559 18.751C10.4966 16.9917 9.81991 14.7587 10.8011 13.8114L12.8987 11.7137C13.2709 11.3416 13.2709 10.7326 12.8987 10.3943L8.06059 5.52229C7.68843 5.15012 7.07943 5.15012 6.7411 5.52229L5.32011 6.94328C2.47813 9.75142 4.37278 16.2474 9.58308 21.4238C14.7595 26.6003 21.2555 28.5288 24.0975 25.6868L25.5185 24.2658C25.8906 23.8937 25.8906 23.2847 25.5185 22.9463L20.6465 18.1082Z"
+                                    stroke="white" stroke-width="1.5" stroke-miterlimit="1" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                                <path d="M15.4365 4C21.831 4 27.0074 9.17646 27.0074 15.5709" stroke="white"
+                                    stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                                <path d="M15.4365 7.82288C19.6995 7.82288 23.1843 11.3077 23.1843 15.5707"
+                                    stroke="white" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                            </svg>
+                        </button>
+                        <span class="menu-hot-phone-icon d-none d-sm-flex align-items-center">
+                            <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M20.6465 18.1082C20.2743 17.736 19.6653 17.736 19.327 18.1082L17.1955 20.2059C16.2144 21.187 14.0152 20.5104 12.2559 18.751C10.4966 16.9917 9.81991 14.7587 10.8011 13.8114L12.8987 11.7137C13.2709 11.3416 13.2709 10.7326 12.8987 10.3943L8.06059 5.52229C7.68843 5.15012 7.07943 5.15012 6.7411 5.52229L5.32011 6.94328C2.47813 9.75142 4.37278 16.2474 9.58308 21.4238C14.7595 26.6003 21.2555 28.5288 24.0975 25.6868L25.5185 24.2658C25.8906 23.8937 25.8906 23.2847 25.5185 22.9463L20.6465 18.1082Z"
+                                    stroke="white" stroke-width="1.5" stroke-miterlimit="1" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                                <path d="M15.4365 4C21.831 4 27.0074 9.17646 27.0074 15.5709" stroke="white"
+                                    stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                                <path d="M15.4365 7.82288C19.6995 7.82288 23.1843 11.3077 23.1843 15.5707"
+                                    stroke="white" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                            </svg>
+                        </span>
+                        <div class="menu-hot-phone-numbers d-none d-sm-flex flex-column">
+                            <a href="tel:0987949494" class="menu-hot-phone-number font-hanzel">(+84) 987 94 94 94 </a>
+                            <a href="tel:01426529" class="menu-hot-phone-number font-hanzel">(+358) 1426 529</a>
+                        </div>
+                    </div>
+                    <div class="menu-hot-phone-popup d-sm-none" x-show="openHotline" @click.away="openHotline = false"
+                        x-transition:enter="transition ease-out duration-200"
+                        x-transition:enter-start="opacity-0 transform scale-95"
+                        x-transition:enter-end="opacity-100 transform scale-100"
+                        x-transition:leave="transition ease-in duration-150"
+                        x-transition:leave-start="opacity-100 transform scale-100"
+                        x-transition:leave-end="opacity-0 transform scale-95" style="display: none;">
+                        <div class="menu-hot-phone-popup-title">{{ __('messages.hotline') }}</div>
+                        <div class="menu-hot-phone-popup-body">
+                            <a href="tel:0987949494" class="menu-hot-phone-option">
+                                <span class="menu-hot-phone-option-icon" aria-hidden="true">
+                                    <i class="bi bi-telephone-fill"></i>
+                                </span>
+                                <span class="menu-hot-phone-option-number">(+84) 987 94 94 94</span>
+                                <i class="bi bi-chevron-right menu-hot-phone-option-arrow" aria-hidden="true"></i>
+                            </a>
+                            <a href="tel:01426529" class="menu-hot-phone-option">
+                                <span class="menu-hot-phone-option-icon" aria-hidden="true">
+                                    <i class="bi bi-telephone-fill"></i>
+                                </span>
+                                <span class="menu-hot-phone-option-number">(+358) 1426 529</span>
+                                <i class="bi bi-chevron-right menu-hot-phone-option-arrow" aria-hidden="true"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
                 <div class="logo">
                     <a href="{{ route('home') }}">
                         <img src="{{ asset('langding_nano/imgs/logonano.png') }}" alt="Logo ">
@@ -393,22 +446,24 @@
 
             <li>
                 <div class="d-flex justify-content-between align-items-center">
-                    <a href="{{ route('document') }}"
+                    <a href="{{ route('post.category', 'case-study') }}"
                         class="text-white fs-16">{{ __('messages.case_studies') }}</a>
                     <span class="show-level-1"><i class="fas fa-chevron-right text-white"></i></span>
                 </div>
 
                 <ul class="menu-level-1 list-unstyled">
-                    @if (isset($dangKiemCategories) && count($dangKiemCategories) > 0)
-                    @foreach ($dangKiemCategories as $index => $parentCategory)
+                    @if (isset($caseStudyPosts) && count($caseStudyPosts) > 0)
+                    @foreach ($caseStudyPosts as $post)
                     @php
-                    $categoryUrl = route('document') . '/' . $parentCategory['slug'];
+                    $postUrl = !empty($post['slug'])
+                    ? route('post.detail', ['slug' => $post['slug']])
+                    : route('post.category', 'case-study');
                     @endphp
                     <li class="menu-item-level-1">
-                        <a href="{{ $categoryUrl }}"
+                        <a href="{{ $postUrl }}"
                             class="text-white d-flex justify-content-between align-items-center">
                             <span class="fs-14 fw-bold d-flex align-items-center gap-2">
-                                <span>{{ $parentCategory['name'] ?? 'N/A' }}</span>
+                                <span>{{ $post['title'] ?? 'N/A' }}</span>
                             </span>
                         </a>
                     </li>
