@@ -559,7 +559,7 @@ a.text-red {
     transition: background 0.2s ease;
 }
 
-.menu-hot-phone-option + .menu-hot-phone-option {
+.menu-hot-phone-option+.menu-hot-phone-option {
     border-top: 1px solid #eef1f3;
 }
 
@@ -845,10 +845,14 @@ body.menu-open {
     width: 27px;
 }
 
-/* thanh them  */
-.nav-menu .menu-center ul li:hover .show-level-1 i {
-    transform: rotate(90deg);
+.nav-menu .menu-center .show-level-1 i,
+.nav-menu .menu-center .show-level-2 i {
     transition: transform 0.3s ease;
+}
+
+.nav-menu .menu-center li.is-expanded > .d-flex .show-level-1 i,
+.nav-menu .menu-center li.is-expanded > .d-flex .show-level-2 i {
+    transform: rotate(90deg);
 }
 
 .nav-menu .menu-center .menu-level-2 {
@@ -869,6 +873,12 @@ body.menu-open {
     width: 24px;
     text-align: center;
     cursor: pointer;
+}
+
+.nav-menu .menu-center .d-flex:has(.show-level-1)>a,
+.nav-menu .menu-center .d-flex:has(.show-level-2)>a {
+    cursor: pointer;
+    flex: 1;
 }
 
 /* Slider home 2*/
@@ -6647,13 +6657,6 @@ footer .footer-call {
     text-align: center;
     cursor: pointer;
     margin-left: 10px;
-}
-
-/* Chỉ áp dụng hiệu ứng khi hover vào li chứa nút hoặc hover trực tiếp vào nút */
-.nav-menu .menu-center .menu-level-2>li:hover>.d-flex .show-level-2 i,
-.nav-menu .menu-center .menu-level-2>li .show-level-2:hover i {
-    transform: rotate(90deg);
-    transition: transform 0.3s ease;
 }
 
 /* Menu level 2 nested (grandchildren) - Ẩn mặc định */

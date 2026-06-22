@@ -684,6 +684,8 @@ window.dealerApp = {
       $(".menu-overlay").removeClass("active");
       $("body").removeClass("menu-open");
       $("body").find(".menu-level-1").removeClass("active");
+      $(".nav-menu .menu-center li").removeClass("is-expanded");
+      $(".menu-level-2-nested").removeClass("active");
       $(".social-sidebar").css("display", "");
     });
 
@@ -693,26 +695,35 @@ window.dealerApp = {
       $(".menu-overlay").removeClass("active");
       $("body").removeClass("menu-open");
       $("body").find(".menu-level-1").removeClass("active");
+      $(".nav-menu .menu-center li").removeClass("is-expanded");
+      $(".menu-level-2-nested").removeClass("active");
     });
 
-    // Hover menu level 1
-    $(document).on("click", ".nav-menu .menu-center .show-level-1", function (e) {
-      e.preventDefault();
-      e.stopPropagation();
-      const $menuLevel1 = $(this).closest("li").find(".menu-level-1");
+    function toggleMenuLevel1($trigger) {
+      const $parentLi = $trigger.closest("li");
+      const $menuLevel1 = $parentLi.find("> .menu-level-1");
       const isVisible = $menuLevel1.hasClass("active");
       if (isVisible) {
-        // Nếu đang hiển thị → Ẩn đi
         $menuLevel1.removeClass("active");
+        $parentLi.removeClass("is-expanded");
       } else {
-        // Nếu đang ẩn → Hiển thị
-        // Đóng tất cả menu level 1 khác trước
         $(".menu-level-1").removeClass("active");
-
-        // Hiện menu hiện tại
+        $(".nav-menu .menu-center > ul > li").removeClass("is-expanded");
         $menuLevel1.addClass("active");
+        $parentLi.addClass("is-expanded");
       }
-    });
+    }
+
+    // Toggle menu level 1 (mũi tên hoặc text menu)
+    $(document).on(
+      "click",
+      ".nav-menu .menu-center .show-level-1, .nav-menu .menu-center .d-flex:has(.show-level-1) > a",
+      function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        toggleMenuLevel1($(this));
+      }
+    );
 
     // search-widget
 
@@ -1464,24 +1475,31 @@ $(document).on("click", ".nav-btn", function (e) {
 });
 
 ///javascript toggle menu level 2 nested
-$(document).on("click", ".nav-menu .menu-center .show-level-2", function (e) {
-  e.preventDefault();
-  e.stopPropagation();
-  const $menuLevel2Nested = $(this).closest("li").find(".menu-level-2-nested");
+function toggleMenuLevel2Nested($trigger) {
+  const $parentLi = $trigger.closest("li");
+  const $menuLevel2Nested = $parentLi.find("> .menu-level-2-nested");
   const isVisible = $menuLevel2Nested.hasClass("active");
 
   if (isVisible) {
-    // Nếu đang hiển thị → Ẩn đi
     $menuLevel2Nested.removeClass("active");
+    $parentLi.removeClass("is-expanded");
   } else {
-    // Nếu đang ẩn → Hiển thị
-    // Đóng tất cả menu level 2 nested khác trong cùng level 2
-    $(this).closest(".menu-level-2").find(".menu-level-2-nested").removeClass("active");
-
-    // Hiện menu hiện tại
+    $trigger.closest(".menu-level-1, .menu-level-2").find(".menu-level-2-nested").removeClass("active");
+    $trigger.closest(".menu-level-1, .menu-level-2").find("> li").removeClass("is-expanded");
     $menuLevel2Nested.addClass("active");
+    $parentLi.addClass("is-expanded");
   }
-});
+}
+
+$(document).on(
+  "click",
+  ".nav-menu .menu-center .show-level-2, .nav-menu .menu-center .d-flex:has(.show-level-2) > a",
+  function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+    toggleMenuLevel2Nested($(this));
+  }
+);
 
 $(document).on("click", ".product-item", function (e) {
   // Giữ nguyên hành vi cho giỏ hàng và các phần tử tương tác
