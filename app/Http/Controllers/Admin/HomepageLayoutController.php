@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Services\BlockAdminLinkResolver;
 use App\Services\HomepageLayoutService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -12,7 +13,8 @@ use Prologue\Alerts\Facades\Alert;
 class HomepageLayoutController extends Controller
 {
     public function __construct(
-        protected HomepageLayoutService $homepageLayoutService
+        protected HomepageLayoutService $homepageLayoutService,
+        protected BlockAdminLinkResolver $blockAdminLinkResolver
     ) {
     }
 
@@ -20,8 +22,9 @@ class HomepageLayoutController extends Controller
     {
         $blocks = $this->homepageLayoutService->getLayoutBlocksForAdmin();
         $locale = app()->getLocale();
+        $blockContentLinks = $this->blockAdminLinkResolver->homepageBlockLinks();
 
-        return view('admin.homepage-layout.index', compact('blocks', 'locale'));
+        return view('admin.homepage-layout.index', compact('blocks', 'locale', 'blockContentLinks'));
     }
 
     public function updateOrder(Request $request): RedirectResponse

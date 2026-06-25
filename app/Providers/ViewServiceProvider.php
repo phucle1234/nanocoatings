@@ -171,18 +171,27 @@ class ViewServiceProvider extends ServiceProvider
 
         // Promotion banners - Dùng chung cho nhiều trang
         View::composer('langding.components.promotion-slide', function ($view) {
+            if ($view->offsetExists('promotionBanners')) {
+                return;
+            }
             $promotionBanners = $this->getBannersBySlug('home-promotion');
             $view->with('promotionBanners', $promotionBanners);
         });
 
         // Partner banners - Dùng chung cho nhiều trang
         View::composer('langding.components.partner-slide', function ($view) {
+            if ($view->offsetExists('partnerBanners')) {
+                return;
+            }
             $partnerBanners = $this->getBannersBySlug('partner-banner');
             $view->with('partnerBanners', $partnerBanners);
         });
 
         // Video - Dùng chung cho nhiều trang
         View::composer('langding.components.video', function ($view) {
+            if ($view->offsetExists('introductionBanners')) {
+                return;
+            }
             $introductionBanners = $this->getBannersBySlug('video-introduction');
             $view->with('introductionBanners', $introductionBanners);
         });

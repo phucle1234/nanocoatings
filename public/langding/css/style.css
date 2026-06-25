@@ -7977,3 +7977,189 @@ footer .footer-call {
 .product-model-characteristics li {
     list-style: disc !important;
 }
+
+/* ===== Application sectors hub ===== */
+.page-sector-hub {
+    background-color: #0a2e24;
+}
+
+.page-sector-hub-hero {
+    padding: 6.5rem 0 1.5rem;
+    background: linear-gradient(180deg, rgba(10, 46, 36, 0.95) 0%, rgba(33, 164, 116, 0.35) 100%),
+        url('../imgs/bg-menu-footer.png') no-repeat center bottom;
+    background-size: cover;
+}
+
+.sector-hub-breadcrumb .breadcrumb-item + .breadcrumb-item::before {
+    color: rgba(255, 255, 255, 0.45);
+}
+
+.sector-hub-breadcrumb a {
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.sector-hub-breadcrumb a:hover {
+    color: #fff !important;
+}
+
+.sector-hub-heading {
+    max-width: 720px;
+    margin: 2rem auto 0;
+}
+
+.sector-hub-title {
+    line-height: 1.25;
+}
+
+.page-sector-hub-body {
+    padding: 3rem 0 5rem;
+    background: linear-gradient(180deg, #145a42 0%, #21A474 55%, #1a8f63 100%);
+}
+
+.sector-hub-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 400px));
+    justify-content: center;
+    gap: 1.75rem;
+    max-width: 1280px;
+    margin: 0 auto;
+}
+
+.sector-card {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    border-radius: 16px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.18);
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+        box-shadow 0.35s ease,
+        border-color 0.35s ease;
+}
+
+.sector-card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(255, 221, 0, 0.45);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.28);
+    color: inherit;
+}
+
+.sector-card-media {
+    position: relative;
+    min-height: 380px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+.sector-card-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg,
+            rgba(8, 35, 28, 0.15) 0%,
+            rgba(8, 35, 28, 0.55) 45%,
+            rgba(8, 35, 28, 0.92) 100%);
+    transition: opacity 0.35s ease;
+}
+
+.sector-card:hover .sector-card-overlay {
+    background: linear-gradient(180deg,
+            rgba(8, 35, 28, 0.1) 0%,
+            rgba(8, 35, 28, 0.5) 40%,
+            rgba(8, 35, 28, 0.95) 100%);
+}
+
+.sector-card-body {
+    position: relative;
+    z-index: 1;
+    padding: 1.75rem 1.5rem 1.5rem;
+}
+
+.sector-card-title {
+    font-size: 1.5rem;
+    font-weight: 400;
+    color: #fff;
+    margin: 0 0 0.65rem;
+    line-height: 1.2;
+}
+
+.sector-card-desc {
+    font-size: 0.9rem;
+    line-height: 1.55;
+    color: rgba(255, 255, 255, 0.78);
+    margin: 0 0 1.15rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.sector-card-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: #FFDD00;
+    transition: gap 0.25s ease;
+}
+
+.sector-card-cta i {
+    font-size: 1rem;
+    transition: transform 0.25s ease;
+}
+
+.sector-card:hover .sector-card-cta {
+    gap: 0.75rem;
+}
+
+.sector-card:hover .sector-card-cta i {
+    transform: translateX(4px);
+}
+
+.sector-hub-empty {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px dashed rgba(255, 255, 255, 0.2);
+}
+
+@media (max-width: 767.98px) {
+    .page-sector-hub-hero {
+        padding: 1.5rem 0 1rem;
+    }
+
+    .sector-hub-heading {
+        margin-top: 1.25rem;
+    }
+
+    .sector-hub-title {
+        font-size: 1.65rem !important;
+    }
+
+    .page-sector-hub-body {
+        padding: 2rem 0 3.5rem;
+    }
+
+    .sector-hub-grid {
+        grid-template-columns: 1fr;
+        gap: 1.25rem;
+    }
+
+    .sector-card-media {
+        min-height: 320px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .sector-hub-grid {
+        gap: 2rem;
+    }
+}

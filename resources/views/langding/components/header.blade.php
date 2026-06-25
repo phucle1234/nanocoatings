@@ -405,7 +405,7 @@
             </li>
 
             <li>
-                <a href="{{ route('branch') }}" class="text-white fs-16">{{ __('messages.store_system') }}
+                <a href="{{ route('sectors.index') }}" class="text-white fs-16">{{ __('messages.application_sectors') }}
                 </a>
             </li>
 

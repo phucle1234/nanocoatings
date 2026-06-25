@@ -120,6 +120,7 @@ class PostCrudController extends CrudController
         }
 
         CRUD::addClause('where', 'post_type', '!=', config('homepage_layout.post_type', 'homepage_block'));
+        CRUD::addClause('where', 'post_type', '!=', config('sector_layout.post_type', 'sector_block'));
 
         CRUD::removeButton('show');
         CRUD::addButtonFromView('line', 'custom_view', 'custom_view', 'beginning');

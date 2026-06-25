@@ -1,9 +1,18 @@
 <?php
 
 return [
-    'category_slug' => 'sap-xep-trang-chu',
-    'category_slug_en' => 'homepage-layout-en',
-    'post_type' => 'homepage_block',
+    'hub_slug' => 'nganh-ung-dung',
+    'hub_slug_en' => 'application-sectors-en',
+    'post_type' => 'sector_block',
+    'banner_prefix' => 'sector',
+
+    'banner_keys' => [
+        'slider_hero' => 'home-slider',
+        'application_slider' => 'home-slider-2',
+        'video' => 'video-introduction',
+        'promotion' => 'home-promotion',
+        'partner' => 'partner-banner',
+    ],
 
     'blocks' => [
         ['section_type' => 'slider_hero', 'title_vi' => 'Slider nền (Hero)', 'title_en' => 'Hero background slider', 'sort_order' => 1],
@@ -14,15 +23,5 @@ return [
         ['section_type' => 'promotion', 'title_vi' => 'Khuyến mãi', 'title_en' => 'Promotions', 'sort_order' => 6],
         ['section_type' => 'partner', 'title_vi' => 'Đối tác', 'title_en' => 'Partners', 'sort_order' => 7],
         ['section_type' => 'media', 'title_vi' => 'Truyền thông / Tin tức', 'title_en' => 'Media / News', 'sort_order' => 8],
-        ['section_type' => 'footer', 'title_vi' => 'Footer', 'title_en' => 'Footer', 'sort_order' => 9],
-    ],
-
-    'banner_keys' => [
-        'slider_hero' => 'home-slider',
-        'application_slider' => 'home-slider-2',
-        'video' => 'video-introduction',
-        'promotion' => 'home-promotion',
-        'partner' => 'partner-banner',
-        'footer' => 'footer-main',
     ],
 ];

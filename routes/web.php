@@ -40,6 +40,7 @@ use App\Http\Controllers\langding\BranchController;
 use App\Http\Controllers\langding\DocumentController;
 use App\Http\Controllers\langding\ShopController;
 use App\Http\Controllers\langding\SearchController;
+use App\Http\Controllers\langding\SectorController;
 // Language Switcher Route (không cần middleware, xử lý trước)
 Route::get('/language/{locale}', [LanguageController::class, 'switch'])->name('language.switch');
 
@@ -113,6 +114,9 @@ $defineRoutes = function () {
 
     Route::get('/ajax/tab-feed', [TabFeedController::class, 'show'])->name('langding.tab-feed');
     Route::get('/about', [AboutController::class, 'index'])->name('about');
+
+    Route::get('/applications', [SectorController::class, 'index'])->name('sectors.index');
+    Route::get('/applications/{slug}', [SectorController::class, 'show'])->name('sectors.show');
 
     Route::get('/login', [LoginController::class, 'showLoginForm'])->middleware('guest')->name('login');
     Route::post('/login', [LoginController::class, 'login'])->middleware('guest');

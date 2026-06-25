@@ -29,6 +29,10 @@ Route::group([
     Route::get('homepage-layout', 'HomepageLayoutController@index')->name('admin.homepage-layout.index');
     Route::post('homepage-layout', 'HomepageLayoutController@updateOrder')->name('admin.homepage-layout.update');
 
+    Route::crud('sector', 'SectorCrudController');
+    Route::get('sector/{sectorId}/layout', 'SectorLayoutController@index')->name('admin.sector-layout.index');
+    Route::post('sector/{sectorId}/layout', 'SectorLayoutController@updateOrder')->name('admin.sector-layout.update');
+
     Route::crud('order', 'OrderCrudController');
     Route::crud('user', 'UserCrudController');
     Route::crud('contact', 'ContactCrudController');

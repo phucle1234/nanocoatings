@@ -104,6 +104,7 @@
             <hr class="dropdown-divider">
         </li>
         <li><a class="dropdown-item" href="{{ route('admin.homepage-layout.index') }}"><i class="la la-sort nav-icon"></i> Sắp xếp trang chủ</a></li>
+        <li><a class="dropdown-item" href="{{ backpack_url('sector') }}"><i class="la la-industry nav-icon"></i> Ngành ứng dụng</a></li>
 
     </ul>
 </li>

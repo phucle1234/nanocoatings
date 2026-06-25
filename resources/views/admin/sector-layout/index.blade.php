@@ -2,8 +2,8 @@
 
 @section('header')
     <section class="header-operation container-fluid animated fadeIn d-flex mb-2 align-items-baseline d-print-none" bp-section="page-header">
-        <h1 class="text-capitalize mb-0" bp-section="page-heading">Sắp xếp trang chủ</h1>
-        <p class="ms-2 mb-0 text-muted" bp-section="page-subheading">Kéo thả để đổi thứ tự · Bật/tắt hiển thị từng block</p>
+        <h1 class="text-capitalize mb-0" bp-section="page-heading">Sắp xếp block — {{ $sectorName }}</h1>
+        <p class="ms-2 mb-0 text-muted" bp-section="page-subheading">Kéo thả · Bật/tắt từng block trang ngành</p>
     </section>
 @endsection
 
@@ -13,19 +13,20 @@
             <div class="card">
                 <div class="card-body">
                     <p class="text-muted mb-3">
-                        Trang chủ có đúng <strong>9 block</strong> (gồm footer). Không thêm/xóa block tại đây — chỉ sắp xếp và bật/tắt.
+                        Quản lý nội dung banner/text từng block trong menu <strong>Danh mục banner</strong>
+                        (slug bắt đầu bằng <code>sector-{{ $sector->translations->firstWhere('language', 'vi')->slug ?? '...' }}-</code>).
                     </p>
 
-                    <form method="post" action="{{ route('admin.homepage-layout.update') }}" id="homepage-layout-form">
+                    <form method="post" action="{{ route('admin.sector-layout.update', $sector->id) }}" id="sector-layout-form">
                         @csrf
-                        <ul class="list-group mb-3" id="homepage-blocks-sortable">
+                        <ul class="list-group mb-3" id="sector-blocks-sortable">
                             @foreach ($blocks as $index => $block)
                                 @php
                                     $translation = $block->translations->firstWhere('language', $locale)
                                         ?? $block->translations->first();
                                     $label = $translation->title ?? $block->section_type;
                                 @endphp
-                                <li class="list-group-item d-flex align-items-center gap-3 homepage-block-item"
+                                <li class="list-group-item d-flex align-items-center gap-3 sector-block-item"
                                     data-id="{{ $block->id }}">
                                     <span class="handle text-muted" style="cursor: grab; font-size: 1.25rem;" title="Kéo để sắp xếp">⋮⋮</span>
                                     <span class="badge bg-secondary">{{ $index + 1 }}</span>
@@ -57,8 +58,16 @@
                         <button type="submit" class="btn btn-primary">
                             <i class="la la-save"></i> Lưu thứ tự
                         </button>
-                        <a href="{{ url('/') }}" class="btn btn-outline-secondary ms-2" target="_blank" rel="noopener">
-                            <i class="la la-external-link"></i> Xem trang chủ
+                        @php
+                            $sectorSlug = $sector->translations->firstWhere('language', 'vi')->slug ?? '';
+                        @endphp
+                        @if ($sectorSlug)
+                            <a href="{{ route('sectors.show', $sectorSlug) }}" class="btn btn-outline-secondary ms-2" target="_blank" rel="noopener">
+                                <i class="la la-external-link"></i> Xem trang ngành
+                            </a>
+                        @endif
+                        <a href="{{ backpack_url('sector') }}" class="btn btn-outline-secondary ms-2">
+                            <i class="la la-arrow-left"></i> Danh sách ngành
                         </a>
                     </form>
                 </div>
@@ -71,8 +80,8 @@
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const list = document.getElementById('homepage-blocks-sortable');
-            const form = document.getElementById('homepage-layout-form');
+            const list = document.getElementById('sector-blocks-sortable');
+            const form = document.getElementById('sector-layout-form');
             if (!list || !form || typeof Sortable === 'undefined') {
                 return;
             }
@@ -90,7 +99,7 @@
             });
 
             function reindexFormFields() {
-                const items = list.querySelectorAll('.homepage-block-item');
+                const items = list.querySelectorAll('.sector-block-item');
                 items.forEach(function (item, index) {
                     item.querySelectorAll('input[name*="[id]"]').forEach(function (input) {
                         input.name = 'blocks[' + index + '][id]';
@@ -110,7 +119,7 @@
 
 @push('after_styles')
     <style>
-        #homepage-blocks-sortable .homepage-block-item.sortable-ghost {
+        #sector-blocks-sortable .sector-block-item.sortable-ghost {
             opacity: 0.5;
             background: #f8f9fa;
         }

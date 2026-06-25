@@ -23,6 +23,7 @@ class PostCategory extends Model
         'is_active',
         'is_featured',
         'is_banner',
+        'is_sector',
         'sort_order',
         'meta_title',
         'meta_description',
@@ -33,6 +34,7 @@ class PostCategory extends Model
         'is_active' => 'boolean',
         'is_featured' => 'boolean',
         'is_banner' => 'boolean',
+        'is_sector' => 'boolean',
         'sort_order' => 'integer',
     ];
 
