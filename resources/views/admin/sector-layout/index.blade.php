@@ -13,8 +13,8 @@
             <div class="card">
                 <div class="card-body">
                     <p class="text-muted mb-3">
-                        Quản lý nội dung banner/text từng block trong menu <strong>Danh mục banner</strong>
-                        (slug bắt đầu bằng <code>sector-{{ $sector->translations->firstWhere('language', 'vi')->slug ?? '...' }}-</code>).
+                        <strong>Ảnh nền &amp; tiêu đề</strong> — sửa ảnh nền section, tiêu đề và mô tả.
+                        <strong>Nội dung</strong> — quản lý bài viết / slide / video trong block.
                     </p>
 
                     <form method="post" action="{{ route('admin.sector-layout.update', $sector->id) }}" id="sector-layout-form">
@@ -34,11 +34,19 @@
                                         <strong>{{ $label }}</strong>
                                         <div class="small text-muted"><code>{{ $block->section_type }}</code></div>
                                     </div>
+                                    @if (!empty($blockBannerLinks[$block->section_type] ?? null))
+                                        <a href="{{ $blockBannerLinks[$block->section_type] }}"
+                                            class="btn btn-sm btn-outline-secondary text-nowrap"
+                                            target="_blank" rel="noopener noreferrer"
+                                            title="Sửa ảnh nền, tiêu đề và mô tả section">
+                                            <i class="la la-image"></i> Ảnh nền &amp; tiêu đề
+                                        </a>
+                                    @endif
                                     @if (!empty($blockContentLinks[$block->section_type] ?? null))
                                         <a href="{{ $blockContentLinks[$block->section_type] }}"
                                             class="btn btn-sm btn-outline-primary text-nowrap"
                                             target="_blank" rel="noopener noreferrer"
-                                            title="Mở quản lý nội dung block trong tab mới">
+                                            title="Mở quản lý bài viết / slide / video trong tab mới">
                                             <i class="la la-external-link"></i> Nội dung
                                         </a>
                                     @endif

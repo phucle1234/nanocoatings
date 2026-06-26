@@ -29,6 +29,32 @@ class BlockAdminLinkResolver
     }
 
     /**
+     * Link sửa ảnh nền + tiêu đề/mô tả section (danh mục banner).
+     *
+     * @return array<string, string|null> section_type => admin URL
+     */
+    public function sectorBannerMetaLinks(PostCategory $sector): array
+    {
+        $sectorService = app(SectorService::class);
+        $bannerKeys = config('sector_layout.banner_keys', []);
+        $links = [];
+
+        foreach (config('sector_layout.blocks', []) as $blockDef) {
+            $sectionType = $blockDef['section_type'];
+
+            if (!isset($bannerKeys[$sectionType])) {
+                $links[$sectionType] = null;
+                continue;
+            }
+
+            $slug = $sectorService->getBannerCategorySlug($sector, $bannerKeys[$sectionType], 'vi');
+            $links[$sectionType] = $this->bannerCategoryEditUrlForSlug($slug);
+        }
+
+        return $links;
+    }
+
+    /**
      * @return array<string, string|null> section_type => admin URL
      */
     public function homepageBlockLinks(): array
@@ -85,6 +111,19 @@ class BlockAdminLinkResolver
         }
 
         return backpack_url('post?category_id=' . $category->id);
+    }
+
+    protected function bannerCategoryEditUrlForSlug(string $slugVi): ?string
+    {
+        $category = PostCategory::withoutGlobalScopes()
+            ->whereHas('translations', fn ($q) => $q->where('slug', $slugVi))
+            ->first();
+
+        if (!$category) {
+            return null;
+        }
+
+        return backpack_url('banner-category/' . $category->id . '/edit');
     }
 
     protected function fallbackLink(string $sectionType): ?string

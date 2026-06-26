@@ -29,13 +29,15 @@ class SectorLayoutController extends Controller
             ?? $sector->translations->first()->name
             ?? 'Ngành';
         $blockContentLinks = $this->blockAdminLinkResolver->sectorBlockLinks($sector);
+        $blockBannerLinks = $this->blockAdminLinkResolver->sectorBannerMetaLinks($sector);
 
         return view('admin.sector-layout.index', compact(
             'blocks',
             'locale',
             'sector',
             'sectorName',
-            'blockContentLinks'
+            'blockContentLinks',
+            'blockBannerLinks'
         ));
     }
 
