@@ -1,4 +1,8 @@
-<div id="box-video" class="box-video" style="background: url('{{ asset('langding_nano/imgs/Slection6.png') }}') no-repeat center center;background-size: cover;">
+@php
+    $videoBanner = $introductionBanners ?? [];
+    $videoBg = ($videoBanner['category_bg_image'] ?? null) ?: asset('langding_nano/imgs/Slection6.png');
+@endphp
+<div id="box-video" class="box-video" style="background: url('{{ $videoBg }}') no-repeat center center;background-size: cover;">
     <div class="container-fluid">
         <div class="scroll-animate" data-animate="fadeInUp">
             @if(isset($introductionBanners['category']) && $introductionBanners['category'])
