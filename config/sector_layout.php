@@ -24,4 +24,20 @@ return [
         ['section_type' => 'partner', 'title_vi' => 'Đối tác', 'title_en' => 'Partners', 'sort_order' => 7],
         ['section_type' => 'media', 'title_vi' => 'Truyền thông / Tin tức', 'title_en' => 'Media / News', 'sort_order' => 8],
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Hướng dẫn quản lý nội dung từng block (hiển thị trong admin)
+    |--------------------------------------------------------------------------
+    */
+    'block_admin_guide' => [
+        'slider_hero' => 'Ảnh slide: Bài viết/Slider. (Hero full màn hình — mỗi bài viết = 1 ảnh nền)',
+        'video' => 'Ảnh nền & tiêu đề: Danh mục banner. Video/ảnh: Bài viết.',
+        'category' => 'Quản lý trong Danh mục sản phẩm.',
+        'application_slider' => 'Ảnh nền section + tiêu đề: Danh mục banner (Hình ảnh, Meta Title, Meta Description). Ảnh từng slide: Bài viết.',
+        'bestseller' => 'Quản lý trong Sản phẩm (đánh dấu bán chạy).',
+        'promotion' => 'Ảnh nền & tiêu đề: Danh mục banner. Nội dung khuyến mãi: Bài viết.',
+        'partner' => 'Ảnh nền & tiêu đề: Danh mục banner. Logo đối tác: Bài viết.',
+        'media' => 'Quản lý tin tức theo danh mục Truyền thông.',
+    ],
 ];

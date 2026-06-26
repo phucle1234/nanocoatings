@@ -7,7 +7,7 @@ use App\Models\PostCategory;
 class BlockAdminLinkResolver
 {
     /**
-     * @return array<string, string|null> section_type => admin URL
+     * @return array<string, array{posts: ?string, category: ?string, manage: ?string, manage_label: ?string}>
      */
     public function sectorBlockLinks(PostCategory $sector): array
     {
@@ -29,7 +29,7 @@ class BlockAdminLinkResolver
     }
 
     /**
-     * @return array<string, string|null> section_type => admin URL
+     * @return array<string, array{posts: ?string, category: ?string, manage: ?string, manage_label: ?string}>
      */
     public function homepageBlockLinks(): array
     {
@@ -46,17 +46,18 @@ class BlockAdminLinkResolver
 
     /**
      * @param  array<string, string>  $bannerKeys
+     * @return array{posts: ?string, category: ?string, manage: ?string, manage_label: ?string}
      */
     protected function resolveSectorBlockLink(
         PostCategory $sector,
         SectorService $sectorService,
         string $sectionType,
         array $bannerKeys
-    ): ?string {
+    ): array {
         if (isset($bannerKeys[$sectionType])) {
             $slug = $sectorService->getBannerCategorySlug($sector, $bannerKeys[$sectionType], 'vi');
 
-            return $this->postsUrlForBannerSlug($slug);
+            return $this->bannerBlockLinks($slug);
         }
 
         return $this->fallbackLink($sectionType);
@@ -64,38 +65,66 @@ class BlockAdminLinkResolver
 
     /**
      * @param  array<string, string>  $bannerKeys
+     * @return array{posts: ?string, category: ?string, manage: ?string, manage_label: ?string}
      */
-    protected function resolveHomepageBlockLink(string $sectionType, array $bannerKeys): ?string
+    protected function resolveHomepageBlockLink(string $sectionType, array $bannerKeys): array
     {
         if (isset($bannerKeys[$sectionType])) {
-            return $this->postsUrlForBannerSlug($bannerKeys[$sectionType]);
+            return $this->bannerBlockLinks($bannerKeys[$sectionType]);
         }
 
         return $this->fallbackLink($sectionType);
     }
 
-    protected function postsUrlForBannerSlug(string $slugVi): ?string
+    /**
+     * @return array{posts: ?string, category: ?string, manage: ?string, manage_label: ?string}
+     */
+    protected function bannerBlockLinks(string $slugVi): array
     {
         $category = PostCategory::withoutGlobalScopes()
             ->whereHas('translations', fn ($q) => $q->where('slug', $slugVi))
             ->first();
 
         if (!$category) {
-            return null;
+            return ['posts' => null, 'category' => null, 'manage' => null, 'manage_label' => null];
         }
 
-        return backpack_url('post?category_id=' . $category->id);
+        return [
+            'posts' => backpack_url('post?category_id=' . $category->id),
+            'category' => backpack_url('banner-category/' . $category->id . '/edit'),
+            'manage' => null,
+            'manage_label' => null,
+        ];
     }
 
-    protected function fallbackLink(string $sectionType): ?string
+    /**
+     * @return array{posts: ?string, category: ?string, manage: ?string, manage_label: ?string}
+     */
+    protected function fallbackLink(string $sectionType): array
     {
-        return match ($sectionType) {
+        $manage = match ($sectionType) {
             'category' => backpack_url('product-category'),
             'bestseller' => backpack_url('product'),
-            'media' => $this->postsUrlForBannerSlug('truyen-thong')
-                ?? backpack_url('post-category'),
-            'footer' => $this->postsUrlForBannerSlug('footer-main'),
+            'media' => $this->bannerBlockLinks('truyen-thong')['posts'] ?? backpack_url('post-category'),
             default => null,
         };
+
+        $label = match ($sectionType) {
+            'category' => 'Danh mục sản phẩm',
+            'bestseller' => 'Sản phẩm',
+            'media' => 'Tin tức',
+            default => 'Quản lý',
+        };
+
+        if ($sectionType === 'media' && $manage) {
+            return ['posts' => $manage, 'category' => null, 'manage' => null, 'manage_label' => null];
+        }
+
+        return [
+            'posts' => null,
+            'category' => null,
+            'manage' => $manage,
+            'manage_label' => $label,
+        ];
     }
 }

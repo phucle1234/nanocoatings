@@ -13,7 +13,8 @@
             <div class="card">
                 <div class="card-body">
                     <p class="text-muted mb-3">
-                        Trang chủ có đúng <strong>9 block</strong> (gồm footer). Không thêm/xóa block tại đây — chỉ sắp xếp và bật/tắt.
+                        Mỗi block banner: <strong>Ảnh nền &amp; tiêu đề</strong> (danh mục banner) và
+                        <strong>Bài viết / Slider</strong> (từng ảnh slide).
                     </p>
 
                     <form method="post" action="{{ route('admin.homepage-layout.update') }}" id="homepage-layout-form">
@@ -25,23 +26,21 @@
                                         ?? $block->translations->first();
                                     $label = $translation->title ?? $block->section_type;
                                 @endphp
-                                <li class="list-group-item d-flex align-items-center gap-3 homepage-block-item"
+                                <li class="list-group-item homepage-block-item"
                                     data-id="{{ $block->id }}">
+                                    <div class="d-flex align-items-start gap-3">
                                     <span class="handle text-muted" style="cursor: grab; font-size: 1.25rem;" title="Kéo để sắp xếp">⋮⋮</span>
                                     <span class="badge bg-secondary">{{ $index + 1 }}</span>
-                                    <div class="flex-grow-1">
+                                    <div class="flex-grow-1 min-w-0">
                                         <strong>{{ $label }}</strong>
                                         <div class="small text-muted"><code>{{ $block->section_type }}</code></div>
+                                        @include('admin.partials.block-content-links', [
+                                            'block' => $block,
+                                            'blockContentLinks' => $blockContentLinks,
+                                            'guideConfigKey' => 'homepage_layout',
+                                        ])
                                     </div>
-                                    @if (!empty($blockContentLinks[$block->section_type] ?? null))
-                                        <a href="{{ $blockContentLinks[$block->section_type] }}"
-                                            class="btn btn-sm btn-outline-primary text-nowrap"
-                                            target="_blank" rel="noopener noreferrer"
-                                            title="Mở quản lý nội dung block trong tab mới">
-                                            <i class="la la-external-link"></i> Nội dung
-                                        </a>
-                                    @endif
-                                    <div class="form-check form-switch mb-0">
+                                    <div class="form-check form-switch mb-0 flex-shrink-0">
                                         <input type="hidden" name="blocks[{{ $index }}][id]" value="{{ $block->id }}">
                                         <input type="hidden" name="blocks[{{ $index }}][is_active]" value="0">
                                         <input class="form-check-input" type="checkbox" role="switch"
@@ -49,6 +48,7 @@
                                             id="block-active-{{ $block->id }}"
                                             {{ $block->is_active ? 'checked' : '' }}>
                                         <label class="form-check-label" for="block-active-{{ $block->id }}">Hiển thị</label>
+                                    </div>
                                     </div>
                                 </li>
                             @endforeach
