@@ -13,10 +13,8 @@
             <div class="card">
                 <div class="card-body">
                     <p class="text-muted mb-3">
-                        Mỗi block có tối đa 2 nơi chỉnh nội dung:
-                        <strong>Ảnh nền &amp; tiêu đề</strong> (danh mục banner — Hình ảnh, Meta Title, Meta Description)
-                        và <strong>Bài viết / Slider</strong> (từng ảnh trong carousel).
-                        Slug banner ngành: <code>sector-{{ $sector->translations->firstWhere('language', 'vi')->slug ?? '...' }}-*</code>
+                        Quản lý nội dung banner/text từng block trong menu <strong>Danh mục banner</strong>
+                        (slug bắt đầu bằng <code>sector-{{ $sector->translations->firstWhere('language', 'vi')->slug ?? '...' }}-</code>).
                     </p>
 
                     <form method="post" action="{{ route('admin.sector-layout.update', $sector->id) }}" id="sector-layout-form">
@@ -28,21 +26,23 @@
                                         ?? $block->translations->first();
                                     $label = $translation->title ?? $block->section_type;
                                 @endphp
-                                <li class="list-group-item sector-block-item"
+                                <li class="list-group-item d-flex align-items-center gap-3 sector-block-item"
                                     data-id="{{ $block->id }}">
-                                    <div class="d-flex align-items-start gap-3">
                                     <span class="handle text-muted" style="cursor: grab; font-size: 1.25rem;" title="Kéo để sắp xếp">⋮⋮</span>
                                     <span class="badge bg-secondary">{{ $index + 1 }}</span>
-                                    <div class="flex-grow-1 min-w-0">
+                                    <div class="flex-grow-1">
                                         <strong>{{ $label }}</strong>
                                         <div class="small text-muted"><code>{{ $block->section_type }}</code></div>
-                                        @include('admin.partials.block-content-links', [
-                                            'block' => $block,
-                                            'blockContentLinks' => $blockContentLinks,
-                                            'guideConfigKey' => 'sector_layout',
-                                        ])
                                     </div>
-                                    <div class="form-check form-switch mb-0 flex-shrink-0">
+                                    @if (!empty($blockContentLinks[$block->section_type] ?? null))
+                                        <a href="{{ $blockContentLinks[$block->section_type] }}"
+                                            class="btn btn-sm btn-outline-primary text-nowrap"
+                                            target="_blank" rel="noopener noreferrer"
+                                            title="Mở quản lý nội dung block trong tab mới">
+                                            <i class="la la-external-link"></i> Nội dung
+                                        </a>
+                                    @endif
+                                    <div class="form-check form-switch mb-0">
                                         <input type="hidden" name="blocks[{{ $index }}][id]" value="{{ $block->id }}">
                                         <input type="hidden" name="blocks[{{ $index }}][is_active]" value="0">
                                         <input class="form-check-input" type="checkbox" role="switch"
@@ -50,7 +50,6 @@
                                             id="block-active-{{ $block->id }}"
                                             {{ $block->is_active ? 'checked' : '' }}>
                                         <label class="form-check-label" for="block-active-{{ $block->id }}">Hiển thị</label>
-                                    </div>
                                     </div>
                                 </li>
                             @endforeach
@@ -123,11 +122,6 @@
         #sector-blocks-sortable .sector-block-item.sortable-ghost {
             opacity: 0.5;
             background: #f8f9fa;
-        }
-
-        #sector-blocks-sortable .sector-block-guide {
-            max-width: 52rem;
-            line-height: 1.45;
         }
     </style>
 @endpush

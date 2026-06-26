@@ -289,11 +289,11 @@ class BannerCategoryCrudController extends CrudController
                 ->tab($langName);
 
             CRUD::field('image_urls_' . $lang)
-                ->label('Ảnh nền section (' . $langName . ')')
+                ->label('Hình ảnh (' . $langName . ')')
                 ->type('view')
                 ->view('components.multiple-images')
                 ->default($this->getTranslationValue($lang, 'image_urls'))
-                ->hint('Ảnh phủ full-width phía sau block (vd. nền Application Potential). Ảnh đầu tiên được dùng.')
+                ->hint('Thêm nhiều hình ảnh cho danh mục bằng ' . $langName)
                 ->tab($langName);
 
             // URL
@@ -337,25 +337,23 @@ class BannerCategoryCrudController extends CrudController
 
             // Meta title
             CRUD::field('meta_title_' . $lang)
-                ->label('Tiêu đề nhỏ (dòng trên)')
+                ->label('Meta Title')
                 ->type('text')
                 ->default($this->getTranslationValue($lang, 'meta_title'))
                 ->attributes([
-                    'placeholder' => 'VD: Ứng dụng / Products'
+                    'placeholder' => 'Meta title cho SEO'
                 ])
-                ->hint('Hiển thị dòng chữ nhỏ phía trên tiêu đề section')
                 ->tab($langName);
 
             // Meta description
             CRUD::field('meta_description_' . $lang)
-                ->label('Tiêu đề lớn / Mô tả section')
+                ->label('Meta Description')
                 ->type('textarea')
                 ->default($this->getTranslationValue($lang, 'meta_description'))
                 ->attributes([
-                    'rows' => 3,
-                    'placeholder' => 'VD: Application Potential'
+                    'rows' => 2,
+                    'placeholder' => 'Meta description cho SEO'
                 ])
-                ->hint('Tiêu đề chính của section. Có thể dùng HTML đơn giản (<br>).')
                 ->tab($langName);
 
             // Slug cho từng ngôn ngữ
