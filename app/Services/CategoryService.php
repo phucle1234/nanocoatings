@@ -22,7 +22,7 @@ class CategoryService
      * @param string|null $locale
      * @return Collection
      */
-    public function getRootCategories(?string $locale = null): Collection
+    public function getRootCategories(?string $locale = null, ?int $sectorId = null): Collection
     {
         if ($locale === null) {
             $locale = app()->getLocale();
@@ -30,7 +30,8 @@ class CategoryService
 
         return ProductCategory::query()
             ->where('is_active', true)
-            ->root() // Sử dụng scope root() để lấy parent_id = null
+            ->root()
+            ->forCategoryBlockDisplay($sectorId)
             ->withCount('productsManyToMany as products_count')
             ->with(['translations' => function ($query) use ($locale) {
                 $query->where('language', $locale);
@@ -82,7 +83,7 @@ class CategoryService
      * @param string|null $locale
      * @return Collection
      */
-    public function getFeaturedCategories(?string $locale = null): Collection
+    public function getFeaturedCategories(?string $locale = null, ?int $sectorId = null): Collection
     {
         if ($locale === null) {
             $locale = app()->getLocale();
@@ -91,10 +92,11 @@ class CategoryService
         return ProductCategory::query()
             ->where('is_active', true)
             ->where('is_featured', true)
+            ->forCategoryBlockDisplay($sectorId)
             ->with(['translations' => function ($query) use ($locale) {
                 $query->where('language', $locale);
             }])
-            ->withCount('productsManyToMany as products_count') // ✅ Fix N+1 query
+            ->withCount('productsManyToMany as products_count')
             ->orderBy('sort_order')
             ->get()
             ->map(function ($category) use ($locale) {

@@ -141,7 +141,7 @@ class ProductService
      * @param string|null $locale
      * @return Collection
      */
-    public function getBestsellerProducts(int $limit = 10, ?string $locale = null): Collection
+    public function getBestsellerProducts(int $limit = 10, ?string $locale = null, ?int $sectorId = null): Collection
     {
         if ($locale === null) {
             $locale = app()->getLocale();
@@ -152,6 +152,7 @@ class ProductService
         return Product::query()
             ->where('is_active', true)
             ->where('is_bestseller', true)
+            ->forDisplayBlock($sectorId)
             ->with(['documentFile', 'translations' => function ($q) use ($locale, $fallbackLocale) {
                 $q->whereIn('language', [$locale, $fallbackLocale]);
             }])

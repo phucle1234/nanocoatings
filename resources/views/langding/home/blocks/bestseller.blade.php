@@ -1,9 +1,15 @@
-    <div id="box-products-sales" class="box-products-sales" style="background: url('{{ asset('langding_nano/imgs/Slection5.png') }}') no-repeat center center;background-size: cover;">
+@php
+    $bestsellerBanner = $bestsellerBlockBanners ?? [];
+    $bestsellerBg = ($bestsellerBanner['category_bg_image'] ?? null) ?: asset('langding_nano/imgs/Slection5.png');
+    $bestsellerSubtitle = $bestsellerBanner['meta_title'] ?? __('messages.products');
+    $bestsellerTitle = $bestsellerBanner['meta_description'] ?? __('messages.bestseller_products');
+@endphp
+    <div id="box-products-sales" class="box-products-sales" style="background: url('{{ $bestsellerBg }}') no-repeat center center;background-size: cover;">
         <div class="container-fluid">
             <div class="scroll-animate" data-animate="fadeInUp">
-                <div class="title-with-line fw-500 fs-20 text-center text-light-red">{{ __('messages.products') }}</div>
+                <div class="title-with-line fw-500 fs-20 text-center text-light-red">{{ $bestsellerSubtitle }}</div>
                 <h2 class="font-hanzel fs-32 fw-400 text-center mt-2 text-white">
-                    {{ __('messages.bestseller_products') }}
+                    {{ $bestsellerTitle }}
                 </h2>
             </div>
             <div class="products-sales-slider scroll-animate" data-animate="fadeInUp">

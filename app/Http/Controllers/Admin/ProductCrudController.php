@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\ProductRequest;
+use App\Models\Product;
 use App\Traits\HasSlugGenerator;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
@@ -44,6 +45,10 @@ class ProductCrudController extends CrudController
      */
     protected function setupListOperation()
     {
+        if ($sectorId = (int) request()->query('sector_id')) {
+            $this->crud->addClause('forDisplayBlock', $sectorId);
+        }
+
         // Eager load bản dịch tiếng Việt để hiển thị tên
         $this->crud->addClause('with', ['translations' => function ($query) {
             $query->where('language', 'vi');
@@ -193,6 +198,13 @@ class ProductCrudController extends CrudController
         CRUD::field('is_bestseller')->label('Sản phẩm bán chạy')->type('boolean')
             ->default(false)
             ->tab('Chung');
+
+        CRUD::field('display_scopes_field')
+            ->label('Hiển thị block Bestseller')
+            ->type('view')
+            ->view('admin.product.display-scopes')
+            ->tab('Chung');
+
         CRUD::field('sort_order')->label('Thứ tự sắp xếp')->type('number')
             ->attributes(['min' => '0'])
             ->default(0)
@@ -545,6 +557,10 @@ class ProductCrudController extends CrudController
         if ($request->has('document_file_id')) {
             $strippedRequest['document_file_id'] = $request->input('document_file_id') ?: null;
         }
+        $strippedRequest['display_scopes'] = Product::normalizeDisplayScopes(
+            $request->boolean('display_scopes_homepage'),
+            $request->input('display_scopes_sector_ids', [])
+        );
         // Insert item in the db
         $item = $this->crud->create($strippedRequest);
         $this->data['entry'] = $this->crud->entry = $item;
@@ -596,6 +612,10 @@ class ProductCrudController extends CrudController
         if ($request->has('document_file_id')) {
             $strippedRequest['document_file_id'] = $request->input('document_file_id') ?: null;
         }
+        $strippedRequest['display_scopes'] = Product::normalizeDisplayScopes(
+            $request->boolean('display_scopes_homepage'),
+            $request->input('display_scopes_sector_ids', [])
+        );
 
         // Update the row in the db
         $item = $this->crud->update(

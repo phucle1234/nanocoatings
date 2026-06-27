@@ -62,12 +62,14 @@ class SectorController extends Controller
         $translation = $sector->translations->firstWhere('language', $currentLocale)
             ?? $sector->translations->first();
 
+        $this->sectorService->syncBannerCategories($sector);
+
         $sectorBlocks = $this->sectorLayoutService->getActiveLayoutBlocks($sector);
         $bannerData = $this->resolveSectorBannerData($sector);
 
-        $bestsellerProducts = $this->productService->getBestsellerProducts(10, $currentLocale);
-        $categories = $this->categoryService->getFeaturedCategories($currentLocale);
-        $rootCategories = $this->categoryService->getRootCategories($currentLocale);
+        $bestsellerProducts = $this->productService->getBestsellerProducts(10, $currentLocale, $sector->id);
+        $categories = $this->categoryService->getFeaturedCategories($currentLocale, $sector->id);
+        $rootCategories = $this->categoryService->getRootCategories($currentLocale, $sector->id);
 
         foreach ($rootCategories as $category) {
             $category->category_image = $this->getImageJson($category->category_image_urls);
@@ -112,6 +114,8 @@ class SectorController extends Controller
                 'home-promotion' => $data['promotionBanners'] = $banners,
                 'video-introduction' => $data['introductionBanners'] = $banners,
                 'partner-banner' => $data['partnerBanners'] = $banners,
+                'home-category' => $data['categoryBlockBanners'] = $banners,
+                'home-bestseller' => $data['bestsellerBlockBanners'] = $banners,
                 default => null,
             };
         }

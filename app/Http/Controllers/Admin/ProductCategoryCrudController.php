@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\ProductCategoryRequest;
+use App\Models\ProductCategory;
 use App\Traits\HasSlugGenerator;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
@@ -42,6 +43,10 @@ class ProductCategoryCrudController extends CrudController
      */
     protected function setupListOperation()
     {
+        if ($sectorId = (int) request()->query('sector_id')) {
+            $this->crud->addClause('forCategoryBlockDisplay', $sectorId);
+        }
+
         // Cột hiển thị
         CRUD::addColumn([
             'name' => 'row_number',
@@ -205,6 +210,12 @@ class ProductCategoryCrudController extends CrudController
             ->default(false)
             ->tab('Chung');
 
+        CRUD::field('display_scopes_field')
+            ->label('Hiển thị trên block danh mục')
+            ->type('view')
+            ->view('admin.product-category.display-scopes')
+            ->tab('Chung');
+
         CRUD::field('sort_order')
             ->label('Thứ tự sắp xếp')
             ->type('number')
@@ -268,7 +279,12 @@ class ProductCategoryCrudController extends CrudController
         $this->crud->registerFieldEvents();
 
         // Insert item in the db
-        $item = $this->crud->create($this->crud->getStrippedSaveRequest($request));
+        $stripped = $this->crud->getStrippedSaveRequest($request);
+        $stripped['display_scopes'] = ProductCategory::normalizeDisplayScopes(
+            $request->boolean('display_scopes_homepage'),
+            $request->input('display_scopes_sector_ids', [])
+        );
+        $item = $this->crud->create($stripped);
         $this->data['entry'] = $this->crud->entry = $item;
 
         // Handle translations
@@ -299,9 +315,14 @@ class ProductCategoryCrudController extends CrudController
         $this->crud->registerFieldEvents();
 
         // Update the row in the db
+        $stripped = $this->crud->getStrippedSaveRequest($request);
+        $stripped['display_scopes'] = ProductCategory::normalizeDisplayScopes(
+            $request->boolean('display_scopes_homepage'),
+            $request->input('display_scopes_sector_ids', [])
+        );
         $item = $this->crud->update(
             $this->crud->getCurrentEntryId(),
-            $this->crud->getStrippedSaveRequest($request)
+            $stripped
         );
         $this->data['entry'] = $this->crud->entry = $item;
 

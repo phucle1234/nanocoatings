@@ -79,13 +79,18 @@ class BlockAdminLinkResolver
         string $sectionType,
         array $bannerKeys
     ): ?string {
+        // Nội dung block danh mục / bestseller = SP & danh mục SP, không phải bài viết banner.
+        if (in_array($sectionType, ['category', 'bestseller'], true)) {
+            return $this->fallbackLink($sectionType, $sector->id);
+        }
+
         if (isset($bannerKeys[$sectionType])) {
             $slug = $sectorService->getBannerCategorySlug($sector, $bannerKeys[$sectionType], 'vi');
 
             return $this->postsUrlForBannerSlug($slug);
         }
 
-        return $this->fallbackLink($sectionType);
+        return $this->fallbackLink($sectionType, $sector->id);
     }
 
     /**
@@ -126,11 +131,13 @@ class BlockAdminLinkResolver
         return backpack_url('banner-category/' . $category->id . '/edit');
     }
 
-    protected function fallbackLink(string $sectionType): ?string
+    protected function fallbackLink(string $sectionType, ?int $sectorId = null): ?string
     {
+        $sectorQuery = $sectorId ? '?sector_id=' . $sectorId : '';
+
         return match ($sectionType) {
-            'category' => backpack_url('product-category'),
-            'bestseller' => backpack_url('product'),
+            'category' => backpack_url('product-category' . $sectorQuery),
+            'bestseller' => backpack_url('product' . $sectorQuery),
             'media' => $this->postsUrlForBannerSlug('truyen-thong')
                 ?? backpack_url('post-category'),
             'footer' => $this->postsUrlForBannerSlug('footer-main'),

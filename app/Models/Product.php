@@ -8,12 +8,15 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use App\Traits\HasDisplayScopes;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Support\Facades\Log;
 
 class Product extends Model
 {
-    use HasFactory, CrudTrait;
+    use CrudTrait;
+    use HasDisplayScopes;
+    use HasFactory;
 
     protected $fillable = [
         'category_id', // Giữ lại để backward compatibility
@@ -29,6 +32,7 @@ class Product extends Model
         'is_bestseller',
         'view_count',
         'sort_order',
+        'display_scopes',
         'image_urls',
         'document_file_id',
     ];
@@ -44,6 +48,7 @@ class Product extends Model
         'is_bestseller' => 'boolean',
         'view_count' => 'integer',
         'sort_order' => 'integer',
+        'display_scopes' => 'array',
         'image_urls' => 'array',
     ];
 

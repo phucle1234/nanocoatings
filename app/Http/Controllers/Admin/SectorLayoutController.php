@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\PostCategory;
 use App\Services\BlockAdminLinkResolver;
 use App\Services\SectorLayoutService;
+use App\Services\SectorService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -16,13 +17,15 @@ class SectorLayoutController extends Controller
 {
     public function __construct(
         protected SectorLayoutService $sectorLayoutService,
-        protected BlockAdminLinkResolver $blockAdminLinkResolver
+        protected BlockAdminLinkResolver $blockAdminLinkResolver,
+        protected SectorService $sectorService
     ) {
     }
 
     public function index(int $sectorId): View
     {
         $sector = $this->findSector($sectorId);
+        $this->sectorService->syncBannerCategories($sector);
         $blocks = $this->sectorLayoutService->getLayoutBlocksForAdmin($sector);
         $locale = app()->getLocale();
         $sectorName = $sector->translations->firstWhere('language', $locale)->name

@@ -8,8 +8,10 @@ return [
 
     'banner_keys' => [
         'slider_hero' => 'home-slider',
-        'application_slider' => 'home-slider-2',
         'video' => 'video-introduction',
+        'category' => 'home-category',
+        'application_slider' => 'home-slider-2',
+        'bestseller' => 'home-bestseller',
         'promotion' => 'home-promotion',
         'partner' => 'partner-banner',
     ],

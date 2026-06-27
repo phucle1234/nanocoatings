@@ -3,7 +3,9 @@
 namespace App\Models;
 
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
+use App\Traits\HasDisplayScopes;
 use App\Traits\HasSlugGenerator;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -15,6 +17,7 @@ use Illuminate\Support\Str;
 class ProductCategory extends Model
 {
     use CrudTrait;
+    use HasDisplayScopes;
     use HasFactory, HasSlugGenerator;
 
     protected $fillable = [
@@ -26,6 +29,7 @@ class ProductCategory extends Model
         'is_active',
         'is_featured',
         'sort_order',
+        'display_scopes',
         'meta_title',
         'meta_description',
         'meta_keywords',
@@ -35,6 +39,7 @@ class ProductCategory extends Model
         'is_active' => 'boolean',
         'is_featured' => 'boolean',
         'sort_order' => 'integer',
+        'display_scopes' => 'array',
         'image_urls' => 'array',
     ];
 
@@ -277,6 +282,12 @@ class ProductCategory extends Model
     public function scopeRoot($query)
     {
         return $query->whereNull('parent_id');
+    }
+
+    /** Giữ tên scope cũ cho tương thích */
+    public function scopeForCategoryBlockDisplay($query, ?int $sectorId = null)
+    {
+        return $query->forDisplayBlock($sectorId);
     }
 
     /**

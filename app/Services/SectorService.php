@@ -119,6 +119,14 @@ class SectorService
     public function provisionSector(PostCategory $sector): void
     {
         $this->sectorLayoutService->ensureDefaultBlocks($sector);
+        $this->syncBannerCategories($sector);
+    }
+
+    /**
+     * Tạo danh mục banner còn thiếu (gọi khi thêm banner_keys mới hoặc mở layout/trang ngành).
+     */
+    public function syncBannerCategories(PostCategory $sector): void
+    {
         $this->ensureBannerCategories($sector);
     }
 
