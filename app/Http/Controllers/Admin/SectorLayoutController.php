@@ -25,7 +25,7 @@ class SectorLayoutController extends Controller
     public function index(int $sectorId): View
     {
         $sector = $this->findSector($sectorId);
-        $this->sectorService->syncBannerCategories($sector);
+        $this->sectorService->syncSectorResources($sector);
         $blocks = $this->sectorLayoutService->getLayoutBlocksForAdmin($sector);
         $locale = app()->getLocale();
         $sectorName = $sector->translations->firstWhere('language', $locale)->name

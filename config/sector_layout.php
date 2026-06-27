@@ -14,6 +14,7 @@ return [
         'bestseller' => 'home-bestseller',
         'promotion' => 'home-promotion',
         'partner' => 'partner-banner',
+        'media' => 'home-media',
     ],
 
     'blocks' => [

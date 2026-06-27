@@ -119,7 +119,16 @@ class SectorService
     public function provisionSector(PostCategory $sector): void
     {
         $this->sectorLayoutService->ensureDefaultBlocks($sector);
+        $this->syncSectorResources($sector);
+    }
+
+    /**
+     * Đồng bộ banner + danh mục tin tức theo ngành (gọi khi mở layout/trang ngành).
+     */
+    public function syncSectorResources(PostCategory $sector): void
+    {
         $this->syncBannerCategories($sector);
+        $this->syncNewsCategories($sector);
     }
 
     /**
@@ -128,6 +137,98 @@ class SectorService
     public function syncBannerCategories(PostCategory $sector): void
     {
         $this->ensureBannerCategories($sector);
+    }
+
+    /**
+     * Tạo hub tin tức riêng theo ngành (không dùng chung truyen-thong).
+     */
+    public function syncNewsCategories(PostCategory $sector): void
+    {
+        $this->ensureNewsCategories($sector);
+    }
+
+    /**
+     * Slug hub tin tức theo ngành, ví dụ: sector-vat-lieu-go-news
+     */
+    public function getNewsHubSlug(PostCategory $sector, ?string $locale = null): string
+    {
+        $locale = $locale ?? app()->getLocale();
+        $sectorSlug = $this->getSectorSlug($sector, 'vi');
+        $prefix = config('sector_layout.banner_prefix', 'sector');
+        $base = $prefix . '-' . $sectorSlug . '-news';
+
+        if ($locale === 'en') {
+            return $base . '-en';
+        }
+
+        return $base;
+    }
+
+    public function getOrCreateNewsHub(PostCategory $sector): ?PostCategory
+    {
+        $slugVi = $this->getNewsHubSlug($sector, 'vi');
+
+        return PostCategory::withoutGlobalScopes()
+            ->whereHas('translations', fn ($q) => $q->where('slug', $slugVi))
+            ->first();
+    }
+
+    protected function ensureNewsCategories(PostCategory $sector): void
+    {
+        $sectorSlug = $this->getSectorSlug($sector, 'vi');
+        $prefix = config('sector_layout.banner_prefix', 'sector');
+        $hubSlugVi = $prefix . '-' . $sectorSlug . '-news';
+
+        $hub = PostCategory::withoutGlobalScopes()
+            ->whereHas('translations', fn ($q) => $q->where('slug', $hubSlugVi))
+            ->first();
+
+        if (!$hub) {
+            $sectorNameVi = $sector->translations->firstWhere('language', 'vi')->name ?? $sectorSlug;
+            $sectorNameEn = $sector->translations->firstWhere('language', 'en')->name ?? $sectorSlug;
+
+            $hub = PostCategory::withoutGlobalScopes()->create([
+                'parent_id' => $sector->id,
+                'is_active' => true,
+                'is_featured' => false,
+                'is_banner' => false,
+                'is_sector' => false,
+                'sort_order' => 20,
+            ]);
+
+            $hub->handleTranslations([
+                'name_vi' => 'Tin tức - ' . $sectorNameVi,
+                'name_en' => 'News - ' . $sectorNameEn,
+                'slug_vi' => $hubSlugVi,
+                'slug_en' => $hubSlugVi . '-en',
+                'description_vi' => 'Danh mục tin tức riêng cho ngành ' . $sectorNameVi,
+                'description_en' => 'News categories for the ' . $sectorNameEn . ' sector',
+            ]);
+        }
+
+        $hasChildren = PostCategory::withoutGlobalScopes()
+            ->where('parent_id', $hub->id)
+            ->where('is_active', true)
+            ->exists();
+
+        if (!$hasChildren) {
+            $childSlugVi = $hubSlugVi . '-chung';
+            $child = PostCategory::withoutGlobalScopes()->create([
+                'parent_id' => $hub->id,
+                'is_active' => true,
+                'is_featured' => false,
+                'is_banner' => false,
+                'is_sector' => false,
+                'sort_order' => 1,
+            ]);
+
+            $child->handleTranslations([
+                'name_vi' => 'Tin tức chung',
+                'name_en' => 'General news',
+                'slug_vi' => $childSlugVi,
+                'slug_en' => $childSlugVi . '-en',
+            ]);
+        }
     }
 
     protected function ensureBannerCategories(PostCategory $sector): void

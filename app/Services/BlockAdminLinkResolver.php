@@ -79,8 +79,8 @@ class BlockAdminLinkResolver
         string $sectionType,
         array $bannerKeys
     ): ?string {
-        // Nội dung block danh mục / bestseller = SP & danh mục SP, không phải bài viết banner.
-        if (in_array($sectionType, ['category', 'bestseller'], true)) {
+        // Nội dung block danh mục / bestseller / media = quản lý riêng theo ngành.
+        if (in_array($sectionType, ['category', 'bestseller', 'media'], true)) {
             return $this->fallbackLink($sectionType, $sector->id);
         }
 
@@ -138,10 +138,43 @@ class BlockAdminLinkResolver
         return match ($sectionType) {
             'category' => backpack_url('product-category' . $sectorQuery),
             'bestseller' => backpack_url('product' . $sectorQuery),
-            'media' => $this->postsUrlForBannerSlug('truyen-thong')
-                ?? backpack_url('post-category'),
+            'media' => $sectorId
+                ? $this->sectorNewsContentUrl($sectorId)
+                : ($this->postsUrlForBannerSlug('truyen-thong') ?? backpack_url('post-category')),
             'footer' => $this->postsUrlForBannerSlug('footer-main'),
             default => null,
         };
+    }
+
+    protected function sectorNewsContentUrl(int $sectorId): ?string
+    {
+        $sector = PostCategory::withoutGlobalScopes()
+            ->where('id', $sectorId)
+            ->where('is_sector', true)
+            ->with('translations')
+            ->first();
+
+        if (!$sector) {
+            return null;
+        }
+
+        $sectorService = app(SectorService::class);
+        $sectorService->syncNewsCategories($sector);
+        $hub = $sectorService->getOrCreateNewsHub($sector);
+
+        if (!$hub) {
+            return null;
+        }
+
+        $tabCategory = PostCategory::withoutGlobalScopes()
+            ->where('parent_id', $hub->id)
+            ->where('is_active', true)
+            ->orderBy('sort_order')
+            ->orderBy('id')
+            ->first();
+
+        $categoryId = $tabCategory?->id ?? $hub->id;
+
+        return backpack_url('post?category_id=' . $categoryId);
     }
 }

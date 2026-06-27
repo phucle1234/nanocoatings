@@ -62,7 +62,7 @@ class SectorController extends Controller
         $translation = $sector->translations->firstWhere('language', $currentLocale)
             ?? $sector->translations->first();
 
-        $this->sectorService->syncBannerCategories($sector);
+        $this->sectorService->syncSectorResources($sector);
 
         $sectorBlocks = $this->sectorLayoutService->getActiveLayoutBlocks($sector);
         $bannerData = $this->resolveSectorBannerData($sector);
@@ -81,7 +81,7 @@ class SectorController extends Controller
             $category->category_image = $this->getImageJson($category->category_image_urls);
         }
 
-        $newsCategories = $this->loadNewsCategories($currentLocale);
+        $newsCategories = $this->loadNewsCategories($sector, $currentLocale);
 
         return view('langding.sectors.show', array_merge($bannerData, [
             'sector' => $sector,
@@ -116,6 +116,7 @@ class SectorController extends Controller
                 'partner-banner' => $data['partnerBanners'] = $banners,
                 'home-category' => $data['categoryBlockBanners'] = $banners,
                 'home-bestseller' => $data['bestsellerBlockBanners'] = $banners,
+                'home-media' => $data['mediaBlockBanners'] = $banners,
                 default => null,
             };
         }
@@ -123,16 +124,21 @@ class SectorController extends Controller
         return $data;
     }
 
-    protected function loadNewsCategories(string $currentLocale)
+    protected function loadNewsCategories(PostCategory $sector, string $currentLocale)
     {
-        $tinTucCategory = $this->postCategoryService->getCategoryBySlugOrId('truyen-thong', $currentLocale);
+        $hubSlug = $this->sectorService->getNewsHubSlug($sector, $currentLocale);
+        $newsHub = $this->postCategoryService->getCategoryBySlugOrId($hubSlug, $currentLocale)
+            ?? $this->postCategoryService->getCategoryBySlugOrId(
+                $this->sectorService->getNewsHubSlug($sector, 'vi'),
+                $currentLocale
+            );
         $newsCategories = collect();
 
-        if (!$tinTucCategory) {
+        if (!$newsHub) {
             return $newsCategories;
         }
 
-        $children = $tinTucCategory->children()
+        $children = $newsHub->children()
             ->where('is_active', true)
             ->withCount('posts as posts_count')
             ->with(['translations' => function ($q) use ($currentLocale) {
