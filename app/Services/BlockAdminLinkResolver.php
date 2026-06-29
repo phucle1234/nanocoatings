@@ -86,7 +86,7 @@ class BlockAdminLinkResolver
         }
 
         if ($sectionType === 'footer') {
-            return $this->fallbackLink('footer');
+            return null;
         }
 
         if (isset($bannerKeys[$sectionType])) {
@@ -103,6 +103,11 @@ class BlockAdminLinkResolver
      */
     protected function resolveHomepageBlockLink(string $sectionType, array $bannerKeys): ?string
     {
+        // Media / Footer: quản lý nội dung ở menu riêng, không qua layout trang chủ.
+        if (in_array($sectionType, ['media', 'footer'], true)) {
+            return null;
+        }
+
         if (isset($bannerKeys[$sectionType])) {
             return $this->postsUrlForBannerSlug($bannerKeys[$sectionType]);
         }
