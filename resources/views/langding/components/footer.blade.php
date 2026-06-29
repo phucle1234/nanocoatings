@@ -1,4 +1,14 @@
-<footer style="background-image: url('{{ $footerMain?->image ?? asset('langding_nano/imgs/Slection8.png') }}'); background-size: cover; background-position: center;">
+@php
+    $defaultFooterBg = asset('langding_nano/imgs/Slection9.png');
+    if (!empty($isSectorPage)) {
+        $footerBg = ($footerBlockBanners['category_bg_image'] ?? null) ?: $defaultFooterBg;
+    } elseif (request()->routeIs('home')) {
+        $footerBg = $defaultFooterBg;
+    } else {
+        $footerBg = $footerMain?->image ?? $defaultFooterBg;
+    }
+@endphp
+<footer style="background-image: url('{{ $footerBg }}'); background-size: cover; background-position: center;">
     <div class="container-fluid">
         <div class="footer-top position-relative text-center">
             <div class="title-main text-white fs-24 fw-700 text-uppercase">

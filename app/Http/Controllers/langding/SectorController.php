@@ -117,6 +117,7 @@ class SectorController extends Controller
                 'home-category' => $data['categoryBlockBanners'] = $banners,
                 'home-bestseller' => $data['bestsellerBlockBanners'] = $banners,
                 'home-media' => $data['mediaBlockBanners'] = $banners,
+                'footer-main' => $data['footerBlockBanners'] = $banners,
                 default => null,
             };
         }

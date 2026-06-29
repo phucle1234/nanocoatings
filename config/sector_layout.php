@@ -15,6 +15,7 @@ return [
         'promotion' => 'home-promotion',
         'partner' => 'partner-banner',
         'media' => 'home-media',
+        'footer' => 'footer-main',
     ],
 
     'blocks' => [
@@ -26,5 +27,6 @@ return [
         ['section_type' => 'promotion', 'title_vi' => 'Khuyến mãi', 'title_en' => 'Promotions', 'sort_order' => 6],
         ['section_type' => 'partner', 'title_vi' => 'Đối tác', 'title_en' => 'Partners', 'sort_order' => 7],
         ['section_type' => 'media', 'title_vi' => 'Truyền thông / Tin tức', 'title_en' => 'Media / News', 'sort_order' => 8],
+        ['section_type' => 'footer', 'title_vi' => 'Footer', 'title_en' => 'Footer', 'sort_order' => 9],
     ],
 ];

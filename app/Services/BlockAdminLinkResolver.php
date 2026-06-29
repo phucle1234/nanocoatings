@@ -80,8 +80,13 @@ class BlockAdminLinkResolver
         array $bannerKeys
     ): ?string {
         // Nội dung block danh mục / bestseller / media = quản lý riêng theo ngành.
+        // Footer ngành chỉ đổi ảnh nền; nội dung dùng chung footer trang chủ.
         if (in_array($sectionType, ['category', 'bestseller', 'media'], true)) {
             return $this->fallbackLink($sectionType, $sector->id);
+        }
+
+        if ($sectionType === 'footer') {
+            return $this->fallbackLink('footer');
         }
 
         if (isset($bannerKeys[$sectionType])) {
