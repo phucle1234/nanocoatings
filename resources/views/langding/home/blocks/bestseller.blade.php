@@ -1,16 +1,25 @@
 @php
     $bestsellerBanner = $bestsellerBlockBanners ?? [];
-    $bestsellerBg = ($bestsellerBanner['category_bg_image'] ?? null) ?: asset('langding_nano/imgs/Slection5.png');
-    $bestsellerSubtitle = $bestsellerBanner['meta_title'] ?? __('messages.products');
-    $bestsellerTitle = $bestsellerBanner['meta_description'] ?? __('messages.bestseller_products');
+    $bestsellerBg = !empty($isSectorPage) && ($bestsellerBanner['category_bg_image'] ?? null)
+        ? $bestsellerBanner['category_bg_image']
+        : asset('langding_nano/imgs/Slection5.png');
 @endphp
     <div id="box-products-sales" class="box-products-sales" style="background: url('{{ $bestsellerBg }}') no-repeat center center;background-size: cover;">
         <div class="container-fluid">
             <div class="scroll-animate" data-animate="fadeInUp">
-                <div class="title-with-line fw-500 fs-20 text-center text-light-red">{{ $bestsellerSubtitle }}</div>
-                <h2 class="font-hanzel fs-32 fw-400 text-center mt-2 text-white">
-                    {{ $bestsellerTitle }}
-                </h2>
+                @if (!empty($isSectorPage))
+                    @include('langding.components.block-banner-heading', [
+                        'banner' => $bestsellerBanner,
+                        'fallbackSubtitle' => __('messages.products'),
+                        'fallbackTitle' => __('messages.bestseller_products'),
+                        'subtitleSize' => 'fs-20',
+                    ])
+                @else
+                    <div class="title-with-line fw-500 fs-20 text-center text-light-red">{{ __('messages.products') }}</div>
+                    <h2 class="font-hanzel fs-32 fw-400 text-center mt-2 text-white">
+                        {{ __('messages.bestseller_products') }}
+                    </h2>
+                @endif
             </div>
             <div class="products-sales-slider scroll-animate" data-animate="fadeInUp">
                 @forelse($bestsellerProducts as $product)

@@ -6,9 +6,11 @@
     <div class="container-fluid">
         <div class="scroll-animate" data-animate="fadeInUp">
             @if(isset($introductionBanners['category']) && $introductionBanners['category'])
+            @if (empty($isSectorPage))
             <div class="title-with-line fw-500 fs-18 text-center text-light-red text-uppercase">
                 {!! $introductionBanners['category']->category_name ?? __('messages.introduction') !!}
             </div>
+            @endif
             <h2 class="font-hanzel fs-32 fw-400 text-center mt-2 mb-0 text-white">
                 {{ $introductionBanners['category']->meta_title ?? __('messages.' . 'casu' . 'mina') }}
             </h2>

@@ -3,12 +3,20 @@
             style="background: url('{{ $homeSliderBanners2['category_bg_image'] ?? '' }}') no-repeat center center;background-size: cover;">
         </div>
         <div class="box-slider-head scroll-animate animated" data-animate="fadeInUp">
-            <div class="title-with-line fw-500 fs-18 text-center text-light-red">
-            {{ $homeSliderBanners2['meta_title'] ?? 'Products' }}
-            </div>
-            <h2 class="font-hanzel fs-32 fw-400 text-center mt-2 text-white">
-                {{ $homeSliderBanners2['meta_description'] ?? 'Application Potential' }}
-            </h2>
+            @if (!empty($isSectorPage))
+                @include('langding.components.block-banner-heading', [
+                    'banner' => $homeSliderBanners2 ?? [],
+                    'fallbackSubtitle' => __('messages.products'),
+                    'fallbackTitle' => 'Application Potential',
+                ])
+            @else
+                <div class="title-with-line fw-500 fs-18 text-center text-light-red">
+                    {{ $homeSliderBanners2['meta_title'] ?? 'Products' }}
+                </div>
+                <h2 class="font-hanzel fs-32 fw-400 text-center mt-2 text-white">
+                    {{ $homeSliderBanners2['meta_description'] ?? 'Application Potential' }}
+                </h2>
+            @endif
         </div>
 
         <div class="main-slider">

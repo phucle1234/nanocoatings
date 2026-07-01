@@ -1,8 +1,8 @@
 @php
     $mediaBanner = $mediaBlockBanners ?? [];
-    $mediaBg = ($mediaBanner['category_bg_image'] ?? null) ?: asset('langding_nano/imgs/Slection8.png');
-    $mediaSubtitle = $mediaBanner['meta_title'] ?? __('messages.media');
-    $mediaTitle = $mediaBanner['meta_description'] ?? __('messages.news_and_events');
+    $mediaBg = !empty($isSectorPage) && ($mediaBanner['category_bg_image'] ?? null)
+        ? $mediaBanner['category_bg_image']
+        : asset('langding_nano/imgs/Slection8.png');
 @endphp
     <div id="box-media" class="box-media"
         data-tab-feed-root
@@ -11,8 +11,17 @@
         data-tab-feed-per-page="4" style="background: url('{{ $mediaBg }}') no-repeat center center;background-size: cover;">
         <div class="container-fluid">
             <div class="scroll-animate" data-animate="fadeInUp">
-                <div class="title-with-line fw-500 fs-18 text-center text-light-red">{{ $mediaSubtitle }}</div>
-                <h2 class="font-hanzel fs-32 mt-3 fw-400 text-center text-white">{{ $mediaTitle }}</h2>
+                @if (!empty($isSectorPage))
+                    @include('langding.components.block-banner-heading', [
+                        'banner' => $mediaBanner,
+                        'fallbackSubtitle' => __('messages.media'),
+                        'fallbackTitle' => __('messages.news_and_events'),
+                        'titleMargin' => 'mt-3',
+                    ])
+                @else
+                    <div class="title-with-line fw-500 fs-18 text-center text-light-red">{{ __('messages.media') }}</div>
+                    <h2 class="font-hanzel fs-32 mt-3 fw-400 text-center text-white">{{ __('messages.news_and_events') }}</h2>
+                @endif
             </div>
             <div class="tabs-scroll-wrap">
                 <ul class="nav nav-tabs tabs-scroll" id="box-media-title" role="tablist">

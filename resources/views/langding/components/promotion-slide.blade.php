@@ -2,9 +2,18 @@
 <div id="box-news-info" class="box-news-info" style="background: url('{{ $promotionBanners['category_bg_image'] ?? url('langding/imgs/section-info-bg111.png') }}') no-repeat center center;background-size: cover;">
     <div class="container-fluid">
         <div class="scroll-animate title-group" data-animate="fadeInUp">
-            <div class="title-with-line fw-500 fs-18 text-center text-light-red text-uppercase">
-                {!! $promotionBanners['category']->category_name ?? __('messages.promotion_info') !!}
-            </div>
+            @if (!empty($isSectorPage))
+                @include('langding.components.block-banner-heading', [
+                    'banner' => $promotionBanners ?? [],
+                    'fallbackSubtitle' => __('messages.promotion_info'),
+                    'fallbackTitle' => __('messages.promotion_info'),
+                    'uppercaseSubtitle' => true,
+                ])
+            @else
+                <div class="title-with-line fw-500 fs-18 text-center text-light-red text-uppercase">
+                    {!! $promotionBanners['category']->category_name ?? __('messages.promotion_info') !!}
+                </div>
+            @endif
         </div>
 
         @if(isset($promotionBanners['banners']) && $promotionBanners['banners']->count() > 0)

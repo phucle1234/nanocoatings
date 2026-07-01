@@ -1,14 +1,22 @@
 @php
     $categoryBanner = $categoryBlockBanners ?? [];
-    $categoryBg = ($categoryBanner['category_bg_image'] ?? null) ?: asset('langding_nano/imgs/Slection3.png');
-    $categorySubtitle = $categoryBanner['meta_title'] ?? __('messages.products');
-    $categoryTitle = $categoryBanner['meta_description'] ?? __('messages.top_tire_manufacturer');
+    $categoryBg = !empty($isSectorPage) && ($categoryBanner['category_bg_image'] ?? null)
+        ? $categoryBanner['category_bg_image']
+        : asset('langding_nano/imgs/Slection3.png');
 @endphp
     <div id="box-category" class="box-category" style="background: url('{{ $categoryBg }}') no-repeat center center;background-size: cover;">
         <div class="container-fluid">
             <div class="scroll-animate" data-animate="fadeInUp">
-                <div class="title-with-line fw-500 fs-18 text-center text-light-red">{{ $categorySubtitle }}</div>
-                <h2 class="font-hanzel fs-32 fw-400 text-center mt-2 text-white">{{ $categoryTitle }}</h2>
+                @if (!empty($isSectorPage))
+                    @include('langding.components.block-banner-heading', [
+                        'banner' => $categoryBanner,
+                        'fallbackSubtitle' => __('messages.products'),
+                        'fallbackTitle' => __('messages.top_tire_manufacturer'),
+                    ])
+                @else
+                    <div class="title-with-line fw-500 fs-18 text-center text-light-red">{{ __('messages.products') }}</div>
+                    <h2 class="font-hanzel fs-32 fw-400 text-center mt-2 text-white">{{ __('messages.top_tire_manufacturer') }}</h2>
+                @endif
             </div>
             <div class="tabs-scroll-wrap">
                 <ul class="nav nav-tabs tabs-scroll" id="box-category-title" role="tablist">
