@@ -1380,7 +1380,13 @@ body.menu-open {
     z-index: 1;
 }
 
-.box-video .video-intro {
+.box-video .video-intro,
+.box-category .video-intro,
+.box-products-sales .video-intro,
+.box-media .video-intro,
+.box-news-info .video-intro,
+.box-slider-head .video-intro,
+.box-partner .video-intro {
     max-width: 66.146vw;
 }
 
@@ -5573,7 +5579,13 @@ footer .footer-call {
         font-size: var(--fs-14);
     }
 
-    .box-video .video-intro {
+    .box-video .video-intro,
+    .box-category .video-intro,
+    .box-products-sales .video-intro,
+    .box-media .video-intro,
+    .box-news-info .video-intro,
+    .box-slider-head .video-intro,
+    .box-partner .video-intro {
         max-width: 100%;
     }
 

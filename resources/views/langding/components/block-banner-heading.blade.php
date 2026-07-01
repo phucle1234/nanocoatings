@@ -9,7 +9,7 @@
     {{ $title }}
 </h2>
 @if (!empty($description))
-    <div class="block-banner-description fw-400 fs-14 text-center mt-3 mx-auto text-white">
+    <div class="video-intro fw-400 fs-14 text-center mt-3 mx-auto text-white">
         {!! $description !!}
     </div>
 @endif
