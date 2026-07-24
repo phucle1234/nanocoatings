@@ -35,3 +35,14 @@ udo ss -tlnp | grep ':80 '
 /storage/storage/
 AJAX_TAB_FEED_PAGINATION.md
 CLAUDE.md
+
+docs/
+tests/Feature/README_NodeServiceTest.md
+/.planning
+/.serena
+.supergraph-env
+.phpunit.result.cache
+public
+/.claude
+# Added by code-review-graph
+.code-review-graph/
