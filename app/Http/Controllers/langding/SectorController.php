@@ -30,8 +30,7 @@ class SectorController extends Controller
         protected PostCategoryService $postCategoryService,
         protected SectorService $sectorService,
         protected SectorLayoutService $sectorLayoutService
-    ) {
-    }
+    ) {}
 
     public function index()
     {
@@ -55,8 +54,8 @@ class SectorController extends Controller
     public function show(Request $request, string $slug)
     {
         $sector = $this->sectorService->findSectorBySlug($slug);
-        if (!$sector) {
-            throw new NotFoundHttpException();
+        if (! $sector) {
+            throw new NotFoundHttpException;
         }
 
         $currentLocale = $this->applySectorDefaultLocale($request, $sector);
@@ -105,8 +104,8 @@ class SectorController extends Controller
         if (
             $defaultLocale
             && in_array($defaultLocale, $supportedLocales, true)
-            && !$request->route('locale')
-            && !$request->session()->get('locale_manually_selected')
+            && ! $request->route('locale')
+            && ! $request->session()->get('locale_manually_selected')
         ) {
             App::setLocale($defaultLocale);
         }
@@ -129,6 +128,7 @@ class SectorController extends Controller
             match ($bannerKey) {
                 'home-slider' => $data['homeSliderBanners'] = $banners,
                 'home-slider-2' => $data['homeSliderBanners2'] = $banners,
+                'home-slider-3' => $data['homeSliderBanners3'] = $banners,
                 'home-promotion' => $data['promotionBanners'] = $banners,
                 'video-introduction' => $data['introductionBanners'] = $banners,
                 'partner-banner' => $data['partnerBanners'] = $banners,
@@ -153,7 +153,7 @@ class SectorController extends Controller
             );
         $newsCategories = collect();
 
-        if (!$newsHub) {
+        if (! $newsHub) {
             return $newsCategories;
         }
 
@@ -176,7 +176,7 @@ class SectorController extends Controller
                 'partner-banner',
             ];
 
-            return !in_array($translation->slug ?? null, $excludedSlugs);
+            return ! in_array($translation->slug ?? null, $excludedSlugs);
         })->map(function ($category) use ($currentLocale) {
             $translation = $category->translations->firstWhere('language', $currentLocale);
             $category->category_name = $translation->name ?? null;
@@ -186,7 +186,7 @@ class SectorController extends Controller
         });
 
         foreach ($newsCategories as $category) {
-            if (!$category instanceof PostCategory) {
+            if (! $category instanceof PostCategory) {
                 continue;
             }
             $result = $this->postService->getPostsByCategory($category, [], 'sort_order', 4, $currentLocale, 1);
