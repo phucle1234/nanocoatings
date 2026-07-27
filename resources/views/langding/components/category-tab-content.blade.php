@@ -51,7 +51,6 @@
                     {!! $category->category_description_html !!}
                 </div>
             @endif
-
             <div class="text-center mt-5">
                 <a href="{{ $detailHref }}"
                     class="btn btn-outline-secondary px-5 py-3 font-hanzel d-inline-flex align-items-center gap-2 text-white text-uppercase"

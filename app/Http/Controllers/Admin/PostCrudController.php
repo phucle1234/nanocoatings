@@ -3,38 +3,35 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\PostRequest;
-use Backpack\CRUD\app\Http\Controllers\CrudController;
-use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 use App\Models\Post;
 use App\Models\PostCategory;
 use App\Services\HomepageLayoutService;
 use App\Traits\HasSlugGenerator;
-use Illuminate\Support\Str;
+use Backpack\CRUD\app\Http\Controllers\CrudController;
+use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 use Illuminate\Support\Facades\Log;
 use Prologue\Alerts\Facades\Alert;
 
 class PostCrudController extends CrudController
 {
-    use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation {
         destroy as traitDestroy;
     }
+    use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
-
+    use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
     use HasSlugGenerator;
 
     public function setup()
     {
         CRUD::setModel(Post::class);
-        CRUD::setRoute(config('backpack.base.route_prefix') . '/post');
+        CRUD::setRoute(config('backpack.base.route_prefix').'/post');
         CRUD::setEntityNameStrings('bài viết', 'Bài viết');
     }
 
     protected function setupListOperation()
     {
-
 
         CRUD::addColumn([
             'name' => 'row_number',
@@ -46,16 +43,16 @@ class PostCrudController extends CrudController
             'wrapper' => [
                 'href' => function ($entry, $crud) {
                     $categoryId = request('category_id');
-                    return backpack_url('post/create' . ($categoryId ? '?category_id=' . $categoryId : ''));
+
+                    return backpack_url('post/create'.($categoryId ? '?category_id='.$categoryId : ''));
                 },
-            ]
+            ],
         ]);
         // Refactored: Dùng model_function thay vì closure
         CRUD::column('title')
             ->label('Tiêu đề')
             ->type('model_function')
             ->function_name('getTitleDisplay');
-
 
         // Refactored: Dùng model_function thay vì closure
         CRUD::column('postcategories')
@@ -109,7 +106,7 @@ class PostCrudController extends CrudController
                 });
 
                 if ($category = PostCategory::find($categoryId)) {
-                    Alert::info('Đang hiển thị bài viết thuộc danh mục: ' . $category->name)->flash();
+                    Alert::info('Đang hiển thị bài viết thuộc danh mục: '.$category->name)->flash();
                 }
             }
         } else {
@@ -131,17 +128,16 @@ class PostCrudController extends CrudController
     {
         CRUD::setValidation(PostRequest::class);
 
-
         // ✅ Lấy category_id từ query string
         $categoryId = request()->query('category_id');
         $defaultCategories = [];
 
         if ($categoryId && PostCategory::find($categoryId)) {
-            $defaultCategories = [(int)$categoryId]; // Chuyển thành array vì field là select_multiple
+            $defaultCategories = [(int) $categoryId]; // Chuyển thành array vì field là select_multiple
 
             // Hiện thông báo
             $category = PostCategory::find($categoryId);
-            Alert::info('Bài viết sẽ được tạo trong danh mục: ' . ($category->name ?? ''))->flash();
+            Alert::info('Bài viết sẽ được tạo trong danh mục: '.($category->name ?? ''))->flash();
         }
 
         // Thay đổi field từ postcategory_id thành postcategories
@@ -164,7 +160,7 @@ class PostCrudController extends CrudController
             ->options([
                 'draft' => 'Bản nháp',
                 'published' => 'Đã xuất bản',
-                'archived' => 'Đã lưu trữ'
+                'archived' => 'Đã lưu trữ',
             ])
             ->default('draft')
             ->tab('Chung');
@@ -188,7 +184,7 @@ class PostCrudController extends CrudController
             ->type('view')
             ->view('vendor.backpack.crud.fields.document_upload')
             ->attributes([
-                'context' => 'post'
+                'context' => 'post',
             ])
             ->hint('Tải lên tài liệu PDF cho bài viết (tối đa 30MB)')
             ->tab('Chung');
@@ -216,14 +212,18 @@ class PostCrudController extends CrudController
             $imageUrls = $translation ? $translation->image_urls : [];
             $defaultValue = is_array($imageUrls) ? implode("\n", $imageUrls) : $imageUrls;
 
-            CRUD::modifyField('image_urls_' . $lang, [
-                'default' => $defaultValue
+            CRUD::modifyField('image_urls_'.$lang, [
+                'default' => $defaultValue,
+            ]);
+
+            CRUD::modifyField('video_url_'.$lang, [
+                'default' => $translation ? $translation->video_url : null,
             ]);
         }
 
         // Đảm bảo field document_file_id có giá trị mặc định từ entry
         CRUD::modifyField('document_file_id', [
-            'default' => $entry->document_file_id ?? null
+            'default' => $entry->document_file_id ?? null,
         ]);
     }
 
@@ -262,22 +262,22 @@ class PostCrudController extends CrudController
 
         foreach ($languages as $lang => $langName) {
             // Tiêu đề bài viết
-            CRUD::field('title_' . $lang)
-                ->label('Tiêu đề (' . $langName . ')')
+            CRUD::field('title_'.$lang)
+                ->label('Tiêu đề ('.$langName.')')
                 ->type('text')
                 ->default($this->getTranslationValue($lang, 'title'))
                 ->attributes([
-                    'placeholder' => 'Nhập tiêu đề bài viết bằng ' . $langName
+                    'placeholder' => 'Nhập tiêu đề bài viết bằng '.$langName,
                 ])
                 ->tab($langName);
 
             // Slug
-            CRUD::field('slug_' . $lang)
-                ->label('Slug (' . $langName . ')')
+            CRUD::field('slug_'.$lang)
+                ->label('Slug ('.$langName.')')
                 ->type('text')
                 ->default($this->getTranslationValue($lang, 'slug'))
                 ->attributes([
-                    'placeholder' => 'Sẽ được tạo tự động từ tiêu đề'
+                    'placeholder' => 'Sẽ được tạo tự động từ tiêu đề',
                 ])
                 ->tab($langName);
 
@@ -287,29 +287,40 @@ class PostCrudController extends CrudController
             $imageUrls = $translation ? $translation->image_urls : [];
             $defaultValue = is_array($imageUrls) ? implode("\n", $imageUrls) : $imageUrls;
 
-            CRUD::field('image_urls_' . $lang)
-                ->label('Hình ảnh (' . $langName . ')')
+            CRUD::field('image_urls_'.$lang)
+                ->label('Hình ảnh ('.$langName.')')
                 ->type('view')
                 ->view('components.multiple-images')
                 ->default($defaultValue)
                 ->data(['value' => $defaultValue])
-                ->hint('Thêm nhiều hình ảnh cho bài viết bằng ' . $langName)
+                ->hint('Thêm nhiều hình ảnh cho bài viết bằng '.$langName)
                 ->tab($langName);
 
             // URL
-            CRUD::field('url_' . $lang)
-                ->label('Link URL (' . $langName . ')')
+            CRUD::field('url_'.$lang)
+                ->label('Link URL ('.$langName.')')
                 ->type('url')
                 ->default($this->getTranslationValue($lang, 'url'))
                 ->attributes([
-                    'placeholder' => 'https://example.com/link'
+                    'placeholder' => 'https://example.com/link',
                 ])
                 ->hint('Nhập URL liên kết cho bài viết (nếu có)')
                 ->tab($langName);
 
+            // Video slide đầu tiên của slider — upload file thủ công lên server, dán đường dẫn tại đây
+            CRUD::field('video_url_'.$lang)
+                ->label('Video ('.$langName.')')
+                ->type('text')
+                ->default($this->getTranslationValue($lang, 'video_url'))
+                ->attributes([
+                    'placeholder' => '/storage/video/ten-file.mp4',
+                ])
+                ->hint('Upload file mp4 thủ công vào storage/app/public/video/ rồi dán đường dẫn dạng /storage/video/ten-file.mp4 ('.$langName.')')
+                ->tab($langName);
+
             // Nội dung bài viết
-            CRUD::field('content_' . $lang)
-                ->label('Nội dung (' . $langName . ')')
+            CRUD::field('content_'.$lang)
+                ->label('Nội dung ('.$langName.')')
                 ->type('summernote')
                 ->default($this->getTranslationValue($lang, 'content'))
                 ->options([
@@ -345,86 +356,86 @@ class PostCrudController extends CrudController
                             if ($codeview.length) {
                                 $textarea.val($codeview.val());
                             }
-                        }'
-                    ]
+                        }',
+                    ],
                 ])
                 ->tab($langName);
 
             // Tóm tắt
-            CRUD::field('excerpt_' . $lang)
-                ->label('Tóm tắt (' . $langName . ')')
+            CRUD::field('excerpt_'.$lang)
+                ->label('Tóm tắt ('.$langName.')')
                 ->type('textarea')
                 ->default($this->getTranslationValue($lang, 'excerpt'))
                 ->attributes([
                     'rows' => 3,
-                    'placeholder' => 'Nhập tóm tắt bài viết bằng ' . $langName
+                    'placeholder' => 'Nhập tóm tắt bài viết bằng '.$langName,
                 ])
                 ->tab($langName);
 
             // SEO Fields
-            CRUD::field('meta_title_' . $lang)
-                ->label('Meta Title (' . $langName . ')')
+            CRUD::field('meta_title_'.$lang)
+                ->label('Meta Title ('.$langName.')')
                 ->type('text')
                 ->default($this->getTranslationValue($lang, 'meta_title'))
                 ->attributes([
-                    'placeholder' => 'Tiêu đề SEO cho ' . $langName
+                    'placeholder' => 'Tiêu đề SEO cho '.$langName,
                 ])
                 ->tab($langName);
 
-            CRUD::field('meta_description_' . $lang)
-                ->label('Meta Description (' . $langName . ')')
+            CRUD::field('meta_description_'.$lang)
+                ->label('Meta Description ('.$langName.')')
                 ->type('textarea')
                 ->default($this->getTranslationValue($lang, 'meta_description'))
                 ->attributes([
                     'rows' => 2,
-                    'placeholder' => 'Mô tả SEO cho ' . $langName
+                    'placeholder' => 'Mô tả SEO cho '.$langName,
                 ])
                 ->tab($langName);
 
-            CRUD::field('meta_keywords_' . $lang)
-                ->label('Meta Keywords (' . $langName . ')')
+            CRUD::field('meta_keywords_'.$lang)
+                ->label('Meta Keywords ('.$langName.')')
                 ->type('text')
                 ->default($this->getTranslationValue($lang, 'meta_keywords'))
                 ->attributes([
-                    'placeholder' => 'Từ khóa SEO cho ' . $langName
+                    'placeholder' => 'Từ khóa SEO cho '.$langName,
                 ])
                 ->tab($langName);
 
-            CRUD::field('canonical_url_' . $lang)
-                ->label('Canonical URL (' . $langName . ')')
+            CRUD::field('canonical_url_'.$lang)
+                ->label('Canonical URL ('.$langName.')')
                 ->type('url')
                 ->default($this->getTranslationValue($lang, 'canonical_url'))
                 ->attributes([
-                    'placeholder' => 'URL chuẩn cho ' . $langName
+                    'placeholder' => 'URL chuẩn cho '.$langName,
                 ])
                 ->tab($langName);
 
             // Open Graph Fields
-            CRUD::field('og_title_' . $lang)
-                ->label('OG Title (' . $langName . ')')
+            CRUD::field('og_title_'.$lang)
+                ->label('OG Title ('.$langName.')')
                 ->type('text')
                 ->default($this->getTranslationValue($lang, 'og_title'))
                 ->attributes([
-                    'placeholder' => 'Tiêu đề chia sẻ mạng xã hội cho ' . $langName
+                    'placeholder' => 'Tiêu đề chia sẻ mạng xã hội cho '.$langName,
                 ])
                 ->tab($langName);
 
-            CRUD::field('og_description_' . $lang)
-                ->label('OG Description (' . $langName . ')')
+            CRUD::field('og_description_'.$lang)
+                ->label('OG Description ('.$langName.')')
                 ->type('textarea')
                 ->default($this->getTranslationValue($lang, 'og_description'))
                 ->attributes([
                     'rows' => 2,
-                    'placeholder' => 'Mô tả chia sẻ mạng xã hội cho ' . $langName
+                    'placeholder' => 'Mô tả chia sẻ mạng xã hội cho '.$langName,
                 ])
                 ->tab($langName);
 
-            CRUD::field('og_image_' . $lang)
-                ->label('OG Image (' . $langName . ')')
+            CRUD::field('og_image_'.$lang)
+                ->label('OG Image ('.$langName.')')
                 ->type('url')
                 ->default($this->getTranslationValue($lang, 'og_image'))
                 ->attributes([
-                    'placeholder' => 'Hình ảnh chia sẻ mạng xã hội cho ' . $langName
+                    'placeholder' => 'Hình ảnh chia sẻ mạng xã hội cho '.$langName,
                 ])
                 ->tab($langName);
         }
@@ -436,28 +447,27 @@ class PostCrudController extends CrudController
 
         foreach ($languages as $lang => $langName) {
             // Refactored: Dùng model_function với parameter
-            CRUD::column('title_' . $lang)
-                ->label('Tiêu đề (' . $langName . ')')
+            CRUD::column('title_'.$lang)
+                ->label('Tiêu đề ('.$langName.')')
                 ->type('model_function')
                 ->function_name('getTranslationTitle')
-                ->function_parameters($lang);
+                ->function_parameters([$lang]);
 
             // Refactored: Dùng model_function với parameter
-            CRUD::column('excerpt_' . $lang)
-                ->label('Tóm tắt (' . $langName . ')')
+            CRUD::column('excerpt_'.$lang)
+                ->label('Tóm tắt ('.$langName.')')
                 ->type('model_function')
                 ->function_name('getTranslationExcerpt')
-                ->function_parameters($lang);
+                ->function_parameters([$lang]);
 
             // Refactored: Dùng model_function với parameter
-            CRUD::column('slug_' . $lang)
-                ->label('Slug (' . $langName . ')')
+            CRUD::column('slug_'.$lang)
+                ->label('Slug ('.$langName.')')
                 ->type('model_function')
                 ->function_name('getTranslationSlug')
-                ->function_parameters($lang);
+                ->function_parameters([$lang]);
         }
     }
-
 
     protected function store()
     {
@@ -476,7 +486,7 @@ class PostCrudController extends CrudController
         // Lấy từ request (có thể từ field number hoặc hidden input)
         $documentFileId = $request->input('document_file_id');
         if ($documentFileId !== null && $documentFileId !== '') {
-            $strippedRequest['document_file_id'] = (int)$documentFileId ?: null;
+            $strippedRequest['document_file_id'] = (int) $documentFileId ?: null;
         } else {
             $strippedRequest['document_file_id'] = null;
         }
@@ -485,7 +495,7 @@ class PostCrudController extends CrudController
         Log::info('Post store - document_file_id', [
             'request_value' => $request->input('document_file_id'),
             'stripped_value' => $strippedRequest['document_file_id'] ?? 'not set',
-            'all_request' => $request->all()
+            'all_request' => $request->all(),
         ]);
 
         // Insert item in the db
@@ -531,13 +541,13 @@ class PostCrudController extends CrudController
             'stripped_request_keys' => array_keys($strippedRequest),
             'stripped_request_has_document_file_id' => isset($strippedRequest['document_file_id']),
             'entry_id' => $this->crud->getCurrentEntryId(),
-            'current_entry_document_file_id' => $this->crud->getCurrentEntry()->document_file_id ?? null
+            'current_entry_document_file_id' => $this->crud->getCurrentEntry()->document_file_id ?? null,
         ]);
 
         // Xử lý document_file_id
         // Luôn set giá trị vào strippedRequest, kể cả khi là null
         if ($documentFileId !== null && $documentFileId !== '' && $documentFileId !== '0') {
-            $strippedRequest['document_file_id'] = (int)$documentFileId;
+            $strippedRequest['document_file_id'] = (int) $documentFileId;
         } else {
             // Nếu giá trị là null hoặc rỗng, set null
             $strippedRequest['document_file_id'] = null;
@@ -546,7 +556,7 @@ class PostCrudController extends CrudController
         // Log giá trị cuối cùng
         Log::info('Post update - document_file_id FINAL', [
             'document_file_id_value' => $strippedRequest['document_file_id'] ?? 'not set',
-            'will_save' => isset($strippedRequest['document_file_id'])
+            'will_save' => isset($strippedRequest['document_file_id']),
         ]);
 
         // Update the row in the db
@@ -578,8 +588,10 @@ class PostCrudController extends CrudController
         $entry = $this->crud->getCurrentEntry();
         if ($entry) {
             $translation = $entry->translations()->where('language', $lang)->first();
+
             return $translation ? $translation->$field : '';
         }
+
         return '';
     }
 

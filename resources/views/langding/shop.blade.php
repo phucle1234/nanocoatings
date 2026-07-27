@@ -399,10 +399,8 @@
                                                     </div>
 
                                                     <div class="product-price d-flex gap-3 align-items-center">
-                                                        <span
-                                                            class="fs-24 font-hanzel text-red">{{ $productRow['price_display'] ?? __('messages.contact') }}</span>
-                                                        <span
-                                                            class="fs-14 text-red">{{ __('messages.vat_included') }}</span>
+                                                        <span class="fs-24 font-hanzel text-red">{{ $productRow['price_display'] ?? __('messages.contact') }}</span>
+                                                        <!-- <span class="fs-14 text-red">{{ __('messages.vat_included') }}</span> -->
                                                     </div>
 
                                                     <div

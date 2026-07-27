@@ -119,6 +119,7 @@ class SectorService
     public function provisionSector(PostCategory $sector): void
     {
         $this->sectorLayoutService->ensureDefaultBlocks($sector);
+
         $this->syncSectorResources($sector);
     }
 
@@ -136,6 +137,7 @@ class SectorService
      */
     public function syncBannerCategories(PostCategory $sector): void
     {
+
         $this->ensureBannerCategories($sector);
     }
 
@@ -230,7 +232,7 @@ class SectorService
             ]);
         }
     }
-
+    
     protected function ensureBannerCategories(PostCategory $sector): void
     {
         $sectorSlug = $this->getSectorSlug($sector, 'vi');

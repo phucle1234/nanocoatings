@@ -211,9 +211,8 @@ default => asset('langding/imgs/category/oto.png'),
                                             href="{{ route('product.detail', ['slug' => $productRow->slug ?? $productRow->id]) }}">{{ $productRow->product_name ?? '' }}</a>
                                     </h3>
                                     <div class="product-price d-flex gap-3 align-items-center">
-                                        <span
-                                            class="fs-24 font-hanzel text-red">{{ $productRow->price_display ?? __('messages.contact') }}</span>
-                                        <span class="fs-14 text-red">{{ __('messages.vat_included') }}</span>
+                                        <span class="fs-24 font-hanzel text-red">{{ $productRow->price_display ?? __('messages.contact') }}</span>
+                                        <!-- <span class="fs-14 text-red">{{ __('messages.vat_included') }}</span> -->
                                     </div>
                                     <div class="d-flex align-items-center justify-content-between mt-2">
                                         <div class="product-item-view">
@@ -296,9 +295,8 @@ default => asset('langding/imgs/category/oto.png'),
                                     <div class="fs-12 text-uppercase">{{ $productRow->short_description }}
                                     </div>
                                     <div class="product-price d-flex gap-3 align-items-center">
-                                        <span
-                                            class="fs-24 font-hanzel text-red">{{ $productRow->price_display ?? __('messages.contact') }}</span>
-                                        <span class="fs-14 text-red">{{ __('messages.vat_included') }}</span>
+                                        <span class="fs-24 font-hanzel text-red">{{ $productRow->price_display ?? __('messages.contact') }}</span>
+                                        <!-- <span class="fs-14 text-red">{{ __('messages.vat_included') }}</span> -->
                                     </div>
                                     <div class="d-flex align-items-center justify-content-between mt-2">
                                         <div class="product-item-view">

@@ -56,7 +56,7 @@
     @include('langding.components.footer')
     @endif
 
-    <div class="search-widget search-widget-secondary">
+    <!-- <div class="search-widget search-widget-secondary">
         <div class="search-form">
             <div class="align-items-center d-flex w-100 block-search">
                 <div class="align-items-center d-flex list-btn-icon">
@@ -154,7 +154,7 @@
                 </svg>
             </div>
         </div>
-    </div>
+    </div> -->
     <div class="modal fade search-widget-popup" id="search-widget-type" tabindex="-1"
         aria-labelledby="search-widget-type-label" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
@@ -261,12 +261,13 @@
     @php
         $sidebarImgLocale = in_array(app()->getLocale(), ['en', 'vi'], true) ? app()->getLocale() : 'en';
     @endphp
+
     <div class="social-sidebar">
         <div class="social-sidebar-group position-relative">
             <div class="social-sidebar-group-item position-relative">
                 <div class="social-sidebar-item position-relative" id="supplierSidebarItem">
                     <div class="social-sidebar-item-icon">
-                        <img src="{{ asset('langding/imgs/support-tim-shop_' . $sidebarImgLocale . '.svg') }}"
+                        <img src="{{ asset('langding/imgs/1-support-tim-shop_' . $sidebarImgLocale . '.svg') }}"
                             alt="">
                     </div>
                     <div class="social-sidebar-item-box text-nowrap shadow-sm">
@@ -311,7 +312,7 @@
                 </div>
                 <div class="social-sidebar-item position-relative" id="socialSidebarItem">
                     <div class="social-sidebar-item-icon">
-                        <img src="{{ asset('langding/imgs/support-connect_' . $sidebarImgLocale . '.svg') }}"
+                        <img src="{{ asset('langding/imgs/1-support-connect_' . $sidebarImgLocale . '.svg') }}"
                             alt="">
                     </div>
                     <div class="social-sidebar-item-box text-nowrap shadow-sm">
@@ -343,7 +344,7 @@
                                     </svg>
                                 </a>
                                 <a class="d-flex align-items-center justify-content-center"
-                                    href="https://zalo.me/2187648418711741062" target="_blank">
+                                    href="#" target="_blank">
                                     <svg width="40" height="40" viewBox="0 0 48 48" fill="none"
                                         xmlns="http://www.w3.org/2000/svg">
                                         <circle data-figma-bg-blur-radius="15" cx="24" cy="24" r="23.5"
@@ -439,7 +440,7 @@
                 </div>
                 <div class="social-sidebar-item position-relative" id="contactSidebarItem">
                     <div class="social-sidebar-item-icon">
-                        <img src="{{ asset('langding/imgs/support-lien-he_' . $sidebarImgLocale . '.svg') }}"
+                        <img src="{{ asset('langding/imgs/1-support-lien-he_' . $sidebarImgLocale . '.svg') }}"
                             alt="{{ __('messages.contact') }}">
                     </div>
                     <div class="social-sidebar-item-box text-nowrap shadow-sm">
@@ -463,7 +464,7 @@
                             <div
                                 class="item-box-list-contact d-flex align-items-center justify-content-center gap-3 mt-4">
                                 <a class="d-flex align-items-center justify-content-center"
-                                    href="https://zalo.me/2187648418711741062" target="_blank">
+                                    href="#" target="_blank">
                                     <svg width="48" height="48" viewBox="0 0 48 48" fill="none"
                                         xmlns="http://www.w3.org/2000/svg">
                                         <circle data-figma-bg-blur-radius="15" cx="24" cy="24" r="23.5"
@@ -506,7 +507,7 @@
                                         </defs>
                                     </svg>
                                 </a>
-                                <a class="d-flex align-items-center justify-content-center" href="tel:02838362369">
+                                <a class="d-flex align-items-center justify-content-center" href="tel:0987949494">
                                     <svg width="48" height="48" viewBox="0 0 48 48" fill="none"
                                         xmlns="http://www.w3.org/2000/svg">
                                         <circle data-figma-bg-blur-radius="15" cx="24" cy="24" r="23.5"
@@ -570,7 +571,7 @@
             </div>
             <div class="position-relative" id="support-show-sidebar">
                 <div class="social-sidebar-item-icon-show mb-0">
-                    <img src="{{ asset('langding/imgs/support-lien-he_' . $sidebarImgLocale . '.svg') }}" class="shake-animation">
+                    <img src="{{ asset('langding/imgs/1-support-lien-he_' . $sidebarImgLocale . '.svg') }}" class="shake-animation">
                     <span class="support-show-sidebar-close d-none text-white"><i class="bi bi-x-lg"></i></span>
                 </div>
             </div>
@@ -580,27 +581,27 @@
         <div class="social-sidebar-item">
             <div class="social-sidebar-item-icon custom-view mt-5 mb-0">
                 <div class="navigation-control-container">
-                    <img src="{{ asset('langding/imgs/support-view/LiquidGlass.svg') }}" alt=""
+                    <img src="{{ asset('langding/imgs/support-view/1-LiquidGlass.svg') }}" alt=""
                         class="navigation-bg">
 
                     <button class="nav-btn nav-btn-up" data-direction="up"
                         aria-label="{{ __('messages.scroll_up') }}">
-                        <img src="{{ asset('langding/imgs/support-view/Vector-up.svg') }}"
+                        <img src="{{ asset('langding/imgs/support-view/1-Vector-up.svg') }}"
                             alt="{{ __('messages.scroll_up') }}">
                     </button>
                     <button class="nav-btn nav-btn-down" data-direction="down"
                         aria-label="{{ __('messages.scroll_down') }}">
-                        <img src="{{ asset('langding/imgs/support-view/Vector-down.svg') }}"
+                        <img src="{{ asset('langding/imgs/support-view/1-Vector-down.svg') }}"
                             alt="{{ __('messages.scroll_down') }}">
                     </button>
                     <button class="nav-btn nav-btn-left" data-direction="left"
                         aria-label="{{ __('messages.scroll_left') }}">
-                        <img src="{{ asset('langding/imgs/support-view/Vector-left.svg') }}"
+                        <img src="{{ asset('langding/imgs/support-view/1-Vector-left.svg') }}"
                             alt="{{ __('messages.scroll_left') }}">
                     </button>
                     <button class="nav-btn nav-btn-right" data-direction="right"
                         aria-label="{{ __('messages.scroll_right') }}">
-                        <img src="{{ asset('langding/imgs/support-view/Vector-right.svg') }}"
+                        <img src="{{ asset('langding/imgs/support-view/1-Vector-right.svg') }}"
                             alt="{{ __('messages.scroll_right') }}">
                     </button>
                 </div>
@@ -625,10 +626,17 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <!-- Custom JS -->
     @php
-    // Cache busting: Use file modification time or timestamp
-    $jsVersion = config('app.debug') ? time() : '20250606before15h';
+    // Cache busting: always derive from the actual files' mtime so browsers
+    // pick up changes immediately, in both debug and production mode — a
+    // hardcoded string here previously meant edits never busted the cache.
+    $jsVersion = collect([
+        'langding/js/main.js',
+        'langding/js/tab-feed.js',
+        'langding/js/voice-search.js',
+        'langding/js/cart.js',
+    ])->map(fn ($file) => file_exists(public_path($file)) ? filemtime(public_path($file)) : 0)->max();
     @endphp
-    <script src="{{ asset('langding/js/main.js') }}?v={{ $jsVersion }}"></script>
+    <script src="{{ asset('langding/js/main.js?v=' . time()) }}"></script>
     <script src="{{ asset('langding/js/tab-feed.js') }}?v={{ $jsVersion }}"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {

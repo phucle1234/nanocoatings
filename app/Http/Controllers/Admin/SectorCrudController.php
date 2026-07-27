@@ -59,6 +59,7 @@ class SectorCrudController extends CrudController
             });
 
         CRUD::column('is_active')->label('Hiển thị')->type('boolean');
+        CRUD::column('default_locale')->label('Ngôn ngữ mặc định')->type('text');
         CRUD::column('sort_order')->label('Thứ tự')->type('number');
 
         CRUD::addColumn([
@@ -90,6 +91,15 @@ class SectorCrudController extends CrudController
             ->label('Thứ tự')
             ->type('number')
             ->default(0)
+            ->tab('Chung');
+
+        CRUD::field('default_locale')
+            ->label('Ngôn ngữ mặc định cho ngành')
+            ->type('select_from_array')
+            ->options(config('languages.supported'))
+            ->allows_null(true)
+            ->default(config('languages.default'))
+            ->hint('Dùng khi khách chưa tự chọn ngôn ngữ. Nếu khách đã chọn ngôn ngữ, lựa chọn của khách được ưu tiên.')
             ->tab('Chung');
 
         $this->addMultilangFieldsWithSections();

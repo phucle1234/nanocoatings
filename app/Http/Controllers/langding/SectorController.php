@@ -14,6 +14,7 @@ use App\Traits\CarSearch;
 use App\Traits\HasBanners;
 use App\Traits\HasImage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class SectorController extends Controller
@@ -58,7 +59,7 @@ class SectorController extends Controller
             throw new NotFoundHttpException();
         }
 
-        $currentLocale = app()->getLocale();
+        $currentLocale = $this->applySectorDefaultLocale($request, $sector);
         $translation = $sector->translations->firstWhere('language', $currentLocale)
             ?? $sector->translations->first();
 
@@ -94,6 +95,23 @@ class SectorController extends Controller
             'allCategoryRows' => $allCategoryRows,
             'newsCategories' => $newsCategories,
         ]));
+    }
+
+    protected function applySectorDefaultLocale(Request $request, PostCategory $sector): string
+    {
+        $supportedLocales = array_keys(config('languages.supported', []));
+        $defaultLocale = $sector->default_locale;
+
+        if (
+            $defaultLocale
+            && in_array($defaultLocale, $supportedLocales, true)
+            && !$request->route('locale')
+            && !$request->session()->get('locale_manually_selected')
+        ) {
+            App::setLocale($defaultLocale);
+        }
+
+        return app()->getLocale();
     }
 
     /**

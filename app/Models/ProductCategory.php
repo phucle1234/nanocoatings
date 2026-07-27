@@ -39,8 +39,8 @@ class ProductCategory extends Model
         'is_active' => 'boolean',
         'is_featured' => 'boolean',
         'sort_order' => 'integer',
-        'display_scopes' => 'array',
         'image_urls' => 'array',
+        'display_scopes' => 'array',
     ];
 
 

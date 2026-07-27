@@ -14,7 +14,7 @@ class ImageUploadController extends Controller
         try {
             // Validate request
             $request->validate([
-                'image' => 'required|file|mimes:jpeg,png,jpg,gif,webp,svg|max:8192'
+                'image' => 'required|file|mimes:jpeg,png,jpg,gif,webp,svg|max:8192',
             ]);
 
             if ($request->hasFile('image')) {
@@ -32,7 +32,7 @@ class ImageUploadController extends Controller
                     'filename' => $filename,
                     'path' => $path,
                     'url' => $url,
-                    'storage_path' => storage_path('app/' . $path)
+                    'storage_path' => storage_path('app/'.$path),
                 ]);
 
                 return response()->json([
@@ -41,26 +41,26 @@ class ImageUploadController extends Controller
                     'filename' => $filename,
                     'path' => $path,
                     'size' => $file->getSize(),
-                    'mime_type' => $file->getMimeType()
+                    'mime_type' => $file->getMimeType(),
                 ]);
             }
 
             return response()->json([
                 'success' => false,
-                'message' => 'Không có file được upload'
+                'message' => 'Không có file được upload',
             ], 400);
         } catch (\Illuminate\Validation\ValidationException $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Validation failed',
-                'errors' => $e->errors()
+                'errors' => $e->errors(),
             ], 422);
         } catch (\Exception $e) {
-            \Log::error('Image upload error: ' . $e->getMessage());
+            \Log::error('Image upload error: '.$e->getMessage());
 
             return response()->json([
                 'success' => false,
-                'message' => 'Lỗi upload: ' . $e->getMessage()
+                'message' => 'Lỗi upload: '.$e->getMessage(),
             ], 500);
         }
     }
@@ -71,7 +71,7 @@ class ImageUploadController extends Controller
             // Validate request
             $request->validate([
                 'images' => 'required|array',
-                'images.*' => 'file|mimes:jpeg,png,jpg,gif,webp,svg|max:8192'
+                'images.*' => 'file|mimes:jpeg,png,jpg,gif,webp,svg|max:8192',
             ]);
 
             if ($request->hasFile('images')) {
@@ -92,46 +92,46 @@ class ImageUploadController extends Controller
                             'index' => $index,
                             'filename' => basename($path),
                             'path' => $path,
-                            'url' => $url
+                            'url' => $url,
                         ]);
                     } catch (\Exception $e) {
-                        $errors[] = "File {$index}: " . $e->getMessage();
-                        \Log::error("Multiple upload error for file {$index}: " . $e->getMessage());
+                        $errors[] = "File {$index}: ".$e->getMessage();
+                        \Log::error("Multiple upload error for file {$index}: ".$e->getMessage());
                     }
                 }
 
-                if (!empty($uploadedUrls)) {
+                if (! empty($uploadedUrls)) {
                     return response()->json([
                         'success' => true,
                         'urls' => $uploadedUrls,
                         'count' => count($uploadedUrls),
-                        'errors' => $errors
+                        'errors' => $errors,
                     ]);
                 } else {
                     return response()->json([
                         'success' => false,
                         'message' => 'Không có file nào được upload thành công',
-                        'errors' => $errors
+                        'errors' => $errors,
                     ], 400);
                 }
             }
 
             return response()->json([
                 'success' => false,
-                'message' => 'Không có file được upload'
+                'message' => 'Không có file được upload',
             ], 400);
         } catch (\Illuminate\Validation\ValidationException $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Validation failed',
-                'errors' => $e->errors()
+                'errors' => $e->errors(),
             ], 422);
         } catch (\Exception $e) {
-            \Log::error('Multiple image upload error: ' . $e->getMessage());
+            \Log::error('Multiple image upload error: '.$e->getMessage());
 
             return response()->json([
                 'success' => false,
-                'message' => 'Lỗi upload: ' . $e->getMessage()
+                'message' => 'Lỗi upload: '.$e->getMessage(),
             ], 500);
         }
     }
@@ -141,22 +141,22 @@ class ImageUploadController extends Controller
         try {
             $filename = $request->input('filename');
 
-            if (!$filename) {
+            if (! $filename) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Tên file không được để trống'
+                    'message' => 'Tên file không được để trống',
                 ], 400);
             }
 
             // Clean filename để tránh path traversal
             $filename = basename($filename);
 
-            $path = 'images/' . $filename;
+            $path = 'images/'.$filename;
 
             \Log::info('Attempting to delete image', [
                 'filename' => $filename,
                 'path' => $path,
-                'storage_path' => storage_path('app/public/' . $path)
+                'storage_path' => storage_path('app/public/'.$path),
             ]);
 
             if (Storage::disk('public')->exists($path)) {
@@ -164,34 +164,34 @@ class ImageUploadController extends Controller
 
                 \Log::info('Image deleted successfully', [
                     'filename' => $filename,
-                    'path' => $path
+                    'path' => $path,
                 ]);
 
                 return response()->json([
                     'success' => true,
                     'message' => 'Xóa file thành công',
-                    'filename' => $filename
+                    'filename' => $filename,
                 ]);
             }
 
             \Log::warning('Image file not found', [
                 'filename' => $filename,
-                'path' => $path
+                'path' => $path,
             ]);
 
             return response()->json([
                 'success' => false,
-                'message' => 'File không tồn tại'
+                'message' => 'File không tồn tại',
             ], 404);
         } catch (\Exception $e) {
-            \Log::error('Image delete error: ' . $e->getMessage(), [
+            \Log::error('Image delete error: '.$e->getMessage(), [
                 'filename' => $request->input('filename'),
-                'trace' => $e->getTraceAsString()
+                'trace' => $e->getTraceAsString(),
             ]);
 
             return response()->json([
                 'success' => false,
-                'message' => 'Lỗi xóa file: ' . $e->getMessage()
+                'message' => 'Lỗi xóa file: '.$e->getMessage(),
             ], 500);
         }
     }

@@ -185,7 +185,10 @@ window.dealerApp = {
         },
       ],
     });
-    $(".box-slider-2-items").slick({
+
+    var $heroSlider = $(".box-slider-2-items");
+    var $heroVideo = $heroSlider.find(".hero-slide-video").first();
+    $heroSlider.slick({
       slidesToShow: 1,
       slidesToScroll: 1,
       arrows: false,
@@ -194,8 +197,116 @@ window.dealerApp = {
       centerPadding: "0px",
       infinite: true,
       autoplaySpeed: 4000,
-      autoplay: true,
+      autoplay: $heroVideo.length === 0,
+      pauseOnHover: false,
+      pauseOnFocus: false,
     });
+
+    if ($heroVideo.length) {
+      var heroVideoEl = $heroVideo[0];
+      var heroVideoAdvanced = false;
+      var heroVideoUnmuteAttempted = false;
+      var heroVideoWatchdog = null;
+
+      function advanceHeroSliderAfterVideo() {
+        if (heroVideoAdvanced) return;
+        heroVideoAdvanced = true;
+        clearInterval(heroVideoWatchdog);
+        $heroSlider.slick("slickNext");
+        $heroSlider.slick("slickPlay");
+      }
+
+      // Poll the video element's own state instead of relying on the
+      // "ended"/"timeupdate" events firing — some browsers/exported mp4s
+      // (missing/odd duration metadata, listener attached after
+      // loadedmetadata already fired, etc.) never dispatch them reliably.
+      // .ended / .paused are plain properties, always accurate.
+      function startHeroVideoWatchdog() {
+        clearInterval(heroVideoWatchdog);
+        heroVideoWatchdog = setInterval(function () {
+          if (heroVideoEl.ended || (heroVideoEl.paused && heroVideoEl.currentTime > 0)) {
+            advanceHeroSliderAfterVideo();
+          }
+        }, 400);
+      }
+
+      // (Re)starts the hero video from the beginning and pauses the image
+      // slides' autoplay until it ends — called on first load AND every
+      // time the slider wraps back around to the video slide, so the loop
+      // is: video -> image slides in order -> back to video from 0:00.
+      function playHeroVideo() {
+        $heroSlider.slick("slickPause");
+        heroVideoAdvanced = false;
+        heroVideoEl.currentTime = 0;
+
+        if (!heroVideoUnmuteAttempted) {
+          // Try playing with sound only on the very first play; browsers
+          // that block unmuted autoplay (no prior user interaction) will
+          // reject the play() promise, so fall back to muted in that case.
+          heroVideoUnmuteAttempted = true;
+          heroVideoEl.volume = 0.8;
+          heroVideoEl.muted = false;
+          var unmutedPlay = heroVideoEl.play();
+          if (unmutedPlay && typeof unmutedPlay.then === "function") {
+            unmutedPlay.catch(function () {
+              heroVideoEl.muted = true;
+              heroVideoEl.play();
+              syncHeroVolumeUi();
+            });
+          }
+        } else {
+          // Subsequent loops: keep whatever mute/volume the visitor chose.
+          heroVideoEl.play();
+        }
+
+        startHeroVideoWatchdog();
+      }
+
+      $heroVideo.on("ended", advanceHeroSliderAfterVideo);
+
+      // Slick wraps (infinite: true) back to slide 0 after the last image
+      // slide — that's the video slide, so replay it from the start.
+      $heroSlider.on("afterChange", function (event, slick, currentSlide) {
+        if (currentSlide === 0) {
+          playHeroVideo();
+        }
+      });
+
+      var $heroControls = $heroVideo.siblings(".hero-video-controls");
+      var $heroMuteBtn = $heroControls.find(".hero-video-mute-btn");
+      var $heroVolume = $heroControls.find(".hero-video-volume");
+
+      function syncHeroVolumeUi() {
+        var isUnmuted = !heroVideoEl.muted && heroVideoEl.volume > 0;
+        var volumePercent = Math.round((heroVideoEl.muted ? 0 : heroVideoEl.volume) * 100);
+        $heroControls.toggleClass("is-unmuted", isUnmuted);
+        $heroMuteBtn.attr("aria-label", isUnmuted ? "Tắt âm thanh" : "Bật âm thanh");
+        $heroVolume.val(volumePercent);
+      }
+
+      $heroMuteBtn.on("click", function () {
+        if (heroVideoEl.muted || heroVideoEl.volume === 0) {
+          heroVideoEl.muted = false;
+          heroVideoEl.volume = heroVideoEl.volume === 0 ? 0.8 : heroVideoEl.volume;
+        } else {
+          heroVideoEl.muted = true;
+        }
+        syncHeroVolumeUi();
+      });
+
+      $heroVolume.on("input", function () {
+        var value = Number(this.value) / 100;
+        heroVideoEl.volume = value;
+        heroVideoEl.muted = value === 0;
+        syncHeroVolumeUi();
+      });
+
+      $heroVideo.on("volumechange", syncHeroVolumeUi);
+
+      syncHeroVolumeUi();
+      playHeroVideo();
+    }
+    
     $(".products-sales-slider").slick({
       slidesToShow: 3,
       arrows: false,
@@ -331,7 +442,7 @@ window.dealerApp = {
         }
       });
     }
-
+    
     $(".box-partner-slider").slick({
       slidesToShow: 1,
       slidesToScroll: 1,
@@ -708,6 +819,7 @@ window.dealerApp = {
         $parentLi.removeClass("is-expanded");
       } else {
         $(".menu-level-1").removeClass("active");
+
         $(".nav-menu .menu-center > ul > li").removeClass("is-expanded");
         $menuLevel1.addClass("active");
         $parentLi.addClass("is-expanded");

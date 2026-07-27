@@ -107,7 +107,7 @@ class BlockAdminLinkResolver
         if (in_array($sectionType, ['media', 'footer'], true)) {
             return null;
         }
-
+        
         if (isset($bannerKeys[$sectionType])) {
             return $this->postsUrlForBannerSlug($bannerKeys[$sectionType]);
         }

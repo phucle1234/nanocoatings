@@ -1,4 +1,4 @@
-    <div class="box-slider">
+<div class="box-slider">
         <div class="bg-slider no-slider"
             style="background: url('{{ $homeSliderBanners2['category_bg_image'] ?? '' }}') no-repeat center center;background-size: cover;">
         </div>
@@ -10,9 +10,9 @@
                     'fallbackTitle' => 'Application Potential',
                 ])
             @else
-                <div class="title-with-line fw-500 fs-18 text-center text-light-red">
+                <!-- <div class="title-with-line fw-500 fs-18 text-center text-light-red">
                     {{ $homeSliderBanners2['meta_title'] ?? 'Products' }}
-                </div>
+                </div> -->
                 <h2 class="font-hanzel fs-32 fw-400 text-center mt-2 text-white">
                     {{ $homeSliderBanners2['meta_description'] ?? 'Application Potential' }}
                 </h2>

@@ -30,18 +30,22 @@ trait HasImage
             return null;
         }
 
-        if (str_starts_with($image, '/storage/')) {
-            $storagePath = str_replace('/storage/', '', $image);
-            if (Storage::disk('public')->exists($storagePath)) {
-                return Storage::disk('public')->url($storagePath);
-            }
+        $image = trim($image);
+        if ($image === '') {
+            return null;
         }
 
-        if (str_starts_with($image, '/') || str_starts_with($image, 'http')) {
-            if (str_starts_with($image, 'http')) {
-                return $image;
-            }
+        $image = $this->normalizeStorageImagePath($image);
 
+        if (str_starts_with($image, '/storage/')) {
+            return $this->resolvePublicStorageUrl($image);
+        }
+
+        if (str_starts_with($image, 'http://') || str_starts_with($image, 'https://')) {
+            return $image;
+        }
+
+        if (str_starts_with($image, '/')) {
             $publicPath = ltrim($image, '/');
             if (file_exists(public_path($publicPath))) {
                 return asset($image);
@@ -58,6 +62,34 @@ trait HasImage
         }
 
         return null;
+    }
+
+    /**
+     * Convert absolute APP_URL/storage/... URLs back to /storage/... paths.
+     */
+    protected function normalizeStorageImagePath(string $image): string
+    {
+        $appUrl = rtrim((string) config('app.url', ''), '/');
+        if ($appUrl !== '' && str_starts_with($image, $appUrl . '/storage/')) {
+            return substr($image, strlen($appUrl));
+        }
+
+        return $image;
+    }
+
+    /**
+     * Resolve /storage/... to a public URL. Prefer verified files, but always
+     * return a URL for valid storage paths (matches admin textarea behaviour).
+     */
+    protected function resolvePublicStorageUrl(string $path): string
+    {
+        $storagePath = ltrim(str_replace('/storage/', '', $path), '/');
+
+        if ($storagePath !== '' && Storage::disk('public')->exists($storagePath)) {
+            return Storage::disk('public')->url($storagePath);
+        }
+
+        return asset($path);
     }
 
     /**

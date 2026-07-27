@@ -46,7 +46,6 @@ class ProductCategoryCrudController extends CrudController
         if ($sectorId = (int) request()->query('sector_id')) {
             $this->crud->addClause('forCategoryBlockDisplay', $sectorId);
         }
-
         // Cột hiển thị
         CRUD::addColumn([
             'name' => 'row_number',

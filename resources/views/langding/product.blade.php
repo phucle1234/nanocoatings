@@ -76,10 +76,9 @@
                     </h1>
 
                     <div class="product-price mt-3 d-flex gap-4 align-items-center">
-                        <span
-                            class="fs-24 font-hanzel text-red">{{ $product['price_display'] ?? __('messages.contact') }}</span>
+                        <span class="fs-24 font-hanzel text-red">{{ $product['price_display'] ?? __('messages.contact') }}</span>
                         <!-- <span class="fs-16 text-decoration-line-through text-muted">{{ number_format($product['price'] ?? 0, 0, ',', '.') }}đ</span> -->
-                        <span class="fs-16 font-hanzel text-red">{{ __('messages.vat_included') }}</span>
+                        <!-- <span class="fs-16 font-hanzel text-red">{{ __('messages.vat_included') }}</span> -->
                     </div>
 
                     <div class="product-review mt-3 d-flex gap-5 align-items-center">
@@ -421,9 +420,8 @@
                                     {{ $relatedProduct['short_description'] ?? '' }}
                                 </div>
                                 <div class="product-price d-flex gap-3 align-items-center">
-                                    <span
-                                        class="fs-24 font-hanzel text-red">{{ $relatedProduct['price_display'] ?? __('messages.contact') }}</span>
-                                    <span class="fs-14 text-red">{{ __('messages.vat_included') }}</span>
+                                    <span class="fs-24 font-hanzel text-red">{{ $relatedProduct['price_display'] ?? __('messages.contact') }}</span>
+                                    <!-- <span class="fs-14 text-red">{{ __('messages.vat_included') }}</span> -->
                                 </div>
                                 <div class="d-flex align-items-center justify-content-between mt-2">
                                     <div class="product-item-view">

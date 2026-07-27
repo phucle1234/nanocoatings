@@ -19,6 +19,7 @@ class PostCategoryRequest extends FormRequest
             'icon' => 'nullable|string',
             'is_active' => 'boolean',
             'is_featured' => 'boolean',
+            'default_locale' => 'nullable|in:' . implode(',', array_keys(config('languages.supported'))),
             'sort_order' => 'integer|min:0',
         ];
 
@@ -49,6 +50,7 @@ class PostCategoryRequest extends FormRequest
             'icon' => 'icon',
             'is_active' => 'trạng thái hoạt động',
             'is_featured' => 'danh mục nổi bật',
+            'default_locale' => 'ngôn ngữ mặc định',
             'sort_order' => 'thứ tự sắp xếp',
         ];
 

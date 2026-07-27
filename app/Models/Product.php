@@ -48,8 +48,8 @@ class Product extends Model
         'is_bestseller' => 'boolean',
         'view_count' => 'integer',
         'sort_order' => 'integer',
-        'display_scopes' => 'array',
         'image_urls' => 'array',
+        'display_scopes' => 'array',
     ];
 
     /**

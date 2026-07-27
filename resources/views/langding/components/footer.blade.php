@@ -86,8 +86,7 @@
 
                 <div class="col-lg-6">
                     <div class="capacity-profile text-end">
-                        <a target="_blank" href="{{ asset('/storage/uploads/documents/posts/HOSONANGLUCCSM.pdf') }}"
-                            class="btn btn-outline-secondary px-5 py-3" style="background-color: #2CCC81;">
+                        <a href="javascript:void(0)" class="btn btn-outline-secondary px-5 py-3" style="background-color: #2CCC81;">
                             <div class="d-flex align-items-center gap-2">
                                 <img src="{{ asset('langding/imgs/user.svg') }}" alt="{{ __('messages.logo') }}"
                                     class="img-fluid">

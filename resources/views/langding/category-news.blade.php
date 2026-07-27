@@ -63,7 +63,7 @@
                             <span class="fs-24 font-hanzel text-red lh-1">
                                 {{ $product['price_display'] ?? __('messages.contact') }}
                             </span>
-                            <span class="fs-14 text-red">{{ __('messages.vat_included') }}</span>
+                            <!-- <span class="fs-14 text-red">{{ __('messages.vat_included') }}</span> -->
                         </div>
 
                         <div class="d-flex align-items-center justify-content-between mt-2">

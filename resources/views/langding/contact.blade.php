@@ -40,7 +40,7 @@
                                 {{-- Họ và Tên --}}
                                 <div class="mb-3">
                                     <label for="name" class="form-label fs-16 fw-500 mb-2" style="color: #333;">
-                                        {{ __('messages.name') }} <span class="text-red" style="color: #DC1A21;">{{ __('messages.required_mark') }}</span>
+                                        {{ __('messages.name') }} <span class="text-red" style="color: #2CCC81;">{{ __('messages.required_mark') }}</span>
                                     </label>
                                     <input
                                         type="text"
@@ -60,7 +60,7 @@
                                 <div class="row g-3 mb-3">
                                     <div class="col-md-6">
                                         <label for="email" class="form-label fs-16 fw-500 mb-2" style="color: #333;">
-                                            {{ __('messages.email') }} <span class="text-red" style="color: #DC1A21;">{{ __('messages.required_mark') }}</span>
+                                            {{ __('messages.email') }} <span class="text-red" style="color: #2CCC81;">{{ __('messages.required_mark') }}</span>
                                         </label>
                                         <input
                                             type="email"
@@ -77,7 +77,7 @@
                                     </div>
                                     <div class="col-md-6">
                                         <label for="phone" class="form-label fs-16 fw-500 mb-2" style="color: #333;">
-                                            {{ __('messages.phone') }} <span class="text-red" style="color: #DC1A21;">{{ __('messages.required_mark') }}</span>
+                                            {{ __('messages.phone') }} <span class="text-red" style="color: #2CCC81;">{{ __('messages.required_mark') }}</span>
                                         </label>
                                         <input
                                             type="tel"
@@ -97,7 +97,7 @@
                                 {{-- Tiêu đề --}}
                                 <div class="mb-3">
                                     <label for="subject" class="form-label fs-16 fw-500 mb-2" style="color: #333;">
-                                        {{ __('messages.subject') }} <span class="text-red" style="color: #DC1A21;">{{ __('messages.required_mark') }}</span>
+                                        {{ __('messages.subject') }} <span class="text-red" style="color: #2CCC81;">{{ __('messages.required_mark') }}</span>
                                     </label>
                                     <input
                                         type="text"
@@ -116,7 +116,7 @@
                                 {{-- Nội dung tin nhắn --}}
                                 <div class="mb-4">
                                     <label for="message" class="form-label fs-16 fw-500 mb-2" style="color: #333;">
-                                        {{ __('messages.message') }} <span class="text-red" style="color: #DC1A21;">{{ __('messages.required_mark') }}</span>
+                                        {{ __('messages.message') }} <span class="text-red" style="color: #2CCC81;">{{ __('messages.required_mark') }}</span>
                                     </label>
                                     <textarea
                                         class="form-control @error('message') is-invalid @enderror"
@@ -157,7 +157,7 @@
                                     <button
                                         type="submit"
                                         class="btn btn-lg fw-700 text-white"
-                                        style="background-color: #DC1A21; border: none; padding: 15px 50px; border-radius: 4px; font-size: 18px; min-width: 200px;">
+                                        style="background-color: #2CCC81; border: none; padding: 15px 50px; border-radius: 4px; font-size: 18px; min-width: 200px;">
                                         {{ __('messages.send_message_button') }}
                                     </button>
                                 </div>
@@ -173,7 +173,7 @@
 <style>
     .page-contact-form .form-control:focus,
     .page-contact-form textarea.form-control:focus {
-        border-color: #DC1A21;
+        border-color: #2CCC81;
         box-shadow: 0 0 0 0.2rem rgba(220, 26, 33, 0.25);
         background-color: #fff;
         outline: none;

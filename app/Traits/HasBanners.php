@@ -9,8 +9,8 @@ trait HasBanners
     /**
      * Lấy banners từ danh mục theo slug
      *
-     * @param string $categorySlug Slug của danh mục (ví dụ: 'home-slider', 'home-slider-en')
-     * @param bool $requireImage When false, include text-only items (e.g. footer menu links)
+     * @param  string  $categorySlug  Slug của danh mục (ví dụ: 'home-slider', 'home-slider-en')
+     * @param  bool  $requireImage  When false, include text-only items (e.g. footer menu links)
      * @return array ['category' => object, 'category_bg_image' => string, 'banners' => Collection]
      */
     public function getBannersBySlug($categorySlug, bool $requireImage = true)
@@ -23,7 +23,7 @@ trait HasBanners
             ->where('slug', $categorySlug)
             ->first();
 
-        if (!$categoryTranslation) {
+        if (! $categoryTranslation) {
             return [
                 'category' => null,
                 'category_bg_image' => null,
@@ -56,7 +56,7 @@ trait HasBanners
             )
             ->first();
 
-        if (!$category) {
+        if (! $category) {
             return [
                 'category' => null,
                 'category_bg_image' => null,
@@ -91,6 +91,8 @@ trait HasBanners
                 DB::raw('COALESCE(pt_current.slug, pt_fallback.slug) as slug'),
                 'pt_current.image_urls as image_urls_current',
                 'pt_fallback.image_urls as image_urls_fallback',
+                'pt_current.video_url as video_url_current',
+                'pt_fallback.video_url as video_url_fallback',
                 DB::raw('COALESCE(pt_current.url, pt_fallback.url) as url'),
                 DB::raw('COALESCE(pt_current.meta_title, pt_fallback.meta_title) as meta_title')
             )
@@ -105,7 +107,14 @@ trait HasBanners
 
                 $hasImage = $this->imageUrlListHasResolvableFile($effectiveImageUrls);
 
-                if ($requireImage && !$hasImage) {
+                $videoUrl = $this->resolveEffectiveBannerVideoUrl(
+                    $banner->video_url_current,
+                    $banner->video_url_fallback
+                );
+                $hasVideo = $videoUrl !== null;
+                $banner->video_url = $videoUrl;
+
+                if ($requireImage && ! $hasImage && ! $hasVideo) {
                     return null;
                 }
 
@@ -179,6 +188,20 @@ trait HasBanners
         return [];
     }
 
+    protected function resolveEffectiveBannerVideoUrl($currentUrl, $fallbackUrl): ?string
+    {
+        foreach ([$currentUrl, $fallbackUrl] as $candidate) {
+            if (! empty($candidate)) {
+                $resolved = $this->resolveImageUrl($candidate);
+                if ($resolved !== null) {
+                    return $resolved;
+                }
+            }
+        }
+
+        return null;
+    }
+
     /**
      * @param  mixed  $imageUrls
      * @return array<int, string>
@@ -194,7 +217,7 @@ trait HasBanners
             $imageUrls = is_array($decoded) ? $decoded : [];
         }
 
-        if (!is_array($imageUrls)) {
+        if (! is_array($imageUrls)) {
             return [];
         }
 

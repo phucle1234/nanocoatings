@@ -2,12 +2,10 @@
 
 namespace App\Models;
 
-use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use App\Traits\HasSlugGenerator;
+use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Str;
 
 class Post extends Model
@@ -39,7 +37,6 @@ class Post extends Model
         'published_at' => 'datetime',
     ];
 
-
     protected static function boot()
     {
         parent::boot();
@@ -50,18 +47,15 @@ class Post extends Model
         });
     }
 
-
     /**
      * Lấy image_urls từ translation hiện tại
-     * 
-     * @return array
      */
     public function getImageUrlsAttribute(): array
     {
         $currentLocale = app()->getLocale();
         $translation = $this->translations()->where('language', $currentLocale)->first();
 
-        if ($translation && !empty($translation->image_urls)) {
+        if ($translation && ! empty($translation->image_urls)) {
             return is_array($translation->image_urls) ? $translation->image_urls : [];
         }
 
@@ -74,22 +68,23 @@ class Post extends Model
 
         foreach ($languages as $lang) {
             $translationData = [
-                'title' => $data['title_' . $lang] ?? '',
-                'slug' => Str::slug($data['title_' . $lang] ?? ''),
-                'content' => $data['content_' . $lang] ?? '',
-                'excerpt' => $data['excerpt_' . $lang] ?? '',
-                'meta_title' => $data['meta_title_' . $lang] ?? '',
-                'meta_description' => $data['meta_description_' . $lang] ?? '',
-                'meta_keywords' => $data['meta_keywords_' . $lang] ?? '',
-                'canonical_url' => $data['canonical_url_' . $lang] ?? '',
-                'og_title' => $data['og_title_' . $lang] ?? '',
-                'og_description' => $data['og_description_' . $lang] ?? '',
-                'og_image' => $data['og_image_' . $lang] ?? '',
-                'image_urls' => $this->processImageUrls($data['image_urls_' . $lang] ?? ''),
-                'url' => $data['url_' . $lang] ?? '',
+                'title' => $data['title_'.$lang] ?? '',
+                'slug' => Str::slug($data['title_'.$lang] ?? ''),
+                'content' => $data['content_'.$lang] ?? '',
+                'excerpt' => $data['excerpt_'.$lang] ?? '',
+                'meta_title' => $data['meta_title_'.$lang] ?? '',
+                'meta_description' => $data['meta_description_'.$lang] ?? '',
+                'meta_keywords' => $data['meta_keywords_'.$lang] ?? '',
+                'canonical_url' => $data['canonical_url_'.$lang] ?? '',
+                'og_title' => $data['og_title_'.$lang] ?? '',
+                'og_description' => $data['og_description_'.$lang] ?? '',
+                'og_image' => $data['og_image_'.$lang] ?? '',
+                'image_urls' => $this->processImageUrls($data['image_urls_'.$lang] ?? ''),
+                'url' => $data['url_'.$lang] ?? '',
+                'video_url' => $data['video_url_'.$lang] ?? '',
             ];
 
-            if (!empty($translationData['title'])) {
+            if (! empty($translationData['title'])) {
                 $this->translations()->updateOrCreate(
                     ['language' => $lang],
                     $translationData
@@ -173,20 +168,17 @@ class Post extends Model
 
     /**
      * Lấy tiêu đề theo locale hiện tại để hiển thị
-     * 
-     * @return string
      */
     public function getTitleDisplay(): string
     {
         $currentLocale = app()->getLocale();
         $translation = $this->translations()->where('language', $currentLocale)->first();
+
         return $translation ? $translation->title : 'N/A';
     }
 
     /**
      * Lấy tên các danh mục để hiển thị
-     * 
-     * @return string
      */
     public function getCategoryNamesDisplay(): string
     {
@@ -195,53 +187,54 @@ class Post extends Model
             $currentLocale = app()->getLocale();
             $categoryNames = $categories->map(function ($category) use ($currentLocale) {
                 $translation = $category->translations()->where('language', $currentLocale)->first();
+
                 return $translation ? $translation->name : $category->slug;
             })->toArray();
+
             return implode(', ', $categoryNames);
         }
+
         return '-';
     }
 
     /**
      * Lấy HTML hiển thị hình ảnh thumbnail (50px)
-     * 
-     * @return string
      */
     public function getImageThumbnailHtml(): string
     {
         $imageUrls = $this->image_urls;
-        if (!empty($imageUrls) && is_array($imageUrls)) {
+        if (! empty($imageUrls) && is_array($imageUrls)) {
             $firstImage = $imageUrls[0];
+
             return sprintf(
                 '<img src="%s" style="max-width: 50px; max-height: 50px;" />',
                 e($firstImage)
             );
         }
+
         return '-';
     }
 
     /**
      * Lấy HTML hiển thị hình ảnh lớn hơn (100px) cho Show
-     * 
-     * @return string
      */
     public function getImageMediumHtml(): string
     {
         $imageUrls = $this->image_urls;
-        if (!empty($imageUrls) && is_array($imageUrls)) {
+        if (! empty($imageUrls) && is_array($imageUrls)) {
             $firstImage = $imageUrls[0];
+
             return sprintf(
                 '<img src="%s" style="max-width: 100px; max-height: 100px;" />',
                 e($firstImage)
             );
         }
+
         return '-';
     }
 
     /**
      * Lấy HTML hiển thị trạng thái với badge
-     * 
-     * @return string
      */
     public function getStatusBadgeHtml(): string
     {
@@ -250,42 +243,37 @@ class Post extends Model
             'published' => '<span class="badge badge-success">Đã xuất bản</span>',
             'archived' => '<span class="badge badge-warning">Đã lưu trữ</span>',
         ];
+
         return $statusLabels[$this->status] ?? e($this->status);
     }
 
     /**
      * Lấy tiêu đề theo ngôn ngữ cụ thể
-     * 
-     * @param string $lang
-     * @return string
      */
     public function getTranslationTitle(string $lang): string
     {
         $translation = $this->translations()->where('language', $lang)->first();
+
         return $translation ? $translation->title : '-';
     }
 
     /**
      * Lấy tóm tắt theo ngôn ngữ cụ thể (giới hạn 100 ký tự)
-     * 
-     * @param string $lang
-     * @return string
      */
     public function getTranslationExcerpt(string $lang): string
     {
         $translation = $this->translations()->where('language', $lang)->first();
+
         return $translation ? \Illuminate\Support\Str::limit($translation->excerpt, 100) : '-';
     }
 
     /**
      * Lấy slug theo ngôn ngữ cụ thể
-     * 
-     * @param string $lang
-     * @return string
      */
     public function getTranslationSlug(string $lang): string
     {
         $translation = $this->translations()->where('language', $lang)->first();
+
         return $translation ? $translation->slug : '-';
     }
 }

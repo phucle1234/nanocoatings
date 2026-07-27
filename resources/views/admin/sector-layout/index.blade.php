@@ -13,8 +13,8 @@
             <div class="card">
                 <div class="card-body">
                     <p class="text-muted mb-3">
-                        <strong>Ảnh nền &amp; tiêu đề</strong> — sửa ảnh nền section, tiêu đề và mô tả.
-                        <strong>Nội dung</strong> — quản lý bài viết / slide / video trong block.
+                    <strong>Ảnh nền &amp; tiêu đề</strong> — sửa ảnh nền section, tiêu đề và mô tả.
+                    <strong>Nội dung</strong> — quản lý bài viết / slide / video trong block.
                     </p>
 
                     <form method="post" action="{{ route('admin.sector-layout.update', $sector->id) }}" id="sector-layout-form">

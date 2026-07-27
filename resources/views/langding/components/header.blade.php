@@ -408,6 +408,11 @@
                 <a href="{{ route('sectors.index') }}" class="text-white fs-16">{{ __('messages.application_sectors') }}
                 </a>
             </li>
+                
+            {{-- <li>
+                <a href="{{ route('branch') }}" class="text-white fs-16">{{ __('messages.store_system') }}
+                </a>
+            </li> --}}
 
             <li>
                 <a href="{{ route('branch') }}" class="text-white fs-16">{{ __('messages.distribution') }}
@@ -443,7 +448,36 @@
                     @endif
                 </ul>
             </li>
+            <!-- <li>
+                <div class="d-flex justify-content-between align-items-center">
+                    <a href="#" class="text-white fs-16">Case</a>
+                    <span class="show-level-1"><i class="fas fa-chevron-right text-white"></i></span>
+                </div>
 
+                <ul class="menu-level-1 list-unstyled ">
+                                                                                <li class="menu-item-level-1">
+                        <a href="https://nanocoatings.com.vn/post/case-sdudies" class="text-white d-flex justify-content-between align-items-center">
+                            <span class="fs-14 fw-bold d-flex align-items-center gap-2">
+                                <span>Case studies </span>
+                            </span>
+                        </a>
+                    </li>
+                    <li class="menu-item-level-1">
+                        <a href="https://nanocoatings.com.vn/post/gallery" class="text-white d-flex justify-content-between align-items-center">
+                            <span class="fs-14 fw-bold d-flex align-items-center gap-2">
+                                <span>Gallery</span>
+                            </span>
+                        </a>
+                    </li>
+                    <li class="menu-item-level-1">
+                        <a href="https://nanocoatings.com.vn/post/potential" class="text-white d-flex justify-content-between align-items-center">
+                            <span class="fs-14 fw-bold d-flex align-items-center gap-2">
+                                <span>Potential</span>
+                            </span>
+                        </a>
+                    </li>
+                                                        </ul>
+            </li> -->
             <li>
                 <div class="d-flex justify-content-between align-items-center">
                     <a href="{{ route('post.category', 'case-study') }}"
@@ -456,8 +490,8 @@
                     @foreach ($caseStudyPosts as $post)
                     @php
                     $postUrl = !empty($post['slug'])
-                    ? route('post.detail', ['slug' => $post['slug']])
-                    : route('post.category', 'case-study');
+                        ? route('post.detail', ['slug' => $post['slug']])
+                        : route('post.category', 'case-study');
                     @endphp
                     <li class="menu-item-level-1">
                         <a href="{{ $postUrl }}"

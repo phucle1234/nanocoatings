@@ -17,7 +17,7 @@ class PostRequest extends FormRequest
         $languages = array_keys(config('languages.supported'));
 
         $rules = [
-            'slug' => 'nullable|string|max:255|unique:posts,slug,' . $id,
+            'slug' => 'nullable|string|max:255|unique:posts,slug,'.$id,
             'postcategory_id' => 'nullable|exists:postcategories,id',
             'icon' => 'nullable|string|max:255',
             'status' => 'required|in:draft,published,archived',
@@ -30,18 +30,19 @@ class PostRequest extends FormRequest
 
         // Validation rules cho từng ngôn ngữ
         foreach ($languages as $lang) {
-            $rules['title_' . $lang] = 'nullable|string|max:255';
-            $rules['slug_' . $lang] = 'nullable|string|max:255';
-            $rules['content_' . $lang] = 'nullable|string';
-            $rules['excerpt_' . $lang] = 'nullable|string';
-            $rules['meta_title_' . $lang] = 'nullable|string|max:255';
-            $rules['meta_description_' . $lang] = 'nullable|string';
-            $rules['meta_keywords_' . $lang] = 'nullable|string';
-            $rules['canonical_url_' . $lang] = 'nullable|url';
-            $rules['og_title_' . $lang] = 'nullable|string|max:255';
-            $rules['og_description_' . $lang] = 'nullable|string';
-            $rules['og_image_' . $lang] = 'nullable|url';
-            $rules['image_urls_' . $lang] = 'nullable|string';
+            $rules['title_'.$lang] = 'nullable|string|max:255';
+            $rules['slug_'.$lang] = 'nullable|string|max:255';
+            $rules['content_'.$lang] = 'nullable|string';
+            $rules['excerpt_'.$lang] = 'nullable|string';
+            $rules['meta_title_'.$lang] = 'nullable|string|max:255';
+            $rules['meta_description_'.$lang] = 'nullable|string';
+            $rules['meta_keywords_'.$lang] = 'nullable|string';
+            $rules['canonical_url_'.$lang] = 'nullable|url';
+            $rules['og_title_'.$lang] = 'nullable|string|max:255';
+            $rules['og_description_'.$lang] = 'nullable|string';
+            $rules['og_image_'.$lang] = 'nullable|url';
+            $rules['image_urls_'.$lang] = 'nullable|string';
+            $rules['video_url_'.$lang] = 'nullable|string|max:255';
         }
 
         return $rules;
@@ -64,18 +65,19 @@ class PostRequest extends FormRequest
 
         // Attributes cho từng ngôn ngữ
         foreach ($languages as $lang => $langName) {
-            $attributes['title_' . $lang] = 'Tiêu đề (' . $langName . ')';
-            $attributes['slug_' . $lang] = 'Slug (' . $langName . ')';
-            $attributes['content_' . $lang] = 'Nội dung (' . $langName . ')';
-            $attributes['excerpt_' . $lang] = 'Tóm tắt (' . $langName . ')';
-            $attributes['meta_title_' . $lang] = 'Meta Title (' . $langName . ')';
-            $attributes['meta_description_' . $lang] = 'Meta Description (' . $langName . ')';
-            $attributes['meta_keywords_' . $lang] = 'Meta Keywords (' . $langName . ')';
-            $attributes['canonical_url_' . $lang] = 'Canonical URL (' . $langName . ')';
-            $attributes['og_title_' . $lang] = 'OG Title (' . $langName . ')';
-            $attributes['og_description_' . $lang] = 'OG Description (' . $langName . ')';
-            $attributes['og_image_' . $lang] = 'OG Image (' . $langName . ')';
-            $attributes['image_urls_' . $lang] = 'Hình ảnh (' . $langName . ')';
+            $attributes['title_'.$lang] = 'Tiêu đề ('.$langName.')';
+            $attributes['slug_'.$lang] = 'Slug ('.$langName.')';
+            $attributes['content_'.$lang] = 'Nội dung ('.$langName.')';
+            $attributes['excerpt_'.$lang] = 'Tóm tắt ('.$langName.')';
+            $attributes['meta_title_'.$lang] = 'Meta Title ('.$langName.')';
+            $attributes['meta_description_'.$lang] = 'Meta Description ('.$langName.')';
+            $attributes['meta_keywords_'.$lang] = 'Meta Keywords ('.$langName.')';
+            $attributes['canonical_url_'.$lang] = 'Canonical URL ('.$langName.')';
+            $attributes['og_title_'.$lang] = 'OG Title ('.$langName.')';
+            $attributes['og_description_'.$lang] = 'OG Description ('.$langName.')';
+            $attributes['og_image_'.$lang] = 'OG Image ('.$langName.')';
+            $attributes['image_urls_'.$lang] = 'Hình ảnh ('.$langName.')';
+            $attributes['video_url_'.$lang] = 'Video ('.$langName.')';
         }
 
         return $attributes;

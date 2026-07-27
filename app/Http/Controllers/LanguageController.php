@@ -31,7 +31,8 @@ class LanguageController extends Controller
 
         // Store locale in session
         Session::put('locale', $locale);
-
+        Session::put('locale_manually_selected', true);
+        
         // Get the previous URL
         $previousUrl = url()->previous();
 

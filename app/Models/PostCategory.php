@@ -24,6 +24,7 @@ class PostCategory extends Model
         'is_featured',
         'is_banner',
         'is_sector',
+        'default_locale',
         'sort_order',
         'meta_title',
         'meta_description',
@@ -35,6 +36,7 @@ class PostCategory extends Model
         'is_featured' => 'boolean',
         'is_banner' => 'boolean',
         'is_sector' => 'boolean',
+        'default_locale' => 'string',
         'sort_order' => 'integer',
     ];
 

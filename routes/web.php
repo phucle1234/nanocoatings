@@ -1,52 +1,49 @@
 <?php
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\ImageUploadController;
+use App\Http\Controllers\Auth\EmailVerificationController;
+use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
-use App\Http\Controllers\Auth\EmailVerificationController;
-
 use App\Http\Controllers\Customer\DashboardController;
 use App\Http\Controllers\Customer\OrderController;
-use App\Http\Controllers\Customer\WarrantyController as CustomerWarrantyController;
 use App\Http\Controllers\Customer\ProfileController as CustomerProfileController;
+use App\Http\Controllers\Customer\WarrantyController as CustomerWarrantyController;
+use App\Http\Controllers\Dealer\CartController as DealerCartController;
+use App\Http\Controllers\Dealer\CustomerController as DealerCustomerController;
 use App\Http\Controllers\Dealer\DashboardController as DealerDashboardController;
+use App\Http\Controllers\Dealer\LoanOrderController as DealerLoanOrderController;
 use App\Http\Controllers\Dealer\OrderController as DealerOrderController;
 use App\Http\Controllers\Dealer\OrderEcommerceController as DealerOrderEcommerceController;
-use App\Http\Controllers\Dealer\CartController as DealerCartController;
-use App\Http\Controllers\Dealer\WarrantyController as DealerWarrantyController;
 use App\Http\Controllers\Dealer\SaleCartController as DealerSaleCartController;
 use App\Http\Controllers\Dealer\SaleOrderController as DealerSaleOrderController;
-use App\Http\Controllers\Dealer\CustomerController as DealerCustomerController;
-use App\Http\Controllers\Dealer\LoanOrderController as DealerLoanOrderController;
-use App\Http\Controllers\Auth\ForgotPasswordController;
-use App\Http\Controllers\LanguageController;
-
-use App\Http\Controllers\langding\HomeController;
-use App\Http\Controllers\langding\VoiceSearchController;
-use App\Http\Controllers\langding\CategoryController;
-use App\Http\Controllers\langding\ProductController;
-use App\Http\Controllers\langding\CategorySearchController;
-use App\Http\Controllers\langding\PostController;
-use App\Http\Controllers\langding\CartController;
-use App\Http\Controllers\langding\DemoController;
+use App\Http\Controllers\Dealer\WarrantyController as DealerWarrantyController;
 use App\Http\Controllers\langding\AboutController;
+use App\Http\Controllers\langding\BranchController;
+use App\Http\Controllers\langding\CartController;
+use App\Http\Controllers\langding\CategoryController;
+use App\Http\Controllers\langding\CategorySearchController;
+use App\Http\Controllers\langding\ContactController;
+use App\Http\Controllers\langding\DemoController;
+use App\Http\Controllers\langding\DocumentController;
+use App\Http\Controllers\langding\HomeController;
+use App\Http\Controllers\langding\PostController;
+use App\Http\Controllers\langding\ProductController;
+use App\Http\Controllers\langding\SearchController;
+use App\Http\Controllers\langding\SectorController;
+use App\Http\Controllers\langding\ShopController;
 use App\Http\Controllers\langding\TabFeedController;
 use App\Http\Controllers\langding\TraceabilityController;
 use App\Http\Controllers\langding\WarrantyController;
-use App\Http\Controllers\langding\ContactController;
-use App\Http\Controllers\langding\BranchController;
-use App\Http\Controllers\langding\DocumentController;
-use App\Http\Controllers\langding\ShopController;
-use App\Http\Controllers\langding\SearchController;
-use App\Http\Controllers\langding\SectorController;
+use App\Http\Controllers\LanguageController;
+use Illuminate\Support\Facades\Route;
+
 // Language Switcher Route (không cần middleware, xử lý trước)
 Route::get('/language/{locale}', [LanguageController::class, 'switch'])->name('language.switch');
 
 // Debug Locale Route (chỉ dùng khi development)
 Route::get('/debug/locale', function () {
-    if (!config('app.debug')) {
+    if (! config('app.debug')) {
         abort(403, 'Debug mode is disabled');
     }
 
@@ -88,7 +85,6 @@ $defineRoutes = function () {
 
     Route::get('/branch/categories/{provinceCode}', [BranchController::class, 'getCategories'])
         ->name('branch.categories');
-
 
     Route::get('/branch/{id?}', [BranchController::class, 'branch'])->name('branch');
 
@@ -270,7 +266,6 @@ Route::middleware('setlocale')->group($defineRoutes);
 
 // Routes WITH locale prefix: /vi/..., /en/... (SEO friendly URLs)
 // Route::prefix('{locale}')->middleware('setlocale')->group($defineRoutes);
-
 
 // Routes upload hình ảnh cho admin
 Route::middleware(['web', 'auth:backpack'])->group(function () {

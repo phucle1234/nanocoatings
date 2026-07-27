@@ -22,7 +22,7 @@
                         </defs>
                     </svg>
                 </div>
-                <a href="tel:02838362369" class="menu-hot-phone d-flex align-items-center gap-1" title=" Gọi Hotline">
+                <a href="tel:0987949494" class="menu-hot-phone d-flex align-items-center gap-1" title=" Gọi Hotline">
                     <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
                         xmlns="http://www.w3.org/2000/svg">
                         <path

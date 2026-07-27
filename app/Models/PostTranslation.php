@@ -24,6 +24,7 @@ class PostTranslation extends Model
         'og_image',
         'image_urls',
         'url',
+        'video_url',
     ];
 
     protected $casts = [

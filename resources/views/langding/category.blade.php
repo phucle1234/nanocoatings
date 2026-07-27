@@ -21,42 +21,11 @@
 
 @include('langding.components.video')
 
-<!-- <div class="category-avenza-about bg-img-cover" style="background-image: url('{{ $twoBannerPost['image'] ?? $firstBannerPost['image'] ?? asset("langding/imgs/bg-avenza-about.png") }}');">
+<div class="category-avenza-about bg-img-cover" style="background-image: url('{{ $twoBannerPost['image'] ?? $firstBannerPost['image'] ?? asset("langding/imgs/bg-avenza-about.png") }}');">
     <div class="container-fluid">
-        <div class="about-content">
-            <div class="title-with-line fs-18 text-center text-light-red lh-1">{{ $twoBannerPost['title'] ?? ''  }}</div>
-            <h2 class="font-hanzel fs-32 fw-400 text-center mb-0 mt-3 text-white">
-                {!! html_entity_decode(data_get($twoBannerPost, 'excerpt', '')) !!}
-            </h2>
-            <div class="fs-16 text-center text-white fw-300 intro mx-auto mt-3">
-                {!! html_entity_decode(data_get($twoBannerPost, 'content', '')) !!}</div>
-            <div class="about-items">
-                <div class="row">
-                    @if(!empty($otherBannerPosts))
-                    @foreach($otherBannerPosts as $otherBannerPost)
-                    <div class="col-6 col-xl-3">
-                        <div class="about-item d-flex justify-content-center">
-                            <div class="about-item-content">
-                                <img width="33" height="33" src="{{ asset($otherBannerPost['image']) }}" alt="{{ $otherBannerPost['title'] ?? '' }}" class="img-fluid">
-                                <div class="fs-20 font-hanzel text-white title mt-2">{{ $otherBannerPost['title'] ?? '' }}</div>
-                                <div class="fs-15 fw-300 text-white intro">
-                                    {!! html_entity_decode(data_get($otherBannerPost, 'content', '')) !!}</div>
-                            </div>
-                        </div>
-                    </div>
-                    @endforeach
-                    @else
-                    <div class="col-12">
-                        <div class="text-center py-5">
-                            <p class="fs-18 text-white"></p>
-                        </div>
-                    </div>
-                    @endif
-                </div>
-            </div>
-        </div>
+        2342324234
     </div>
-</div> -->
+</div>
 
 @if($selectedRootCategory)
 <div class="category-avenza-cat bg-img-cover" style="background-image: url('{{ asset("langding/imgs/bg-avenza.png") }}');">
@@ -158,7 +127,7 @@
                             <span class="fs-24 font-hanzel text-red lh-1">
                                 {{ $product['price_display'] ?? __('messages.contact') }}
                             </span>
-                            <span class="fs-14 text-red">{{ __('messages.vat_included') }}</span>
+                            <!-- <span class="fs-14 text-red">{{ __('messages.vat_included') }}</span> -->
                         </div>
 
                         <div class="d-flex align-items-center justify-content-between mt-2">

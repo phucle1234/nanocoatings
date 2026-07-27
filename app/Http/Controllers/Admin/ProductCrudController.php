@@ -48,7 +48,6 @@ class ProductCrudController extends CrudController
         if ($sectorId = (int) request()->query('sector_id')) {
             $this->crud->addClause('forDisplayBlock', $sectorId);
         }
-
         // Eager load bản dịch tiếng Việt để hiển thị tên
         $this->crud->addClause('with', ['translations' => function ($query) {
             $query->where('language', 'vi');
@@ -612,11 +611,12 @@ class ProductCrudController extends CrudController
         if ($request->has('document_file_id')) {
             $strippedRequest['document_file_id'] = $request->input('document_file_id') ?: null;
         }
+
         $strippedRequest['display_scopes'] = Product::normalizeDisplayScopes(
             $request->boolean('display_scopes_homepage'),
             $request->input('display_scopes_sector_ids', [])
         );
-
+        
         // Update the row in the db
         $item = $this->crud->update(
             $this->crud->getCurrentEntryId(),

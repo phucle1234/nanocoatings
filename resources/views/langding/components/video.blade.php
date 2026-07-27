@@ -7,15 +7,23 @@
         <div class="scroll-animate" data-animate="fadeInUp">
             @if(isset($introductionBanners['category']) && $introductionBanners['category'])
             @if (empty($isSectorPage))
-            <div class="title-with-line fw-500 fs-18 text-center text-light-red text-uppercase">
+            <!-- <div class="title-with-line fw-500 fs-18 text-center text-light-red text-uppercase">
                 {!! $introductionBanners['category']->category_name ?? __('messages.introduction') !!}
-            </div>
+            </div> -->
             @endif
             <h2 class="font-hanzel fs-32 fw-400 text-center mt-2 mb-0 text-white">
                 {{ $introductionBanners['category']->meta_title ?? __('messages.' . 'casu' . 'mina') }}
             </h2>
             <div class="video-intro fw-400 fs-14 text-center mt-3 mx-auto text-white">
-                {!! $introductionBanners['category']->meta_description ?? __('messages.introduction_description') !!} <a href="{{ route('about') }}" class="text-white fw-500">({{ __('messages.detail') }})</a>
+                {!! $introductionBanners['category']->meta_description ?? __('messages.introduction_description') !!} 
+                <!-- <a href="{{ route('about') }}" class="text-white fw-500">({{ __('messages.detail') }})</a> -->
+                <a class="text-white fw-500" href="{{ route('about') }}">
+                    <span>{{ __('messages.detail') }}</span>
+                    <svg width="11" height="12" viewBox="0 0 11 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M2.00109 1.37635L9.28725 0.738899M9.28725 0.738899L9.92471 8.02506M9.28725 0.738899L0.738909 10.9264"
+                            stroke="#ffffff" stroke-width="1.47765" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                </a>
             </div>
 
             @else
