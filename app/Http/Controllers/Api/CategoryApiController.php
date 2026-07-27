@@ -3,20 +3,20 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Services\ProductService;
-use App\Services\CategoryService;
-use App\Traits\HasImage;
 use App\Models\ProductCategory;
-use Illuminate\Http\Request;
+use App\Services\CategoryService;
+use App\Services\ProductService;
+use App\Traits\HasImage;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Collection;
 
 class CategoryApiController extends Controller
 {
     use HasImage;
 
     protected ProductService $productService;
+
     protected CategoryService $categoryService;
 
     public function __construct(ProductService $productService, CategoryService $categoryService)
@@ -27,9 +27,6 @@ class CategoryApiController extends Controller
 
     /**
      * Lấy danh sách tất cả danh mục sản phẩm
-     * 
-     * @param Request $request
-     * @return JsonResponse
      */
     public function index(Request $request): JsonResponse
     {
@@ -40,13 +37,13 @@ class CategoryApiController extends Controller
             $validator = Validator::make($request->all(), [
                 'parent_id' => 'nullable',
                 'is_featured' => ['nullable', function ($attribute, $value, $fail) {
-                    if (!in_array($value, [true, false, 1, 0, '1', '0', 'true', 'false', 'on', 'yes'], true)) {
-                        $fail('The ' . $attribute . ' field must be a boolean.');
+                    if (! in_array($value, [true, false, 1, 0, '1', '0', 'true', 'false', 'on', 'yes'], true)) {
+                        $fail('The '.$attribute.' field must be a boolean.');
                     }
                 }],
                 'include_children' => ['nullable', function ($attribute, $value, $fail) {
-                    if (!in_array($value, [true, false, 1, 0, '1', '0', 'true', 'false', 'on', 'yes'], true)) {
-                        $fail('The ' . $attribute . ' field must be a boolean.');
+                    if (! in_array($value, [true, false, 1, 0, '1', '0', 'true', 'false', 'on', 'yes'], true)) {
+                        $fail('The '.$attribute.' field must be a boolean.');
                     }
                 }],
             ]);
@@ -55,7 +52,7 @@ class CategoryApiController extends Controller
                 return response()->json([
                     'success' => false,
                     'message' => 'Dữ liệu không hợp lệ',
-                    'errors' => $validator->errors()
+                    'errors' => $validator->errors(),
                 ], 422);
             }
 
@@ -111,6 +108,7 @@ class CategoryApiController extends Controller
                             ->get()
                             ->map(function ($child) use ($currentLocale) {
                                 $childTranslation = $child->translations->firstWhere('language', $currentLocale);
+
                                 return [
                                     'id' => $child->id,
                                     'slug' => $childTranslation->slug ?? null,
@@ -132,23 +130,21 @@ class CategoryApiController extends Controller
             return response()->json([
                 'success' => true,
                 'data' => $categories,
-                'locale' => $currentLocale
+                'locale' => $currentLocale,
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Lỗi khi lấy danh sách danh mục',
-                'error' => config('app.debug') ? $e->getMessage() : null
+                'error' => config('app.debug') ? $e->getMessage() : null,
             ], 500);
         }
     }
 
     /**
      * Lấy chi tiết một danh mục sản phẩm
-     * 
-     * @param Request $request
-     * @param string|int $identifier Slug hoặc ID của danh mục
-     * @return JsonResponse
+     *
+     * @param  string|int  $identifier  Slug hoặc ID của danh mục
      */
     public function show(Request $request, $identifier): JsonResponse
     {
@@ -157,22 +153,22 @@ class CategoryApiController extends Controller
 
             $category = $this->categoryService->getCategoryBySlugOrId($identifier, $currentLocale);
 
-            if (!$category || !$category->is_active) {
+            if (! $category || ! $category->is_active) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Không tìm thấy danh mục'
+                    'message' => 'Không tìm thấy danh mục',
                 ], 404);
             }
 
             // Ensure translations and products_count are loaded
-            if (!$category->relationLoaded('translations')) {
+            if (! $category->relationLoaded('translations')) {
                 $category->load(['translations' => function ($q) use ($currentLocale) {
                     $q->where('language', $currentLocale);
                 }]);
             }
 
             // Load products_count if not already loaded
-            if (!isset($category->products_count)) {
+            if (! isset($category->products_count)) {
                 $category->loadCount('productsManyToMany as products_count');
             }
 
@@ -181,7 +177,7 @@ class CategoryApiController extends Controller
 
             // Load parent translations if parent exists
             if ($parent) {
-                if (!$parent->relationLoaded('translations')) {
+                if (! $parent->relationLoaded('translations')) {
                     $parent->load(['translations' => function ($q) use ($currentLocale) {
                         $q->where('language', $currentLocale);
                     }]);
@@ -202,6 +198,7 @@ class CategoryApiController extends Controller
                 ->get()
                 ->map(function ($child) use ($currentLocale) {
                     $childTranslation = $child->translations->firstWhere('language', $currentLocale);
+
                     return [
                         'id' => $child->id,
                         'slug' => $childTranslation->slug ?? null,
@@ -226,6 +223,7 @@ class CategoryApiController extends Controller
 
             $path = $pathCategories->map(function ($pathCategory) use ($currentLocale) {
                 $pathTranslation = $pathCategory->translations->firstWhere('language', $currentLocale);
+
                 return [
                     'id' => $pathCategory->id,
                     'code' => $pathCategory->code,
@@ -261,23 +259,21 @@ class CategoryApiController extends Controller
                     'products_count' => $this->categoryService->getProductsCount($category),
                     'meta_keywords' => $category->meta_keywords,
                 ],
-                'locale' => $currentLocale
+                'locale' => $currentLocale,
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Lỗi khi lấy chi tiết danh mục',
-                'error' => config('app.debug') ? $e->getMessage() : null
+                'error' => config('app.debug') ? $e->getMessage() : null,
             ], 500);
         }
     }
 
     /**
      * Lấy danh sách sản phẩm trong danh mục
-     * 
-     * @param Request $request
-     * @param string|int $identifier Slug hoặc ID của danh mục
-     * @return JsonResponse
+     *
+     * @param  string|int  $identifier  Slug hoặc ID của danh mục
      */
     public function products(Request $request, $identifier): JsonResponse
     {
@@ -286,8 +282,8 @@ class CategoryApiController extends Controller
 
             // Validate request
             $booleanRule = ['nullable', function ($attribute, $value, $fail) {
-                if (!in_array($value, [true, false, 1, 0, '1', '0', 'true', 'false', 'on', 'yes'], true)) {
-                    $fail('The ' . $attribute . ' field must be a boolean.');
+                if (! in_array($value, [true, false, 1, 0, '1', '0', 'true', 'false', 'on', 'yes'], true)) {
+                    $fail('The '.$attribute.' field must be a boolean.');
                 }
             }];
 
@@ -306,16 +302,16 @@ class CategoryApiController extends Controller
                 return response()->json([
                     'success' => false,
                     'message' => 'Dữ liệu không hợp lệ',
-                    'errors' => $validator->errors()
+                    'errors' => $validator->errors(),
                 ], 422);
             }
 
             $category = $this->categoryService->getCategoryBySlugOrId($identifier, $currentLocale);
 
-            if (!$category || !$category->is_active) {
+            if (! $category || ! $category->is_active) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Không tìm thấy danh mục'
+                    'message' => 'Không tìm thấy danh mục',
                 ], 404);
             }
 
@@ -370,24 +366,21 @@ class CategoryApiController extends Controller
                         'last_page' => $paginated->lastPage(),
                         'from' => $paginated->firstItem(),
                         'to' => $paginated->lastItem(),
-                    ]
+                    ],
                 ],
-                'locale' => $currentLocale
+                'locale' => $currentLocale,
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Lỗi khi lấy danh sách sản phẩm',
-                'error' => config('app.debug') ? $e->getMessage() : null
+                'error' => config('app.debug') ? $e->getMessage() : null,
             ], 500);
         }
     }
 
     /**
      * Lấy danh sách tất cả sản phẩm (không theo danh mục)
-     * 
-     * @param Request $request
-     * @return JsonResponse
      */
     public function allProducts(Request $request): JsonResponse
     {
@@ -396,8 +389,8 @@ class CategoryApiController extends Controller
 
             // Validate request
             $booleanRule = ['nullable', function ($attribute, $value, $fail) {
-                if (!in_array($value, [true, false, 1, 0, '1', '0', 'true', 'false', 'on', 'yes'], true)) {
-                    $fail('The ' . $attribute . ' field must be a boolean.');
+                if (! in_array($value, [true, false, 1, 0, '1', '0', 'true', 'false', 'on', 'yes'], true)) {
+                    $fail('The '.$attribute.' field must be a boolean.');
                 }
             }];
 
@@ -421,7 +414,7 @@ class CategoryApiController extends Controller
                 return response()->json([
                     'success' => false,
                     'message' => 'Dữ liệu không hợp lệ',
-                    'errors' => $validator->errors()
+                    'errors' => $validator->errors(),
                 ], 422);
             }
 
@@ -478,26 +471,23 @@ class CategoryApiController extends Controller
                         'last_page' => $paginated->lastPage(),
                         'from' => $paginated->firstItem(),
                         'to' => $paginated->lastItem(),
-                    ]
+                    ],
                 ],
-                'locale' => $currentLocale
+                'locale' => $currentLocale,
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Lỗi khi lấy danh sách sản phẩm',
-                'error' => config('app.debug') ? $e->getMessage() : null
+                'error' => config('app.debug') ? $e->getMessage() : null,
             ], 500);
         }
     }
 
-
     /**
      * Lấy danh sách sản phẩm nổi bật trong danh mục
-     * 
-     * @param Request $request
-     * @param string|int $identifier Slug hoặc ID của danh mục
-     * @return JsonResponse
+     *
+     * @param  string|int  $identifier  Slug hoặc ID của danh mục
      */
     public function featuredProducts(Request $request, $identifier): JsonResponse
     {
@@ -514,16 +504,16 @@ class CategoryApiController extends Controller
                 return response()->json([
                     'success' => false,
                     'message' => 'Dữ liệu không hợp lệ',
-                    'errors' => $validator->errors()
+                    'errors' => $validator->errors(),
                 ], 422);
             }
 
             $category = $this->categoryService->getCategoryBySlugOrId($identifier, $currentLocale);
 
-            if (!$category || !$category->is_active) {
+            if (! $category || ! $category->is_active) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Không tìm thấy danh mục'
+                    'message' => 'Không tìm thấy danh mục',
                 ], 404);
             }
 
@@ -531,7 +521,7 @@ class CategoryApiController extends Controller
 
             // ✅ Lọc sản phẩm nổi bật (is_featured = true)
             $filters = [
-                'is_featured' => true
+                'is_featured' => true,
             ];
 
             // Get products using service
@@ -565,24 +555,21 @@ class CategoryApiController extends Controller
                         'last_page' => $paginated->lastPage(),
                         'from' => $paginated->firstItem(),
                         'to' => $paginated->lastItem(),
-                    ]
+                    ],
                 ],
-                'locale' => $currentLocale
+                'locale' => $currentLocale,
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Lỗi khi lấy danh sách sản phẩm nổi bật',
-                'error' => config('app.debug') ? $e->getMessage() : null
+                'error' => config('app.debug') ? $e->getMessage() : null,
             ], 500);
         }
     }
 
     /**
      * Lấy danh sách danh mục nổi bật
-     * 
-     * @param Request $request
-     * @return JsonResponse
      */
     public function featured(Request $request): JsonResponse
     {
@@ -615,31 +602,30 @@ class CategoryApiController extends Controller
             return response()->json([
                 'success' => true,
                 'data' => $categories,
-                'locale' => $currentLocale
+                'locale' => $currentLocale,
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Lỗi khi lấy danh sách danh mục nổi bật',
-                'error' => config('app.debug') ? $e->getMessage() : null
+                'error' => config('app.debug') ? $e->getMessage() : null,
             ], 500);
         }
     }
 
     /**
      * Lấy danh sách danh mục gốc (không có parent)
-     * 
-     * @param Request $request
-     * @return JsonResponse
      */
     public function root(Request $request): JsonResponse
     {
         try {
             $currentLocale = app()->getLocale();
+            $sectorId = $request->query('sector_id') !== null ? (int) $request->query('sector_id') : null;
 
             $categories = ProductCategory::query()
                 ->active()
                 ->root()
+                ->forCategoryBlockDisplay($sectorId)
                 ->withCount('productsManyToMany as products_count')
                 ->withCount(['children as children_count' => function ($query) {
                     $query->where('is_active', true);
@@ -667,23 +653,21 @@ class CategoryApiController extends Controller
             return response()->json([
                 'success' => true,
                 'data' => $categories,
-                'locale' => $currentLocale
+                'locale' => $currentLocale,
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Lỗi khi lấy danh sách danh mục gốc',
-                'error' => config('app.debug') ? $e->getMessage() : null
+                'error' => config('app.debug') ? $e->getMessage() : null,
             ], 500);
         }
     }
 
     /**
      * Lấy danh sách danh mục con
-     * 
-     * @param Request $request
-     * @param string|int $identifier Slug hoặc ID của danh mục cha
-     * @return JsonResponse
+     *
+     * @param  string|int  $identifier  Slug hoặc ID của danh mục cha
      */
     public function children(Request $request, $identifier): JsonResponse
     {
@@ -692,19 +676,21 @@ class CategoryApiController extends Controller
 
             $category = $this->categoryService->getCategoryBySlugOrId($identifier, $currentLocale);
 
-            if (!$category || !$category->is_active) {
+            if (! $category || ! $category->is_active) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Không tìm thấy danh mục'
+                    'message' => 'Không tìm thấy danh mục',
                 ], 404);
             }
 
             // ✅ Dùng Service thay vì duplicate logic
-            $children = $this->categoryService->getChildCategories($category, $currentLocale);
+            $sectorId = $request->query('sector_id') !== null ? (int) $request->query('sector_id') : null;
+            $children = $this->categoryService->getChildCategories($category, $currentLocale, $sectorId);
 
             // Format cho API response
             $formattedChildren = $children->map(function ($child) use ($currentLocale) {
                 $translation = $child->translations->firstWhere('language', $currentLocale);
+
                 return [
                     'id' => $child->id,
                     'slug' => $child->category_translation_slug ?? $child->slug,
@@ -729,15 +715,15 @@ class CategoryApiController extends Controller
                         'slug' => $category->translations->firstWhere('language', $currentLocale)?->slug ?? null,
                         'name' => $category->translations->firstWhere('language', $currentLocale)->name ?? 'N/A',
                     ],
-                    'children' => $formattedChildren
+                    'children' => $formattedChildren,
                 ],
-                'locale' => $currentLocale
+                'locale' => $currentLocale,
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Lỗi khi lấy danh sách danh mục con',
-                'error' => config('app.debug') ? $e->getMessage() : null
+                'error' => config('app.debug') ? $e->getMessage() : null,
             ], 500);
         }
     }

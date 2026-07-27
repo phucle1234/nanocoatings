@@ -2,28 +2,53 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\View;
 use App\Http\Controllers\Api\CategoryApiController;
 use App\Http\Controllers\Api\PostCategoryApiController;
+use App\Models\Cart;
+use App\Services\SectorService;
 use App\Traits\CartManagement;
-use Illuminate\Http\Request;
 use App\Traits\HasBanners;
 use App\Traits\HasImage;
-use App\Services\PostCategoryService;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Cart;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\View;
+use Illuminate\Support\ServiceProvider;
+
 class ViewServiceProvider extends ServiceProvider
 {
-    use HasBanners, HasImage, CartManagement;
+    use CartManagement, HasBanners, HasImage;
+
+    /**
+     * The current sector's PostCategory id, if the page currently being
+     * rendered is a sector page (route `sectors.show`), otherwise null
+     * (homepage / any other page).
+     */
+    private function currentSectorId(): ?int
+    {
+        $route = request()->route();
+
+        if (! $route || $route->getName() !== 'sectors.show') {
+            return null;
+        }
+
+        $slug = $route->parameter('slug');
+        if (! $slug) {
+            return null;
+        }
+
+        $sector = app(SectorService::class)->findSectorBySlug($slug);
+
+        return $sector?->id;
+    }
 
     public function boot()
     {
         View::composer('langding.components.header', function ($view) {
             $categoryApiController = app(CategoryApiController::class);
             $postCategoryApiController = app(PostCategoryApiController::class);
-            $request = new Request();
+            $sectorId = $this->currentSectorId();
+            $request = new Request($sectorId !== null ? ['sector_id' => $sectorId] : []);
 
             // Lấy số lượng giỏ hàng
             if (Auth::check()) {
@@ -32,7 +57,6 @@ class ViewServiceProvider extends ServiceProvider
             } else {
                 $cartCount = $this->getCartTotalQuantity();
             }
-
 
             // Gọi API root categories
             $response = $categoryApiController->root($request);
@@ -83,7 +107,6 @@ class ViewServiceProvider extends ServiceProvider
                 }
             }
 
-
             $caseStudyPosts = [];
             $HeThongPhanPhoiCategories = [];
             $gioiThieuCasuminaPosts = [];
@@ -92,7 +115,7 @@ class ViewServiceProvider extends ServiceProvider
                 // Case Study: menu con = bài viết trong danh mục (không phải subcategory)
                 $caseStudyRequest = new Request(['per_page' => 50]);
                 $caseStudyResponse = $postCategoryApiController->posts($caseStudyRequest, 'case-study');
-                
+
                 $caseStudyData = json_decode($caseStudyResponse->getContent(), true);
                 if ($caseStudyData['success'] ?? false) {
                     $caseStudyPosts = $caseStudyData['data']['posts'] ?? [];
@@ -142,7 +165,7 @@ class ViewServiceProvider extends ServiceProvider
                     $gioiThieuCasuminaPosts = []; // ← luôn reset về array rỗng nếu thất bại
                 }
 
-                $truyenThongResponse = $postCategoryApiController->show(new Request(), 'truyen-thong');
+                $truyenThongResponse = $postCategoryApiController->show(new Request, 'truyen-thong');
                 $truyenThongData = json_decode($truyenThongResponse->getContent(), true);
 
                 if ($truyenThongData['success'] && isset($truyenThongData['data']['children'])) {
@@ -155,11 +178,11 @@ class ViewServiceProvider extends ServiceProvider
                 $truyenThongCategories = [];
             }
 
-            ///sản phầm
+            // /sản phầm
             $view->with('menuCategories', $categoriesWithChildren);
-            ///đăng kiêm
+            // /đăng kiêm
             $view->with('caseStudyPosts', $caseStudyPosts);
-            ///hệ thống phân phối
+            // /hệ thống phân phối
             $view->with('HeThongPhanPhoiCategories', $HeThongPhanPhoiCategories);
 
             $view->with('cartCount', $cartCount);
@@ -196,10 +219,10 @@ class ViewServiceProvider extends ServiceProvider
             $view->with('introductionBanners', $introductionBanners);
         });
 
-
         View::composer('langding.components.footer', function ($view) {
             $categoryApiController = app(CategoryApiController::class);
-            $request = new Request();
+            $sectorId = $this->currentSectorId();
+            $request = new Request($sectorId !== null ? ['sector_id' => $sectorId] : []);
 
             // Gọi API root categories
             $response = $categoryApiController->root($request);
@@ -233,14 +256,12 @@ class ViewServiceProvider extends ServiceProvider
                 $slug2 = 'distribution-system';
                 $slugQuocGia = 'international-distribution-system';
             }
-            $request = new Request();
+            $request = new Request;
             $postCategoryApiController = app(PostCategoryApiController::class);
-
 
             $parentCategoryResponse = $postCategoryApiController->show($request, $slug2);
             $parentCategoryData = json_decode($parentCategoryResponse->getContent(), true);
             $childCategories = $parentCategoryData['data']['children'] ?? [];
-
 
             $QuocGiaResponse = $postCategoryApiController->show($request, $slugQuocGia);
             $QuocGiaCategoryData = json_decode($QuocGiaResponse->getContent(), true);

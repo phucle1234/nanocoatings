@@ -10,17 +10,14 @@ class CategoryService
 {
     /**
      * Lấy category theo slug hoặc ID
-     * 
-     * @param string|int $identifier Slug hoặc ID của danh mục
-     * @param string $locale Locale hiện tại
+     *
+     * @param  string|int  $identifier  Slug hoặc ID của danh mục
+     * @param  string  $locale  Locale hiện tại
      * @return ProductCategory|null
      */
 
     /**
      * Lấy danh sách danh mục gốc (parent_id = null hoặc 0)
-     *
-     * @param string|null $locale
-     * @return Collection
      */
     public function getRootCategories(?string $locale = null, ?int $sectorId = null): Collection
     {
@@ -42,6 +39,7 @@ class CategoryService
                 return $this->formatCategoryForFrontend($category, $locale);
             });
     }
+
     public function getCategoryBySlugOrId($identifier, ?string $locale = null): ?ProductCategory
     {
         // Lấy locale từ app nếu không được truyền vào
@@ -79,9 +77,6 @@ class CategoryService
 
     /**
      * Lấy danh sách danh mục nổi bật
-     * 
-     * @param string|null $locale
-     * @return Collection
      */
     public function getFeaturedCategories(?string $locale = null, ?int $sectorId = null): Collection
     {
@@ -106,9 +101,6 @@ class CategoryService
 
     /**
      * Lấy tất cả danh mục đang hoạt động
-     * 
-     * @param string|null $locale
-     * @return Collection
      */
     public function getAllActiveCategories(?string $locale = null): Collection
     {
@@ -131,12 +123,7 @@ class CategoryService
 
     /**
      * Format category data cho frontend (Blade views)
-     * 
-     * @param ProductCategory $category
-     * @param string $locale
-     * @return object
      */
-
     private function formatCategoryForFrontend(ProductCategory $category, string $locale): object
     {
         $translation = $category->translations->firstWhere('language', $locale);
@@ -159,14 +146,11 @@ class CategoryService
 
     /**
      * Lấy products_count từ category (đảm bảo luôn là integer)
-     * 
-     * @param ProductCategory $category
-     * @return int
      */
     public function getProductsCount(ProductCategory $category): int
     {
         // Nếu chưa có products_count, load nó
-        if (!isset($category->products_count)) {
+        if (! isset($category->products_count)) {
             $category->loadCount('productsManyToMany as products_count');
         }
 
@@ -175,12 +159,10 @@ class CategoryService
 
     /**
      * Lấy danh sách danh mục con của một danh mục
-     * 
-     * @param int|ProductCategory $parentId Hoặc ProductCategory object
-     * @param string|null $locale
-     * @return Collection
+     *
+     * @param  int|ProductCategory  $parentId  Hoặc ProductCategory object
      */
-    public function getChildCategories($parentId, ?string $locale = null): Collection
+    public function getChildCategories($parentId, ?string $locale = null, ?int $sectorId = null): Collection
     {
         if ($locale === null) {
             $locale = app()->getLocale();
@@ -189,13 +171,13 @@ class CategoryService
         // Nếu là ProductCategory object, lấy id
         $parent = $parentId instanceof ProductCategory ? $parentId : ProductCategory::find($parentId);
 
-        if (!$parent) {
+        if (! $parent) {
             return collect();
         }
 
-
         return $parent->children()
             ->active()
+            ->forCategoryBlockDisplay($sectorId)
             ->withCount('productsManyToMany as products_count')
             ->withCount(['children as children_count' => function ($query) {
                 $query->where('is_active', true);
