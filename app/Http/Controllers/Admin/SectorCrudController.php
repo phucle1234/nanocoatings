@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\PostCategoryRequest;
 use App\Models\PostCategory;
+use App\Services\BlockAdminLinkResolver;
 use App\Services\SectorService;
 use App\Traits\HasSlugGenerator;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
@@ -12,18 +13,18 @@ use Prologue\Alerts\Facades\Alert;
 
 class SectorCrudController extends CrudController
 {
-    use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation {
         destroy as traitDestroy;
     }
+    use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
     use HasSlugGenerator;
 
     public function setup()
     {
         CRUD::setModel(PostCategory::class);
-        CRUD::setRoute(config('backpack.base.route_prefix') . '/sector');
+        CRUD::setRoute(config('backpack.base.route_prefix').'/sector');
         CRUD::setEntityNameStrings('ngành ứng dụng', 'Ngành ứng dụng');
     }
 
@@ -69,7 +70,7 @@ class SectorCrudController extends CrudController
             'function' => function ($entry) {
                 $url = route('admin.sector-layout.index', $entry->id);
 
-                return '<a href="' . e($url) . '" class="btn btn-sm btn-outline-primary"><i class="la la-sort"></i> Block</a>';
+                return '<a href="'.e($url).'" class="btn btn-sm btn-outline-primary"><i class="la la-sort"></i> Block</a>';
             },
             'escaped' => false,
         ]);
@@ -118,12 +119,25 @@ class SectorCrudController extends CrudController
         $languages = array_keys(config('languages.supported'));
         $entry = $this->crud->getCurrentEntry();
 
+        // Ensure this sector's own contact/social banner categories exist
+        // even if nobody has visited its public page yet, then surface
+        // direct edit links right here instead of hunting through the
+        // generic Banner Category list.
+        app(SectorService::class)->syncSectorResources($entry);
+        $contactSocialLinks = app(BlockAdminLinkResolver::class)->sectorContactSocialLinks($entry);
+
+        CRUD::field('contact_social_links')
+            ->type('view')
+            ->view('admin.sector.contact-social-links')
+            ->data(['links' => $contactSocialLinks])
+            ->tab('Chung');
+
         foreach ($languages as $lang) {
             $translation = $entry->translations()->where('language', $lang)->first();
             $imageUrls = $translation ? $translation->image_urls : [];
             $defaultValue = is_array($imageUrls) ? implode("\n", $imageUrls) : $imageUrls;
 
-            CRUD::modifyField('image_urls_' . $lang, [
+            CRUD::modifyField('image_urls_'.$lang, [
                 'default' => $defaultValue,
                 'data' => ['value' => $defaultValue],
             ]);
@@ -177,39 +191,39 @@ class SectorCrudController extends CrudController
         $languages = config('languages.supported');
 
         foreach ($languages as $lang => $langName) {
-            CRUD::field('header_' . $lang)
+            CRUD::field('header_'.$lang)
                 ->label('')
                 ->type('view')
                 ->view('vendor.backpack.crud.fields.language_header')
                 ->data(['language' => $langName, 'code' => $lang])
                 ->tab($langName);
 
-            CRUD::field('name_' . $lang)
+            CRUD::field('name_'.$lang)
                 ->label('Tên ngành')
                 ->type('text')
                 ->default($this->getTranslationValue($lang, 'name'))
                 ->tab($langName);
 
-            CRUD::field('image_urls_' . $lang)
+            CRUD::field('image_urls_'.$lang)
                 ->label('Ảnh đại diện (hub)')
                 ->type('view')
                 ->view('components.multiple-images')
                 ->default($this->getTranslationValue($lang, 'image_urls'))
                 ->tab($langName);
 
-            CRUD::field('description_' . $lang)
+            CRUD::field('description_'.$lang)
                 ->label('Mô tả ngắn')
                 ->type('summernote')
                 ->default($this->getTranslationValue($lang, 'description'))
                 ->tab($langName);
 
-            CRUD::field('meta_title_' . $lang)
+            CRUD::field('meta_title_'.$lang)
                 ->label('Meta title')
                 ->type('text')
                 ->default($this->getTranslationValue($lang, 'meta_title'))
                 ->tab($langName);
 
-            CRUD::field('meta_description_' . $lang)
+            CRUD::field('meta_description_'.$lang)
                 ->label('Meta description')
                 ->type('textarea')
                 ->default($this->getTranslationValue($lang, 'meta_description'))
@@ -219,13 +233,13 @@ class SectorCrudController extends CrudController
 
     protected function getTranslationValue(string $lang, string $field)
     {
-        if (!$this->crud->getCurrentEntry()) {
+        if (! $this->crud->getCurrentEntry()) {
             return '';
         }
 
         $translation = $this->crud->getCurrentEntry()->translations()->where('language', $lang)->first();
 
-        if (!$translation) {
+        if (! $translation) {
             return '';
         }
 
