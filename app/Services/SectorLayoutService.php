@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Post;
 use App\Models\PostCategory;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 
 class SectorLayoutService
 {
@@ -26,7 +27,7 @@ class SectorLayoutService
         $sectorService = app(SectorService::class);
         $sectorSlug = $sectorService->getSectorSlug($sector, 'vi');
 
-        return 'sector-' . $sectorSlug . '-layout';
+        return 'sector-'.$sectorSlug.'-layout';
     }
 
     public function getOrCreateLayoutCategory(PostCategory $sector): ?PostCategory
@@ -54,10 +55,10 @@ class SectorLayoutService
         ]);
 
         $category->handleTranslations([
-            'name_vi' => 'Sắp xếp trang - ' . $sectorNameVi,
-            'name_en' => 'Page layout - ' . $sectorNameEn,
+            'name_vi' => 'Sắp xếp trang - '.$sectorNameVi,
+            'name_en' => 'Page layout - '.$sectorNameEn,
             'slug_vi' => $slug,
-            'slug_en' => $slug . '-en',
+            'slug_en' => $slug.'-en',
             'description_vi' => 'Cấu hình block trang ngành',
             'description_en' => 'Sector page block configuration',
         ]);
@@ -68,50 +69,72 @@ class SectorLayoutService
     public function ensureDefaultBlocks(PostCategory $sector): void
     {
         $category = $this->getOrCreateLayoutCategory($sector);
-        if (!$category) {
+        if (! $category) {
             return;
         }
 
         foreach (config('sector_layout.blocks', []) as $blockDef) {
             $sectionType = $blockDef['section_type'];
 
-            $existing = Post::withoutGlobalScopes()
-                ->where('post_type', $this->postType())
-                ->where('section_type', $sectionType)
-                ->whereHas('postcategories', fn ($q) => $q->where('postcategories.id', $category->id))
-                ->first();
+            DB::transaction(function () use ($category, $sectionType, $blockDef, $sector) {
+                // Lock any matching rows for this (post_type, section_type, category)
+                // combination so concurrent requests for a never-visited-before sector
+                // can't both pass the "does it exist" check and each insert their own
+                // duplicate block — the second request blocks here until the first
+                // request's transaction commits, then sees the row it just created.
+                $matches = Post::withoutGlobalScopes()
+                    ->where('post_type', $this->postType())
+                    ->where('section_type', $sectionType)
+                    ->whereHas('postcategories', fn ($q) => $q->where('postcategories.id', $category->id))
+                    ->orderBy('id')
+                    ->lockForUpdate()
+                    ->get();
 
-            if ($existing) {
-                if (!$existing->postcategories()->where('postcategories.id', $category->id)->exists()) {
-                    $existing->postcategories()->attach($category->id, [
-                        'is_primary' => true,
-                        'sort_order' => $blockDef['sort_order'],
-                    ]);
+                $existing = $matches->first();
+
+                // Self-heal: if duplicates already exist (e.g. from a past race),
+                // keep the oldest and detach/delete the rest instead of leaving
+                // the same block rendered twice on the page.
+                foreach ($matches->slice(1) as $duplicate) {
+                    $duplicate->postcategories()->detach($category->id);
+                    if ($duplicate->postcategories()->count() === 0) {
+                        $duplicate->delete();
+                    }
                 }
-                continue;
-            }
 
-            $post = Post::withoutGlobalScopes()->create([
-                'post_type' => $this->postType(),
-                'section_type' => $sectionType,
-                'status' => 'published',
-                'is_active' => true,
-                'is_featured' => false,
-                'sort_order' => $blockDef['sort_order'],
-                'published_at' => now(),
-            ]);
+                if ($existing) {
+                    if (! $existing->postcategories()->where('postcategories.id', $category->id)->exists()) {
+                        $existing->postcategories()->attach($category->id, [
+                            'is_primary' => true,
+                            'sort_order' => $blockDef['sort_order'],
+                        ]);
+                    }
 
-            $post->postcategories()->attach($category->id, [
-                'is_primary' => true,
-                'sort_order' => $blockDef['sort_order'],
-            ]);
+                    return;
+                }
 
-            $post->handleTranslations([
-                'title_vi' => $blockDef['title_vi'],
-                'title_en' => $blockDef['title_en'],
-                'slug_vi' => 'sector-block-' . $sectionType . '-' . $sector->id,
-                'slug_en' => 'sector-block-' . $sectionType . '-' . $sector->id . '-en',
-            ]);
+                $post = Post::withoutGlobalScopes()->create([
+                    'post_type' => $this->postType(),
+                    'section_type' => $sectionType,
+                    'status' => 'published',
+                    'is_active' => true,
+                    'is_featured' => false,
+                    'sort_order' => $blockDef['sort_order'],
+                    'published_at' => now(),
+                ]);
+
+                $post->postcategories()->attach($category->id, [
+                    'is_primary' => true,
+                    'sort_order' => $blockDef['sort_order'],
+                ]);
+
+                $post->handleTranslations([
+                    'title_vi' => $blockDef['title_vi'],
+                    'title_en' => $blockDef['title_en'],
+                    'slug_vi' => 'sector-block-'.$sectionType.'-'.$sector->id,
+                    'slug_en' => 'sector-block-'.$sectionType.'-'.$sector->id.'-en',
+                ]);
+            });
         }
     }
 
@@ -123,7 +146,7 @@ class SectorLayoutService
         $this->ensureDefaultBlocks($sector);
 
         $category = $this->getOrCreateLayoutCategory($sector);
-        if (!$category) {
+        if (! $category) {
             return collect();
         }
 
@@ -155,7 +178,7 @@ class SectorLayoutService
 
         foreach ($items as $position => $item) {
             $id = (int) ($item['id'] ?? 0);
-            if (!in_array($id, $allowedIds, true)) {
+            if (! in_array($id, $allowedIds, true)) {
                 continue;
             }
 
@@ -164,7 +187,7 @@ class SectorLayoutService
                 ->where('post_type', $this->postType())
                 ->update([
                     'sort_order' => $position + 1,
-                    'is_active' => !empty($item['is_active']),
+                    'is_active' => ! empty($item['is_active']),
                 ]);
         }
     }
@@ -172,6 +195,6 @@ class SectorLayoutService
     public function blockViewExists(string $sectionType): bool
     {
         return in_array($sectionType, $this->allowedSectionTypes(), true)
-            && view()->exists('langding.home.blocks.' . $sectionType);
+            && view()->exists('langding.home.blocks.'.$sectionType);
     }
 }
