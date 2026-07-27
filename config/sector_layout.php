@@ -17,6 +17,9 @@ return [
         'partner' => 'partner-banner',
         'media' => 'home-media',
         'footer' => 'footer-main',
+        'footer_contact' => 'footer-lien-he',
+        'footer_about' => 'footer-ve-nanocoatings',
+        'footer_social' => 'ket-noi-voi-casumina',
     ],
 
     'blocks' => [

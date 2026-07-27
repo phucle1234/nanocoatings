@@ -20,11 +20,10 @@ class ViewServiceProvider extends ServiceProvider
     use CartManagement, HasBanners, HasImage;
 
     /**
-     * The current sector's PostCategory id, if the page currently being
-     * rendered is a sector page (route `sectors.show`), otherwise null
-     * (homepage / any other page).
+     * The current sector, if the page currently being rendered is a sector
+     * page (route `sectors.show`), otherwise null (homepage / any other page).
      */
-    private function currentSectorId(): ?int
+    private function currentSector(): ?\App\Models\PostCategory
     {
         $route = request()->route();
 
@@ -37,9 +36,34 @@ class ViewServiceProvider extends ServiceProvider
             return null;
         }
 
-        $sector = app(SectorService::class)->findSectorBySlug($slug);
+        return app(SectorService::class)->findSectorBySlug($slug);
+    }
 
-        return $sector?->id;
+    /**
+     * The current sector's PostCategory id, if the page currently being
+     * rendered is a sector page (route `sectors.show`), otherwise null
+     * (homepage / any other page).
+     */
+    private function currentSectorId(): ?int
+    {
+        return $this->currentSector()?->id;
+    }
+
+    /**
+     * Resolve a banner category slug for the given literal (homepage) key,
+     * scoped to the current sector when one is active — e.g. 'footer-lien-he'
+     * becomes 'sector-vat-lieu-go-footer-lien-he' on that sector's page.
+     * Falls back to the literal slug on the homepage / any non-sector page.
+     */
+    private function sectorAwareBannerSlug(string $literalSlug): string
+    {
+        $sector = $this->currentSector();
+
+        if (! $sector) {
+            return $literalSlug;
+        }
+
+        return app(SectorService::class)->getBannerCategorySlug($sector, $literalSlug);
     }
 
     public function boot()
@@ -239,9 +263,9 @@ class ViewServiceProvider extends ServiceProvider
             if ($footerMainCategory) {
                 $footerMainCategory->image = $footerMain['category_bg_image'] ?? null;
             }
-            $lienHe = $this->getBannersBySlug('footer-lien-he');
-            $veCasumina = $this->getBannersBySlug('footer-ve-nanocoatings', false);
-            $ketNoiVoiCasumina = $this->getBannersBySlug('ket-noi-voi-casumina');
+            $lienHe = $this->getBannersBySlug($this->sectorAwareBannerSlug('footer-lien-he'));
+            $veCasumina = $this->getBannersBySlug($this->sectorAwareBannerSlug('footer-ve-nanocoatings'), false);
+            $ketNoiVoiCasumina = $this->getBannersBySlug($this->sectorAwareBannerSlug('ket-noi-voi-casumina'));
             $view->with('lienHe', $lienHe);
             $view->with('veCasumina', $veCasumina);
             $view->with('ketNoiVoiCasumina', $ketNoiVoiCasumina);
