@@ -66,6 +66,28 @@ class ViewServiceProvider extends ServiceProvider
         return app(SectorService::class)->getBannerCategorySlug($sector, $literalSlug);
     }
 
+    /**
+     * Phone-number lines from the current sector's own contact-info banner
+     * category (falls back to the homepage's own on non-sector pages) —
+     * reused by both the header hotline display and the floating sidebar's
+     * "Liên hệ" box, so a sector's phone number is no longer hardcoded HTML
+     * shared identically across every page.
+     *
+     * @return \Illuminate\Support\Collection<int, object>
+     */
+    private function contactPhoneNumbers(): \Illuminate\Support\Collection
+    {
+        $lienHe = $this->getBannersBySlug($this->sectorAwareBannerSlug('footer-lien-he'));
+
+        return collect($lienHe['banners'] ?? [])
+            ->filter(function ($banner) {
+                $image = $banner->image ?? '';
+
+                return str_contains($image, 'telephone') || str_contains($image, 'phone-call') || str_contains($image, '/phone');
+            })
+            ->values();
+    }
+
     public function boot()
     {
         View::composer('langding.components.header', function ($view) {
@@ -214,6 +236,17 @@ class ViewServiceProvider extends ServiceProvider
             $view->with('gioiThieuCasuminaPosts', $gioiThieuCasuminaPosts);
 
             $view->with('truyenThongCategories', $truyenThongCategories);
+
+            $view->with('headerPhones', $this->contactPhoneNumbers());
+        });
+
+        // Floating sidebar (langding.index itself, not a sub-partial) — same
+        // sector-aware phone numbers as the header, for the "Liên hệ" box.
+        View::composer('langding.index', function ($view) {
+            if ($view->offsetExists('sidebarPhones')) {
+                return;
+            }
+            $view->with('sidebarPhones', $this->contactPhoneNumbers());
         });
 
         // Promotion banners - Dùng chung cho nhiều trang

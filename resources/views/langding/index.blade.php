@@ -457,8 +457,9 @@
                                     </svg>
                                 </span>
                                 <div class="item-box-phone-numbers d-flex flex-column">
-                                    <a href="tel:0987949494" class="item-box-phone-number font-hanzel">(+84) 987 94 94 94</a>
-                                    <a href="tel:01426529" class="item-box-phone-number font-hanzel">(+358) 1426 529</a>
+                                    @foreach ($sidebarPhones ?? [] as $phone)
+                                        <a href="tel:{{ preg_replace('/[^0-9+]/', '', $phone->title) }}" class="item-box-phone-number font-hanzel">{{ $phone->title }}</a>
+                                    @endforeach
                                 </div>
                             </div>
                             <div
@@ -507,7 +508,7 @@
                                         </defs>
                                     </svg>
                                 </a>
-                                <a class="d-flex align-items-center justify-content-center" href="tel:0987949494">
+                                <a class="d-flex align-items-center justify-content-center" href="tel:{{ isset($sidebarPhones) && $sidebarPhones->isNotEmpty() ? preg_replace('/[^0-9+]/', '', $sidebarPhones->first()->title) : '' }}">
                                     <svg width="48" height="48" viewBox="0 0 48 48" fill="none"
                                         xmlns="http://www.w3.org/2000/svg">
                                         <circle data-figma-bg-blur-radius="15" cx="24" cy="24" r="23.5"

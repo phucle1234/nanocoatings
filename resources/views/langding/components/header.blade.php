@@ -59,8 +59,9 @@
                             </svg>
                         </span>
                         <div class="menu-hot-phone-numbers d-none d-sm-flex flex-column">
-                            <a href="tel:0987949494" class="menu-hot-phone-number font-hanzel">(+84) 987 94 94 94 </a>
-                            <a href="tel:01426529" class="menu-hot-phone-number font-hanzel">(+358) 1426 529</a>
+                            @foreach ($headerPhones ?? [] as $phone)
+                                <a href="tel:{{ preg_replace('/[^0-9+]/', '', $phone->title) }}" class="menu-hot-phone-number font-hanzel">{{ $phone->title }}</a>
+                            @endforeach
                         </div>
                     </div>
                     <div class="menu-hot-phone-popup d-sm-none" x-show="openHotline" @click.away="openHotline = false"
@@ -72,20 +73,15 @@
                         x-transition:leave-end="opacity-0 transform scale-95" style="display: none;">
                         <div class="menu-hot-phone-popup-title">{{ __('messages.hotline') }}</div>
                         <div class="menu-hot-phone-popup-body">
-                            <a href="tel:0987949494" class="menu-hot-phone-option">
-                                <span class="menu-hot-phone-option-icon" aria-hidden="true">
-                                    <i class="bi bi-telephone-fill"></i>
-                                </span>
-                                <span class="menu-hot-phone-option-number">(+84) 987 94 94 94</span>
-                                <i class="bi bi-chevron-right menu-hot-phone-option-arrow" aria-hidden="true"></i>
-                            </a>
-                            <a href="tel:01426529" class="menu-hot-phone-option">
-                                <span class="menu-hot-phone-option-icon" aria-hidden="true">
-                                    <i class="bi bi-telephone-fill"></i>
-                                </span>
-                                <span class="menu-hot-phone-option-number">(+358) 1426 529</span>
-                                <i class="bi bi-chevron-right menu-hot-phone-option-arrow" aria-hidden="true"></i>
-                            </a>
+                            @foreach ($headerPhones ?? [] as $phone)
+                                <a href="tel:{{ preg_replace('/[^0-9+]/', '', $phone->title) }}" class="menu-hot-phone-option">
+                                    <span class="menu-hot-phone-option-icon" aria-hidden="true">
+                                        <i class="bi bi-telephone-fill"></i>
+                                    </span>
+                                    <span class="menu-hot-phone-option-number">{{ $phone->title }}</span>
+                                    <i class="bi bi-chevron-right menu-hot-phone-option-arrow" aria-hidden="true"></i>
+                                </a>
+                            @endforeach
                         </div>
                     </div>
                 </div>
