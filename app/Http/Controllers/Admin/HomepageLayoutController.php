@@ -15,8 +15,7 @@ class HomepageLayoutController extends Controller
     public function __construct(
         protected HomepageLayoutService $homepageLayoutService,
         protected BlockAdminLinkResolver $blockAdminLinkResolver
-    ) {
-    }
+    ) {}
 
     public function index(): View
     {
@@ -29,8 +28,10 @@ class HomepageLayoutController extends Controller
 
     public function updateOrder(Request $request): RedirectResponse
     {
+        $blockCount = count(config('homepage_layout.blocks', []));
+
         $validated = $request->validate([
-            'blocks' => ['required', 'array', 'size:9'],
+            'blocks' => ['required', 'array', 'size:'.$blockCount],
             'blocks.*.id' => ['required', 'integer'],
             'blocks.*.is_active' => ['nullable', 'boolean'],
         ]);

@@ -175,7 +175,8 @@ window.dealerApp = {
       speed: 300,
       centerPadding: "0px",
       infinite: true,
-      autoplaySpeed: 5000,
+      autoplay: true,
+      autoplaySpeed: 3000,
       responsive: [
         {
           breakpoint: 576,
