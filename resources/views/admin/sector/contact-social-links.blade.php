@@ -1,5 +1,5 @@
 @php
-    $links = $field['links'] ?? [];
+    $links = $links ?? $field['links'] ?? $field['data']['links'] ?? [];
     $items = [
         'footer_contact' => 'Liên hệ (địa chỉ, SĐT, email)',
         'footer_about' => 'Về Nanocoatings',
