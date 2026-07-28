@@ -11,9 +11,10 @@ use Illuminate\Support\Facades\Log;
 /**
  * Seeds the 6 wood-industry ("Vật liệu gỗ") articles from
  * 00-Sitemap-va-Ke-hoach-Noi-dung.docx + noidungbaiviet/*.docx into the
- * sector's own news category (sector-vat-lieu-go-news-chung), auto-created
- * if missing. Idempotent: re-running updates existing posts (matched by
- * slug) instead of duplicating them.
+ * sector's own news hub (sector-vat-lieu-go-news), split into 3 topic
+ * categories per the sitemap plan's grouping (Kỹ thuật / Giới thiệu sản
+ * phẩm / Giải pháp), auto-created if missing. Idempotent: re-running
+ * updates existing posts (matched by slug) instead of duplicating them.
  *
  * IMPORTANT — do not publish as-is. Every article still contains literal
  * placeholders: [THƯƠNG HIỆU], [TÊN SẢN PHẨM], [DÒNG TRONG SUỐT],
@@ -45,37 +46,86 @@ class WoodIndustryArticlesSeeder extends Seeder
         // an admin opens the sector's layout page).
         $sectorService->syncNewsCategories($sector);
 
-        $newsHubSlug = $sectorService->getNewsHubSlug($sector, 'vi');
-        $childCategorySlugVi = $newsHubSlug.'-chung';
+        $hub = $sectorService->getOrCreateNewsHub($sector);
 
-        $newsCategory = PostCategory::withoutGlobalScopes()
-            ->whereHas('translations', fn ($q) => $q->where('slug', $childCategorySlugVi))
-            ->first();
-
-        if (! $newsCategory) {
-            // Sector already had a news hub with other, non-default
-            // children — fall back to attaching directly to the hub itself.
-            $newsCategory = PostCategory::withoutGlobalScopes()
-                ->whereHas('translations', fn ($q) => $q->where('slug', $newsHubSlug))
-                ->first();
-        }
-
-        if (! $newsCategory) {
-            Log::warning('WoodIndustryArticlesSeeder: could not resolve or create a news category for the sector — skipped.');
-            $this->command?->error('Không tạo được danh mục tin tức cho ngành. Vào trang layout của ngành 1 lần rồi chạy lại seeder.');
+        if (! $hub) {
+            Log::warning('WoodIndustryArticlesSeeder: could not resolve or create the news hub for the sector — skipped.');
+            $this->command?->error('Không tạo được hub tin tức cho ngành. Vào trang layout của ngành 1 lần rồi chạy lại seeder.');
 
             return;
         }
 
+        $hubSlugVi = $sectorService->getNewsHubSlug($sector, 'vi');
+
+        // The sitemap plan (00-Sitemap-va-Ke-hoach-Noi-dung.docx, section 2)
+        // groups the 6 articles into 3 editorial topics — mirror that as 3
+        // real news sub-categories so the "media" block's tab UI shows them
+        // separately instead of one flat feed.
+        $categories = [
+            'ky-thuat' => $this->ensureNewsSubCategory($hub, $hubSlugVi, 'ky-thuat', 'Kỹ thuật', 'Technical', 1),
+            'gioi-thieu-san-pham' => $this->ensureNewsSubCategory($hub, $hubSlugVi, 'gioi-thieu-san-pham', 'Giới thiệu sản phẩm', 'Product introduction', 2),
+            'giai-phap' => $this->ensureNewsSubCategory($hub, $hubSlugVi, 'giai-phap', 'Giải pháp', 'Solutions', 3),
+        ];
+
         foreach ($this->articles() as $article) {
-            $this->seedArticle($newsCategory->id, $article);
+            $this->seedArticle($categories[$article['group']]->id, $article);
         }
 
-        $this->command?->info('Đã seed 6 bài viết ngành Vật liệu gỗ vào category id '.$newsCategory->id.' (status: draft — cần thay placeholder rồi mới publish).');
+        // The generic "-chung" placeholder child was auto-created by
+        // syncNewsCategories() above before any of our 3 topic categories
+        // existed. All 6 posts now live in their topic category instead, so
+        // deactivate it — media.blade.php renders one tab per active child
+        // regardless of post count, and would otherwise show a permanently
+        // empty "Tin tức chung" tab.
+        $this->deactivateEmptyChungCategory($hubSlugVi);
+
+        $this->command?->info('Đã seed 6 bài viết ngành Vật liệu gỗ vào 3 danh mục (Kỹ thuật / Giới thiệu sản phẩm / Giải pháp) dưới hub id '.$hub->id.' (status: draft — cần thay placeholder rồi mới publish).');
+    }
+
+    protected function ensureNewsSubCategory(PostCategory $hub, string $hubSlugVi, string $slugSuffix, string $nameVi, string $nameEn, int $sortOrder): PostCategory
+    {
+        $slugVi = $hubSlugVi.'-'.$slugSuffix;
+
+        $category = PostCategory::withoutGlobalScopes()
+            ->whereHas('translations', fn ($q) => $q->where('slug', $slugVi))
+            ->first();
+
+        if (! $category) {
+            $category = PostCategory::withoutGlobalScopes()->create([
+                'parent_id' => $hub->id,
+                'is_active' => true,
+                'is_featured' => false,
+                'is_banner' => false,
+                'is_sector' => false,
+                'sort_order' => $sortOrder,
+            ]);
+
+            $category->handleTranslations([
+                'name_vi' => $nameVi,
+                'name_en' => $nameEn,
+                'slug_vi' => $slugVi,
+                'slug_en' => $slugVi.'-en',
+            ]);
+        }
+
+        return $category;
+    }
+
+    protected function deactivateEmptyChungCategory(string $hubSlugVi): void
+    {
+        $chungSlugVi = $hubSlugVi.'-chung';
+
+        $chung = PostCategory::withoutGlobalScopes()
+            ->whereHas('translations', fn ($q) => $q->where('slug', $chungSlugVi))
+            ->first();
+
+        if ($chung && $chung->is_active && $chung->posts()->count() === 0) {
+            $chung->update(['is_active' => false]);
+        }
     }
 
     /**
-     * @param  array{slug: string, title: string, excerpt: string, meta_title: string, meta_description: string, content: string}  $article
+     * @param  array{slug: string, title: string, excerpt: string, meta_title: string, meta_description: string, content: string, group: string}  $article
      */
     protected function seedArticle(int $categoryId, array $article): void
     {
@@ -91,9 +141,12 @@ class WoodIndustryArticlesSeeder extends Seeder
             ]);
         }
 
-        if (! $post->postcategories()->where('postcategories.id', $categoryId)->exists()) {
-            $post->postcategories()->attach($categoryId, ['is_primary' => true, 'sort_order' => 0]);
-        }
+        // sync() (not attach()) — this seeder is the single source of truth
+        // for which category an article belongs to. Without it, re-running
+        // after moving an article between topic categories (or after an
+        // earlier version of this seeder attached everything to the old
+        // flat "-chung" category) would leave the post attached to both.
+        $post->postcategories()->sync([$categoryId => ['is_primary' => true, 'sort_order' => 0]]);
 
         $post->handleTranslations([
             'title_vi' => $article['title'],
@@ -335,6 +388,7 @@ HTML;
         ]);
 
         return [
+            'group' => 'ky-thuat',
             'slug' => 'vi-sao-lop-phu-nano-bao-ve-duoc-go-ma-son-tao-mang-thi-khong',
             'title' => 'Vì sao lớp phủ nano bảo vệ được gỗ mà sơn tạo màng thì không',
             'excerpt' => 'Sơn PU, vecni và dầu lau tạo màng kín và nhốt ẩm trong gỗ. Lớp phủ nano thẩm thấu vào thớ gỗ, kháng UV và vẫn cho gỗ thở được.',
@@ -523,6 +577,7 @@ HTML;
         ]);
 
         return [
+            'group' => 'ky-thuat',
             'slug' => 'ho-so-thong-so-ky-thuat-tieu-chuan-kiem-dinh-lop-phu-nano-cho-go',
             'title' => 'Hồ sơ thông số kỹ thuật & tiêu chuẩn kiểm định lớp phủ nano cho gỗ',
             'excerpt' => 'Bảng đầy đủ thông số hiệu năng, độ dày màng, định mức, bảo quản và tiêu chuẩn chứng nhận — dùng làm tài liệu bán hàng B2B.',
@@ -735,6 +790,7 @@ HTML;
         ]);
 
         return [
+            'group' => 'ky-thuat',
             'slug' => 'quy-trinh-thi-cong-chuan-tu-chuan-bi-be-mat-den-nghiem-thu-qc',
             'title' => 'Quy trình thi công chuẩn: từ chuẩn bị bề mặt đến nghiệm thu QC',
             'excerpt' => '7 bước thi công chuẩn cho đội thợ: chuẩn bị bề mặt, điều kiện môi trường, thiết bị, thời gian khô, xử lý sự cố và nghiệm thu QC.',
@@ -943,6 +999,7 @@ HTML;
         ]);
 
         return [
+            'group' => 'gioi-thieu-san-pham',
             'slug' => 'thuong-hieu-cho-vat-lieu-go-bao-ve-tu-ben-trong-tho-go',
             'title' => '[THƯƠNG HIỆU] cho vật liệu gỗ: bảo vệ từ bên trong thớ gỗ',
             'excerpt' => 'Dòng phủ nano cho gỗ nội và ngoại thất — thẩm thấu vào thớ gỗ, kháng UV, giữ vân gỗ tự nhiên, gỗ vẫn thở được.',
@@ -1102,6 +1159,7 @@ HTML;
         ]);
 
         return [
+            'group' => 'giai-phap',
             'slug' => 'go-ngoai-troi-vi-sao-moi-lop-son-deu-bong-va-giai-phap-nam-o-dau',
             'title' => 'Gỗ ngoài trời: vì sao mọi lớp sơn đều bong, và giải pháp nằm ở đâu',
             'excerpt' => 'Sàn deck bạc màu, lan can bong sơn, facade nứt chân chim — nguyên nhân và giải pháp phủ nano kháng UV cho gỗ ngoài trời, giữ cho gỗ thở được.',
@@ -1298,6 +1356,7 @@ HTML;
         ]);
 
         return [
+            'group' => 'giai-phap',
             'slug' => 'giai-phap-nano-theo-tung-hang-muc-go-ngoai-troi',
             'title' => 'Giải pháp nano theo từng hạng mục gỗ ngoài trời',
             'excerpt' => 'Sàn deck, facade gỗ, lan can, cầu cảng, đình chùa, di tích — mỗi hạng mục gỗ ngoài trời có một bài toán riêng và cấu hình phủ nano tương ứng.',
