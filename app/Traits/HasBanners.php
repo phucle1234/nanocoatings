@@ -52,7 +52,8 @@ trait HasBanners
                 'pct_fallback.image_urls as category_image_urls_fallback',
                 DB::raw('COALESCE(pct_current.meta_title, pct_fallback.meta_title) as meta_title'),
                 DB::raw('COALESCE(pct_current.meta_description, pct_fallback.meta_description) as meta_description'),
-                DB::raw('COALESCE(pct_current.slug, pct_fallback.slug) as slug')
+                DB::raw('COALESCE(pct_current.slug, pct_fallback.slug) as slug'),
+                DB::raw('COALESCE(pct_current.url, pct_fallback.url) as url')
             )
             ->first();
 

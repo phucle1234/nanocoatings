@@ -17,7 +17,7 @@
             <div class="video-intro fw-400 fs-14 text-center mt-3 mx-auto text-white">
                 {!! $introductionBanners['category']->meta_description ?? __('messages.introduction_description') !!} 
                 <!-- <a href="{{ route('about') }}" class="text-white fw-500">({{ __('messages.detail') }})</a> -->
-                <a class="text-white fw-500" href="{{ route('about') }}">
+                <a class="text-white fw-500" href="{{ ($introductionBanners['category']->url ?? null) ?: route('about') }}">
                     <span>{{ __('messages.detail') }}</span>
                     <svg width="11" height="12" viewBox="0 0 11 12" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M2.00109 1.37635L9.28725 0.738899M9.28725 0.738899L9.92471 8.02506M9.28725 0.738899L0.738909 10.9264"

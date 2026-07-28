@@ -79,7 +79,40 @@ class WoodIndustryArticlesSeeder extends Seeder
         // empty "Tin tức chung" tab.
         $this->deactivateEmptyChungCategory($hubSlugVi);
 
+        // Sitemap plan section "Vị trí hiển thị cụ thể trên trang
+        // /applications/wood-materials": Khối 2 (video-introduction block)
+        // "Chi tiết" button → KT-01; Khối 3 (bestseller block) heading gets
+        // a "Tìm hiểu thêm" link → SP-01. Both blocks already read an
+        // optional per-category CTA url (see HasBanners::getBannersBySlug()
+        // + components/block-banner-heading.blade.php) — just wire it here
+        // instead of requiring a manual admin step on every deploy.
+        $kt01 = $this->kt01();
+        $sp01 = $this->sp01();
+        $this->setCategoryCtaUrl($sectorService, $sector, 'video-introduction', $kt01['slug'], $kt01['slug_en']);
+        $this->setCategoryCtaUrl($sectorService, $sector, 'home-bestseller', $sp01['slug'], $sp01['slug_en']);
+
         $this->command?->info('Đã seed 6 bài viết ngành Vật liệu gỗ vào 3 danh mục (Kỹ thuật / Giới thiệu sản phẩm / Giải pháp) dưới hub id '.$hub->id.' (status: draft — cần thay placeholder rồi mới publish).');
+    }
+
+    /**
+     * Points an already-provisioned sector banner category's "Chi tiết"/CTA
+     * link at one of the 6 seeded articles instead of the generic default
+     * (e.g. video-introduction's button used to hardcode /about).
+     */
+    protected function setCategoryCtaUrl(SectorService $sectorService, PostCategory $sector, string $bannerKey, string $slugVi, string $slugEn): void
+    {
+        $categorySlugVi = $sectorService->getBannerCategorySlug($sector, $bannerKey, 'vi');
+
+        $category = PostCategory::withoutGlobalScopes()
+            ->whereHas('translations', fn ($q) => $q->where('slug', $categorySlugVi))
+            ->first();
+
+        if (! $category) {
+            return;
+        }
+
+        $category->translations()->where('language', 'vi')->update(['url' => url('/post/'.$slugVi)]);
+        $category->translations()->where('language', 'en')->update(['url' => url('/post/'.$slugEn)]);
     }
 
     protected function ensureNewsSubCategory(PostCategory $hub, string $hubSlugVi, string $slugSuffix, string $nameVi, string $nameEn, int $sortOrder): PostCategory
