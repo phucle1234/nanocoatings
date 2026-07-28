@@ -108,6 +108,13 @@ class SectorController extends Controller
             && ! $request->session()->get('locale_manually_selected')
         ) {
             App::setLocale($defaultLocale);
+
+            // Pagination and post-detail links load as brand new requests with no
+            // locale route prefix, so SetLocale falls back to whatever is in the
+            // session. Persist here too, or the very next request flips back to
+            // the previous locale (usually the site default) and slug lookups
+            // scoped to that locale start 404/redirecting.
+            $request->session()->put('locale', $defaultLocale);
         }
 
         return app()->getLocale();
