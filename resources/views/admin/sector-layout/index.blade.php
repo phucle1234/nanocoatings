@@ -42,7 +42,16 @@
                                             <i class="la la-image"></i> Ảnh nền &amp; tiêu đề
                                         </a>
                                     @endif
-                                    @if (!empty($blockContentLinks[$block->section_type] ?? null))
+                                    @if ($block->section_type === 'media')
+                                        @foreach ($mediaCategoryButtons ?? [] as $mediaButton)
+                                            <a href="{{ $mediaButton['url'] }}"
+                                                class="btn btn-sm btn-outline-primary text-nowrap"
+                                                target="_blank" rel="noopener noreferrer"
+                                                title="Mở quản lý bài viết của danh mục &quot;{{ $mediaButton['label'] }}&quot; trong tab mới">
+                                                <i class="la la-external-link"></i> {{ $mediaButton['label'] }}
+                                            </a>
+                                        @endforeach
+                                    @elseif (!empty($blockContentLinks[$block->section_type] ?? null))
                                         <a href="{{ $blockContentLinks[$block->section_type] }}"
                                             class="btn btn-sm btn-outline-primary text-nowrap"
                                             target="_blank" rel="noopener noreferrer"

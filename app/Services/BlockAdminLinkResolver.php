@@ -56,6 +56,46 @@ class BlockAdminLinkResolver
     }
 
     /**
+     * One "Nội dung" button per active news category under this sector's
+     * news hub (Kỹ thuật / Giới thiệu sản phẩm / Giải pháp / ...), instead
+     * of a single link to whichever category happens to sort first. Count
+     * and labels follow whatever news categories actually exist for the
+     * sector — nothing hardcoded.
+     *
+     * @return array<int, array{label: string, url: string}>
+     */
+    public function sectorMediaCategoryButtons(PostCategory $sector): array
+    {
+        $sectorService = app(SectorService::class);
+        $sectorService->syncNewsCategories($sector);
+        $hub = $sectorService->getOrCreateNewsHub($sector);
+
+        if (! $hub) {
+            return [];
+        }
+
+        $locale = app()->getLocale();
+
+        return PostCategory::withoutGlobalScopes()
+            ->where('parent_id', $hub->id)
+            ->where('is_active', true)
+            ->with('translations')
+            ->orderBy('sort_order')
+            ->orderBy('id')
+            ->get()
+            ->map(function (PostCategory $category) use ($locale) {
+                $translation = $category->translations->firstWhere('language', $locale)
+                    ?? $category->translations->first();
+
+                return [
+                    'label' => $translation->name ?? (string) $category->id,
+                    'url' => backpack_url('post?category_id='.$category->id),
+                ];
+            })
+            ->all();
+    }
+
+    /**
      * Quick links to this sector's own contact-info / about / social-links
      * banner categories (footer_contact / footer_about / footer_social) —
      * these aren't page "blocks" (not in sector_layout.blocks), just banner

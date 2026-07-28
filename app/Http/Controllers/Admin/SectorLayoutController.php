@@ -33,6 +33,7 @@ class SectorLayoutController extends Controller
             ?? 'Ngành';
         $blockContentLinks = $this->blockAdminLinkResolver->sectorBlockLinks($sector);
         $blockBannerLinks = $this->blockAdminLinkResolver->sectorBannerMetaLinks($sector);
+        $mediaCategoryButtons = $this->blockAdminLinkResolver->sectorMediaCategoryButtons($sector);
 
         return view('admin.sector-layout.index', compact(
             'blocks',
@@ -40,7 +41,8 @@ class SectorLayoutController extends Controller
             'sector',
             'sectorName',
             'blockContentLinks',
-            'blockBannerLinks'
+            'blockBannerLinks',
+            'mediaCategoryButtons'
         ));
     }
 
