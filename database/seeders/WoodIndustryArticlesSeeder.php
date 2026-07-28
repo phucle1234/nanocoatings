@@ -101,16 +101,26 @@ class WoodIndustryArticlesSeeder extends Seeder
             'excerpt_vi' => $article['excerpt'],
             'meta_title_vi' => $article['meta_title'],
             'meta_description_vi' => $article['meta_description'],
+            'title_en' => $article['title_en'],
+            'content_en' => $article['content_en'],
+            'excerpt_en' => $article['excerpt_en'],
+            'meta_title_en' => $article['meta_title_en'],
+            'meta_description_en' => $article['meta_description_en'],
         ]);
 
         // Post::handleTranslations() always derives slug from Str::slug(title),
         // which won't match the exact SEO slug specified in the sitemap plan
-        // — overwrite it directly with the intended one.
+        // — overwrite it directly with the intended one. Also required for
+        // /post/{slug} to resolve at all in a given locale: PostService::
+        // getPostBySlugOrId() looks up the slug scoped to translations.language,
+        // so a post with only a vi row is unreachable while the site defaults
+        // to the en locale.
         $post->translations()->where('language', 'vi')->update(['slug' => $article['slug']]);
+        $post->translations()->where('language', 'en')->update(['slug' => $article['slug_en']]);
     }
 
     /**
-     * @return array<int, array{slug: string, title: string, excerpt: string, meta_title: string, meta_description: string, content: string}>
+     * @return array<int, array<string, string>>
      */
     protected function articles(): array
     {
@@ -129,6 +139,13 @@ class WoodIndustryArticlesSeeder extends Seeder
         $items = collect($links)->map(fn ($l) => '<li><a href="'.$l['href'].'">'.$l['label'].'</a></li>')->implode('');
 
         return '<div class="related-articles"><h3>Bài viết liên quan</h3><ul>'.$items.'</ul></div>';
+    }
+
+    protected function relatedLinksEn(array $links): string
+    {
+        $items = collect($links)->map(fn ($l) => '<li><a href="'.$l['href'].'">'.$l['label'].'</a></li>')->implode('');
+
+        return '<div class="related-articles"><h3>Related articles</h3><ul>'.$items.'</ul></div>';
     }
 
     protected function kt01(): array
@@ -220,18 +237,116 @@ class WoodIndustryArticlesSeeder extends Seeder
 HTML;
 
         $content .= $this->relatedLinks([
-            ['href' => '/post/thong-so-ky-thuat-lop-phu-nano-cho-go', 'label' => 'Hồ sơ thông số kỹ thuật & tiêu chuẩn kiểm định'],
-            ['href' => '/post/giai-phap-phu-go-ngoai-troi-khang-uv', 'label' => 'Giải pháp phủ gỗ ngoài trời: kháng UV và để gỗ thở được'],
+            ['href' => '/post/ho-so-thong-so-ky-thuat-tieu-chuan-kiem-dinh-lop-phu-nano-cho-go', 'label' => 'Hồ sơ thông số kỹ thuật & tiêu chuẩn kiểm định'],
+            ['href' => '/post/go-ngoai-troi-vi-sao-moi-lop-son-deu-bong-va-giai-phap-nam-o-dau', 'label' => 'Giải pháp phủ gỗ ngoài trời: kháng UV và để gỗ thở được'],
             ['href' => '/applications/vat-lieu-go', 'label' => 'Trang trụ: Vật liệu gỗ'],
         ]);
 
+        $contentEn = <<<'HTML'
+<p><strong>Audience:</strong> materials engineers, workshop managers, applicators and technical distributors.</p>
+<p><em>Editorial note: replace the <code>[BRAND]</code>, <code>[PRODUCT NAME]</code>, <code>[CLEAR LINE]</code>, <code>[TINTED LINE]</code> placeholders before publishing. Every figure must be checked against the TDS/MSDS of the batch you actually distribute.</em></p>
+
+<h2>Summary for the busy reader</h2>
+<p>PU paint, varnish and oil finishes all fail on outdoor wood the same way: they form a sealed film on the surface. The wood underneath keeps absorbing and releasing moisture with the seasons, keeps expanding and contracting — the film can't keep up, so it cracks, moisture gets trapped, and the wood rots from inside the paint layer while the surface still looks fine.</p>
+<p>Nano coating solves the problem at a different level: instead of sitting on top, it penetrates and cures into a high-density cross-linked network right inside the wood's porous structure. The result is a surface that blocks liquid water and UV while still letting water vapour pass through — what the industry calls a "breathable" surface.</p>
+
+<h2>1. How outdoor wood actually fails</h2>
+<p>Wood is an organic material with two parts: the fibre (cellulose and hemicellulose forming the skeleton) and the resin/lignin (the binder between fibres). Outdoors, three degradation mechanisms run in parallel.</p>
+
+<h3>1.1. UV photodegradation of lignin</h3>
+<p>Lignin is the strongest UV absorber in wood. UV photons carry enough energy to break chemical bonds in the lignin molecule, creating free radicals. The degraded lignin turns into water-soluble fragments that rain washes away, exposing the bare grey cellulose underneath.</p>
+<p>That's the "greying" everyone sees on a deck after one sunny season. It isn't dirt — it's lost material. Once the lignin is gone, the cellulose fibres lose their binder and start fraying.</p>
+
+<h3>1.2. Swelling and shrinking cycles</h3>
+<p>Wood constantly seeks moisture equilibrium with the surrounding air. On hot days the surface heats up and loses moisture faster than the core, causing uneven expansion through the thickness. At night and in rain, the process reverses.</p>
+<p>Urban and industrial rainwater isn't neutral — it carries dissolved CO₂, SOₓ, NOₓ that form weak acids attacking the wood structure. After a few hundred cycles, accumulated stress exceeds the threshold and the surface develops fine cracks. On painted wood, these cracks are exactly where the film starts to lift.</p>
+
+<h3>1.3. Micro-organisms</h3>
+<p>Fungi, mould, algae and bacteria feed on wood. Their metabolism releases sulphuric and nitric acid, breaking down the fibre. The one precondition they need is standing moisture on the surface — which is exactly why vapour permeability matters as much as water resistance.</p>
+
+<h2>2. Why a sealed film is the wrong answer</h2>
+<p>A typical two-component PU builds a 60–100 µm film, nearly impermeable to water vapour. That sounds good until you consider what happens next.</p>
+<p>Indoor wood equilibrates around 8–12% moisture content; outdoor wood in Vietnam swings 14–20% by season. That moisture has to go somewhere. When the top surface is sealed, vapour migrates sideways and accumulates right under the paint film. Vapour pressure builds, forming bubbles, then blisters, then peeling sheets.</p>
+<p>Worse: moist wood trapped under a sealed film is the ideal environment for rot fungi. The surface still looks glossy while the wood underneath is already spongy. By the time it's discovered, the fix is no longer repainting — it's replacing the board.</p>
+<p>The film's maintenance cycle is also expensive: repainting means sanding the old layer completely off, and every sanding pass removes real wood material. After three or four cycles, the board is visibly thinner, screw heads are exposed, and the grain is gone.</p>
+
+<h2>3. How nano coating actually works</h2>
+<h3>3.1. Composition — and a common misconception</h3>
+<p>Two different technology families are both marketed as "nano," and it's worth telling them apart when advising customers:</p>
+<ul>
+<li>A one-component (1K) nano-structured Polyurethane/Polyurea hybrid resin system. Important point: this line does <em>not</em> contain solid nanoparticles as many people assume. "Nano" here describes a network structure at the nanometre scale, not filler particles. Performance comes from an extremely high cross-link density between polymer molecules.</li>
+<li>A water-based, silicone-free fluoride-technology system. Penetrating, non-film-forming, geared toward water resistance and vapour permeability.</li>
+</ul>
+<p>When a customer asks "does it contain nanoparticles," the honest answer for the first family is: no — and that's an advantage. Solid particles dispersed in a film are typically where cracking and delamination start.</p>
+
+<h3>3.2. Penetration and mechanical anchoring</h3>
+<p>The active molecules are sized around 10⁻⁹ m — orders of magnitude smaller than the capillaries and pores on the wood surface. That lets them travel into the wood fibre instead of sitting on top. Once inside, the curing reaction builds a three-dimensional network mechanically anchored into the pore structure itself.</p>
+<table border="1" cellpadding="6" cellspacing="0">
+<thead><tr><th></th><th>Conventional coating</th><th>Nano-structured coating</th></tr></thead>
+<tbody>
+<tr><td>Molecular geometry</td><td>Linear chains</td><td>Three-dimensional cross-linked network</td></tr>
+<tr><td>Cross-link density</td><td>Low</td><td>2.17 × 10³ mol/m³</td></tr>
+<tr><td>Protective layer location</td><td>On the surface</td><td>Inside the pores and on the surface</td></tr>
+<tr><td>Adhesion mechanism</td><td>Surface adhesion</td><td>Mechanical anchoring into the wood structure</td></tr>
+</tbody>
+</table>
+<p>Cross-link density drives almost every other property: hardness, chemical resistance, abrasion resistance, and weathering durability. The denser the network, the fewer paths for foreign molecules to enter and the harder it is for UV energy to break it apart.</p>
+
+<h3>3.3. UV resistance</h3>
+<p>The UV-resistance mechanism here is a barrier mechanism, not simple chemical absorption. The dense cross-linked network acts as a durable barrier that absorbs and dissipates UV-A/UV-B energy before it reaches the lignin underneath.</p>
+<p>The difference from additive UV absorbers in ordinary paint: additive absorbers deplete over exposure time and migrate out of the film. A structural barrier doesn't deplete — it <em>is</em> the coating's own framework.</p>
+<p><strong>Verified data:</strong> accelerated weathering per SASO ISO 16474-2 over 5,000 hours shows colour and gloss change under 2%.</p>
+
+<h3>3.4. Breathability</h3>
+<p>This is the easiest selling point to state incorrectly, so precision matters. A nano-coated surface blocks liquid water but lets water vapour through. The physical mechanism: water vapour molecules are far smaller than a liquid droplet, which is held back by surface tension on a hydrophobic surface. A penetrating coating that doesn't form a continuous film still leaves an escape path for vapour molecules.</p>
+<p>Practical consequences:</p>
+<ul>
+<li>Moisture in the wood can escape → no vapour pressure buildup → no blistering, no peeling.</li>
+<li>The surface stays dry → mould and algae have no foothold.</li>
+<li>Wood still expands and contracts naturally, with the coating moving with it, because the coating lives inside the wood rather than as a film glued on top.</li>
+</ul>
+<p><em>Note for marketing copy:</em> saying "the wood breathes" is fine in conversation, but technical documentation should read "maintains the surface's water-vapour permeability." The source technical file does not provide a specific WVTR value (g/m²·24h) — if you need that figure for a tender submission, request test results per ASTM E96 or ISO 7783 from the manufacturer.</p>
+
+<h2>4. Comparison table for sales conversations</h2>
+<table border="1" cellpadding="6" cellspacing="0">
+<thead><tr><th>Criterion</th><th>Nano coating</th><th>PU paint / Varnish / Oil finish</th></tr></thead>
+<tbody>
+<tr><td>Protection mechanism</td><td>Deep penetration, no sealed film</td><td>Forms a sealed surface film</td></tr>
+<tr><td>Moisture-vapour escape</td><td>Vapour escapes, surface stays dry</td><td>Sealed, moisture accumulates under the film</td></tr>
+<tr><td>Typical failure mode</td><td>Gradual, even wear, no sheet peeling</td><td>Blistering, cracking, peeling in sheets</td></tr>
+<tr><td>Protective lifespan</td><td>Over 10 years</td><td>Short, degrades quickly outdoors</td></tr>
+<tr><td>When it degrades</td><td>Recoat over the top, no stripping needed</td><td>Must sand off the old layer completely</td></tr>
+<tr><td>Effect on wood grain</td><td>Keeps the real grain and surface</td><td>Covers and hides the real surface</td></tr>
+<tr><td>Greyed / rotted wood</td><td>Can be restored close to original condition</td><td>Only covers it up — the wood keeps rotting underneath</td></tr>
+<tr><td>Life-cycle cost</td><td>Low — few maintenance cycles</td><td>High — periodic sanding and repainting</td></tr>
+</tbody>
+</table>
+
+<h2>5. Three questions technical customers ask</h2>
+<p><strong>"Does nano coating change the wood colour?"</strong> The clear line keeps the original grain and tone, usually deepening the colour slightly the way wetting wood does — that's the coating's refractive index inside the pores. Use the tinted line if you want to actively change colour.</p>
+<p><strong>"Can I apply nano coating over existing PU paint?"</strong> Yes, if the old layer is still firmly bonded and has been sanded for tooth and degreased. But note: the nano layer then protects <em>the old paint</em>, not the wood, and the system's breathability is still limited by the PU film underneath. For the full benefit, strip the old layer first.</p>
+<p><strong>"Does it protect against termites?"</strong> The source documentation covers microbial resistance and decay prevention through keeping the surface dry, but there's no dedicated termite-resistance test data. Don't claim termite protection on the website — that's a real false-advertising legal risk, not a theoretical one.</p>
+HTML;
+
+        $contentEn .= $this->relatedLinksEn([
+            ['href' => '/post/technical-specifications-nano-coating-for-wood', 'label' => 'Technical Specifications & Certification Standards'],
+            ['href' => '/post/outdoor-wood-coating-solution-uv-resistant', 'label' => 'Outdoor Wood Coating: UV Resistance While Letting Wood Breathe'],
+            ['href' => '/applications/wood-materials', 'label' => 'Pillar page: Wood Materials'],
+        ]);
+
         return [
-            'slug' => 'co-che-bao-ve-go-cua-lop-phu-nano',
+            'slug' => 'vi-sao-lop-phu-nano-bao-ve-duoc-go-ma-son-tao-mang-thi-khong',
             'title' => 'Vì sao lớp phủ nano bảo vệ được gỗ mà sơn tạo màng thì không',
             'excerpt' => 'Sơn PU, vecni và dầu lau tạo màng kín và nhốt ẩm trong gỗ. Lớp phủ nano thẩm thấu vào thớ gỗ, kháng UV và vẫn cho gỗ thở được.',
             'meta_title' => 'Cơ chế lớp phủ nano bảo vệ gỗ',
             'meta_description' => 'Vì sao sơn tạo màng làm gỗ mục nhanh hơn, và lớp phủ nano thẩm thấu giải quyết vấn đề ở tầng khác. Cơ chế, số liệu kiểm định và so sánh chi tiết.',
             'content' => $content,
+            'slug_en' => 'how-nano-coating-protects-wood-not-film-forming-paint',
+            'title_en' => 'Why Nano Coating Protects Wood While Film-Forming Paint Does Not',
+            'excerpt_en' => 'PU paint, varnish and oil finishes form a sealed film that traps moisture in wood. Nano coating penetrates the wood fibre, resists UV, and still lets the wood breathe.',
+            'meta_title_en' => 'How Nano Coating Protects Wood',
+            'meta_description_en' => 'Why film-forming paint makes wood rot faster, and how penetrating nano coating solves the problem differently. Mechanism, test data and detailed comparison.',
+            'content_en' => $contentEn,
         ];
     }
 
@@ -317,18 +432,109 @@ HTML;
 HTML;
 
         $content .= $this->relatedLinks([
-            ['href' => '/post/quy-trinh-thi-cong-lop-phu-nano-tren-go', 'label' => 'Quy trình thi công chuẩn: từ chuẩn bị bề mặt đến nghiệm thu QC'],
-            ['href' => '/post/gioi-thieu-dong-san-pham-nano-cho-go', 'label' => 'Giới thiệu dòng sản phẩm nano cho vật liệu gỗ'],
+            ['href' => '/post/quy-trinh-thi-cong-chuan-tu-chuan-bi-be-mat-den-nghiem-thu-qc', 'label' => 'Quy trình thi công chuẩn: từ chuẩn bị bề mặt đến nghiệm thu QC'],
+            ['href' => '/post/thuong-hieu-cho-vat-lieu-go-bao-ve-tu-ben-trong-tho-go', 'label' => 'Giới thiệu dòng sản phẩm nano cho vật liệu gỗ'],
             ['href' => '/document/catalog', 'label' => 'Catalog & tài liệu kỹ thuật'],
         ]);
 
+        $contentEn = <<<'HTML'
+<p>This article doubles as a B2B sales asset: developers, supervising consultants and procurement teams all need one page consolidating the data and reference standards.</p>
+
+<h2>1. Performance specification table</h2>
+<table border="1" cellpadding="6" cellspacing="0">
+<thead><tr><th>Property</th><th>Test method</th><th>Result</th><th>Practical meaning</th></tr></thead>
+<tbody>
+<tr><td>Gloss at 60°</td><td>ASTM D523 / SASO 2833</td><td>92.0 GU</td><td>High gloss, reflects adequate film build</td></tr>
+<tr><td>Pencil hardness</td><td>ASTM D3363 / SASO ISO 15184</td><td>4H (up to 7H with matting additive)</td><td>Scratch resistance against sand, chairs, luggage</td></tr>
+<tr><td>Taber abrasion</td><td>ASTM D4060 (1 kg, 1,000 cycles)</td><td>8.4 – 19.85 mg loss</td><td>Withstands high foot-traffic areas</td></tr>
+<tr><td>Impact resistance</td><td>ASTM D2794</td><td>&gt; 140 kg·cm</td><td>No cracking on impact</td></tr>
+<tr><td>Cross-link density (XLD)</td><td>DMA</td><td>2.17 × 10³ mol/m³</td><td>Foundation of every other property</td></tr>
+<tr><td>Glass transition temperature (Tg)</td><td>DMA</td><td>57.7 – 96.1 °C</td><td>Doesn't soften under direct sun</td></tr>
+<tr><td>Working temperature range</td><td>DMA cycle</td><td>−50 °C to 200 °C</td><td>Ample margin for Vietnam's climate</td></tr>
+<tr><td>Flammability</td><td>ASTM E84 / BS 476</td><td>Class A / Class 1</td><td>Meets public-building requirements</td></tr>
+<tr><td>Water immersion</td><td>ISO 2812-2 (240 h @ 50 °C)</td><td>Pass, no colour change</td><td>Withstands prolonged standing water</td></tr>
+<tr><td>Chemical resistance</td><td>ASTM D4752 (MEK rub)</td><td>&gt; 1,500 double rubs</td><td>Resists industrial cleaning chemicals</td></tr>
+<tr><td>QUV accelerated weathering</td><td>ASTM D4587 (1,500 h)</td><td>Retains 99–100% gloss</td><td>Equivalent to years of outdoor exposure</td></tr>
+<tr><td>Xenon accelerated weathering</td><td>ASTM G155 (4,000 h)</td><td>Retains gloss; ΔE = 0.63</td><td>ΔE &lt; 1 means the naked eye can't detect colour change</td></tr>
+<tr><td>Combined accelerated weathering</td><td>SASO ISO 16474-2 (5,000 h)</td><td>Colour and gloss change &lt; 2%</td><td>Rated Excellent</td></tr>
+<tr><td>Salt spray</td><td>ASTM B117 / SASO ISO 11997</td><td>4,000 – 5,000 h, no blistering</td><td>Suitable for coastal projects</td></tr>
+<tr><td>Adhesion — cross-cut</td><td>ISO 2409 / ASTM D3359</td><td>Grade 0 / 5B (100%)</td><td>No lifting on tape-pull test</td></tr>
+<tr><td>Adhesion — pull-off</td><td>—</td><td>9 MPa</td><td>Excellent rating</td></tr>
+<tr><td>VOC</td><td>—</td><td>156 g/L</td><td>Low, meets green-building requirements</td></tr>
+<tr><td>Biodegradability</td><td>—</td><td>&gt; 95%</td><td>Environmental profile for export customers</td></tr>
+</tbody>
+</table>
+<p><strong>To confirm with the manufacturer before publishing:</strong> the source documentation shows two different water contact-angle values — one around 70°, another &gt; 100°. These describe two different surface states (70° is mild hydrophobicity, &gt; 100° is true hydrophobic lotus-effect). Don't publish either figure until you've confirmed which value applies to which product line.</p>
+
+<h2>2. Film build and coverage rate</h2>
+<table border="1" cellpadding="6" cellspacing="0">
+<thead><tr><th>Parameter</th><th>Value</th></tr></thead>
+<tbody>
+<tr><td>Wet film thickness per coat</td><td>2 – 3 mil (51 – 76 µm)</td></tr>
+<tr><td>Total dry film thickness (DFT)</td><td>1.5 – 2.5 mil (38 – 63 µm)</td></tr>
+<tr><td>Theoretical coverage</td><td>31 m² / 3.8 L at 2.00 mil DFT ≈ 8.1 m²/L</td></tr>
+</tbody>
+</table>
+<p>The figure above is theoretical coverage on an already-sealed surface. On bare, untreated wood the first coat is absorbed into the pores, so real-world consumption is significantly higher — add 20–35% depending on how porous the wood species is when estimating, and always run a sample panel to measure actual consumption.</p>
+
+<h2>3. Packaging, storage, shelf life</h2>
+<table border="1" cellpadding="6" cellspacing="0">
+<thead><tr><th>Packaging</th><th>Volume</th><th>Weight</th></tr></thead>
+<tbody>
+<tr><td>Gallon</td><td>3.8 L</td><td>3.63 kg</td></tr>
+<tr><td>Pail</td><td>19 L</td><td>18.14 kg</td></tr>
+<tr><td>Drum</td><td>208 L</td><td>~198 kg</td></tr>
+</tbody>
+</table>
+<p>Isocyanate-based product is highly moisture-sensitive. Shelf life depends heavily on storage temperature:</p>
+<table border="1" cellpadding="6" cellspacing="0">
+<thead><tr><th>Condition</th><th>Unopened</th><th>Opened</th></tr></thead>
+<tbody>
+<tr><td>4 – 22 °C</td><td>12 months</td><td>—</td></tr>
+<tr><td>27 °C</td><td>6 months</td><td>Up to 2 months</td></tr>
+<tr><td>38 °C</td><td>2 months</td><td>—</td></tr>
+<tr><td>Transport</td><td>4 – 30 °C, short duration</td><td>—</td></tr>
+</tbody>
+</table>
+<p>Three mandatory storage rules:</p>
+<ul>
+<li>Reseal the lid tightly immediately after pouring. A lid left open is the number-one cause of gelling in the container.</li>
+<li>Don't decant into smaller containers unless you can blanket the headspace with nitrogen.</li>
+<li>In non-air-conditioned warehouses across southern and central Vietnam, summer temperatures easily exceed 35 °C — real shelf life drops to 2–3 months. Manage stock strictly on a FIFO basis.</li>
+</ul>
+
+<h2>4. System standards and certifications</h2>
+<ul>
+<li>ISO 9001:2015 — quality management system.</li>
+<li>ISO 45001:2018 — occupational health and safety management system.</li>
+<li>ASTM E84 Class A — surface flame-spread rating, a requirement for public buildings.</li>
+<li>VOC 156 g/L, silicone-free, &gt; 95% biodegradable — the environmental profile export-oriented wood processors need for shipments to the EU and North America.</li>
+</ul>
+
+<h2>5. Warranty</h2>
+<p>The documented warranty policy is 5–10 years, while the field-reported protective lifespan is over 10 years.</p>
+<p>Keep these two numbers distinct when communicating: the warranty is a legal commitment, the lifespan is an observed result. Conflating them creates the wrong expectation and dispute risk.</p>
+HTML;
+
+        $contentEn .= $this->relatedLinksEn([
+            ['href' => '/post/application-process-nano-coating-on-wood', 'label' => 'Standard Application Process: From Surface Prep to QC Sign-off'],
+            ['href' => '/post/nano-coating-product-line-for-wood', 'label' => 'Nano Coating Product Line for Wood'],
+            ['href' => '/document/catalog', 'label' => 'Catalog & Technical Documents'],
+        ]);
+
         return [
-            'slug' => 'thong-so-ky-thuat-lop-phu-nano-cho-go',
+            'slug' => 'ho-so-thong-so-ky-thuat-tieu-chuan-kiem-dinh-lop-phu-nano-cho-go',
             'title' => 'Hồ sơ thông số kỹ thuật & tiêu chuẩn kiểm định lớp phủ nano cho gỗ',
             'excerpt' => 'Bảng đầy đủ thông số hiệu năng, độ dày màng, định mức, bảo quản và tiêu chuẩn chứng nhận — dùng làm tài liệu bán hàng B2B.',
             'meta_title' => 'Thông số kỹ thuật sơn nano gỗ',
             'meta_description' => 'TDS đầy đủ: độ bóng, độ cứng, mài mòn Taber, kháng UV, kháng muối, VOC, định mức thi công và tiêu chuẩn ASTM/ISO cho lớp phủ nano gỗ.',
             'content' => $content,
+            'slug_en' => 'technical-specifications-nano-coating-for-wood',
+            'title_en' => 'Technical Specifications & Certification Standards for Nano Wood Coating',
+            'excerpt_en' => 'Full table of performance specs, film build, coverage rate, storage and certification standards — a ready-to-use B2B sales asset.',
+            'meta_title_en' => 'Technical Specifications for Nano Wood Coating',
+            'meta_description_en' => 'Full TDS: gloss, hardness, Taber abrasion, UV resistance, salt resistance, VOC, application coverage and ASTM/ISO standards for nano wood coating.',
+            'content_en' => $contentEn,
         ];
     }
 
@@ -426,18 +632,121 @@ HTML;
 HTML;
 
         $content .= $this->relatedLinks([
-            ['href' => '/post/thong-so-ky-thuat-lop-phu-nano-cho-go', 'label' => 'Hồ sơ thông số kỹ thuật & tiêu chuẩn kiểm định'],
-            ['href' => '/post/giai-phap-nano-theo-hang-muc-go-ngoai-troi', 'label' => 'Giải pháp nano theo từng hạng mục gỗ ngoài trời'],
+            ['href' => '/post/ho-so-thong-so-ky-thuat-tieu-chuan-kiem-dinh-lop-phu-nano-cho-go', 'label' => 'Hồ sơ thông số kỹ thuật & tiêu chuẩn kiểm định'],
+            ['href' => '/post/giai-phap-nano-theo-tung-hang-muc-go-ngoai-troi', 'label' => 'Giải pháp nano theo từng hạng mục gỗ ngoài trời'],
             ['href' => '/contact', 'label' => 'Đặt mẫu thử miễn phí'],
         ]);
 
+        $contentEn = <<<'HTML'
+<p>In high-performance coatings, over 80% of field failures come not from the material but from surface preparation and environmental conditions. The process below is written directly for the application crew.</p>
+
+<h2>Step 1 — Surface preparation</h2>
+<p><strong>Previously painted or oxidised wood:</strong> sand with an orbital sander using 400-grit paper. The goal isn't to strip everything but to create a profile the coating can key into, while removing the greyed, lignin-depleted layer.</p>
+<p><strong>New bare wood:</strong> sand in increasing grit sequence, stopping at 320–400 grit. Sanding finer than this closes the pores and reduces penetration — a common mistake among finishers used to high-end interior work.</p>
+<p><strong>Cleaning:</strong></p>
+<ul>
+<li>Degrease the entire surface with a dedicated degreaser.</li>
+<li>Rinse and dry completely.</li>
+<li>For oil, grease, silicone or stubborn wax residue: use acetone or MEK to remove it.</li>
+</ul>
+<p>Silicone is public enemy number one. Any workshop that has used polishing wax or silicone-based release agents will have residue that causes fisheyes and localised adhesion loss. If in doubt, degrease twice and run a test panel first.</p>
+<p><strong>Old, greyed, rotted or mouldy wood:</strong> nano technology can treat and restore aged, greyed or rotted wood close to its original condition without altering the material's properties. For heritage items and fine furniture, always test on a hidden area before working the full surface.</p>
+
+<h2>Step 2 — Environmental conditions</h2>
+<table border="1" cellpadding="6" cellspacing="0">
+<thead><tr><th>Parameter</th><th>Allowable range</th></tr></thead>
+<tbody>
+<tr><td>Ambient temperature</td><td>4 °C – 32 °C (40 – 90 °F)</td></tr>
+<tr><td>Surface temperature</td><td>At least 3 °C above dew point</td></tr>
+<tr><td>Air humidity</td><td>See note below</td></tr>
+<tr><td>Wood moisture</td><td>Surface must be dry, no residual solvent</td></tr>
+</tbody>
+</table>
+<p>On air humidity, understand the mechanism correctly: higher humidity speeds up curing (the 1K system cures via moisture), while lower humidity helps the coating level and self-even better. There's no single "best" threshold — it's a trade-off. In northern Vietnam's humid "nồm" season above 85% humidity, shorten working time and accept a slightly less level finish.</p>
+<p>The source documentation doesn't give a specific wood-moisture percentage. Industry practice for outdoor wood in Vietnam is to check with a moisture meter and avoid applying above 18%. Confirm the official threshold with the manufacturer before writing it into your internal process.</p>
+
+<h2>Step 3 — Equipment</h2>
+<table border="1" cellpadding="6" cellspacing="0">
+<thead><tr><th>Equipment</th><th>Settings</th></tr></thead>
+<tbody>
+<tr><td>HVLP / LVLP spray gun</td><td>1.3 – 1.4 – 1.5 mm tip; 29 – 30 PSI at the gun; 50% overlap</td></tr>
+<tr><td>Airless sprayer</td><td>417 / 517 / 617 tip size; ~800 PSI pump pressure; 30:1 or 40:1 pump ratio</td></tr>
+<tr><td>Manual application</td><td>Dedicated applicator pad for outdoor decking</td></tr>
+</tbody>
+</table>
+<p>Equipment cleaning: clean immediately after use with acetone or MEK. Never use water or alcohol — both react with the system and cure inside the lines.</p>
+
+<h2>Step 4 — Application and dry times</h2>
+<p>Apply 3–4 wet coats. Role of each layer: the first two coats build colour and fill the pores; the last two build film density and long-term protection.</p>
+<p>Flash-off time between coats: 2–5 minutes at 22 °C, enough for solvent to evaporate. Don't apply another coat past the 20-minute mark — beyond that the film has started curing and the new coat will bond poorly. If you miss the window, let it cure hard, then sand for tooth before recoating.</p>
+<table border="1" cellpadding="6" cellspacing="0">
+<thead><tr><th>Milestone (at 22 – 32 °C, 50% humidity)</th><th>Time</th></tr></thead>
+<tbody>
+<tr><td>Surface dry (dust-free)</td><td>10 – 30 minutes</td></tr>
+<tr><td>Touch dry</td><td>20 – 40 minutes</td></tr>
+<tr><td>Can be moved / turned</td><td>3 – 4 hours</td></tr>
+<tr><td>Hard dry</td><td>24 hours</td></tr>
+<tr><td>Full cure</td><td>48 hours</td></tr>
+</tbody>
+</table>
+<p>Don't put the item into service before the 48-hour mark. For decking, no heavy furniture and no cart traffic for the first 7 days.</p>
+
+<h2>Step 5 — Field troubleshooting</h2>
+<table border="1" cellpadding="6" cellspacing="0">
+<thead><tr><th>Symptom</th><th>Cause</th><th>Fix</th></tr></thead>
+<tbody>
+<tr><td>Streaks, high spots</td><td>Uneven wiping technique</td><td>Level it out immediately while the film is still wet</td></tr>
+<tr><td>Poor adhesion, local peeling</td><td>Residual oil, grease or silicone on the substrate</td><td>Strip the affected area, degrease thoroughly, reapply</td></tr>
+<tr><td>Unusually low gloss</td><td>Insufficient dry film thickness</td><td>Apply one more wet coat</td></tr>
+<tr><td>Fisheyes</td><td>Silicone contamination</td><td>Sand the affected area, degrease twice</td></tr>
+<tr><td>Product gelled in the container</td><td>Moisture ingress, lid left open too long</td><td>Not usable; prevent by resealing immediately and not decanting into small containers</td></tr>
+<tr><td>Later coat lifting off the earlier one</td><td>Recoated past the 20-minute window</td><td>Let it cure hard, sand for tooth, reapply</td></tr>
+</tbody>
+</table>
+
+<h2>Step 6 — QC sign-off</h2>
+<table border="1" cellpadding="6" cellspacing="0">
+<thead><tr><th>Check item</th><th>Method</th><th>Pass criteria</th></tr></thead>
+<tbody>
+<tr><td>Visual</td><td>Observe gloss and uniformity</td><td>High, even gloss, no streaks, no fisheyes</td></tr>
+<tr><td>Dry film thickness</td><td>DFT gauge</td><td>1.5 – 2.5 mil (38 – 63 µm)</td></tr>
+<tr><td>Hardness</td><td>Pencil, ASTM D3363</td><td>4H minimum</td></tr>
+<tr><td>Adhesion</td><td>Cross-cut, ISO 2409 / ASTM D3359</td><td>Grade 0 or 5B (100%)</td></tr>
+<tr><td>Chemical resistance</td><td>MEK rub, ASTM D4752</td><td>&gt; 1,500 double rubs, no change</td></tr>
+</tbody>
+</table>
+<p>Run adhesion and hardness checks on a witness panel sprayed from the same batch under the same conditions — never cross-cut a completed, signed-off project surface.</p>
+
+<h2>Step 7 — Worker safety</h2>
+<p>The source documentation requires referring to the product SDS and using full PPE. Minimum requirements for spray application in an enclosed space:</p>
+<ul>
+<li>An organic-vapour cartridge respirator — cloth and medical masks have no effect against solvent vapour and isocyanate.</li>
+<li>Chemical-resistant gloves, sealed safety goggles.</li>
+<li>Forced-air ventilation, running continuously throughout spraying and for at least 30 minutes after.</li>
+<li>Acetone and MEK are flammable — no welding, cutting or smoking in or near the work area.</li>
+</ul>
+<p>Before every project, download the latest SDS from the manufacturer and brief the whole crew. This is mandatory, not a suggestion.</p>
+HTML;
+
+        $contentEn .= $this->relatedLinksEn([
+            ['href' => '/post/technical-specifications-nano-coating-for-wood', 'label' => 'Technical Specifications & Certification Standards'],
+            ['href' => '/post/nano-solutions-by-outdoor-wood-category', 'label' => 'Nano Solutions by Outdoor Wood Category'],
+            ['href' => '/contact', 'label' => 'Request a Free Sample'],
+        ]);
+
         return [
-            'slug' => 'quy-trinh-thi-cong-lop-phu-nano-tren-go',
+            'slug' => 'quy-trinh-thi-cong-chuan-tu-chuan-bi-be-mat-den-nghiem-thu-qc',
             'title' => 'Quy trình thi công chuẩn: từ chuẩn bị bề mặt đến nghiệm thu QC',
             'excerpt' => '7 bước thi công chuẩn cho đội thợ: chuẩn bị bề mặt, điều kiện môi trường, thiết bị, thời gian khô, xử lý sự cố và nghiệm thu QC.',
             'meta_title' => 'Quy trình thi công sơn nano trên gỗ',
             'meta_description' => 'Quy trình 7 bước cho thợ thi công: chuẩn bị bề mặt, định mức sơn nano, thi công HVLP/Airless, thời gian khô, xử lý lỗi và nghiệm thu QC.',
             'content' => $content,
+            'slug_en' => 'application-process-nano-coating-on-wood',
+            'title_en' => 'Standard Application Process: From Surface Prep to QC Sign-off',
+            'excerpt_en' => '7 standard application steps for the crew: surface prep, environmental conditions, equipment, dry times, troubleshooting and QC sign-off.',
+            'meta_title_en' => 'Nano Wood Coating Application Process',
+            'meta_description_en' => '7-step process for applicators: surface prep, coverage rate, HVLP/Airless application, dry times, defect handling and QC sign-off.',
+            'content_en' => $contentEn,
         ];
     }
 
@@ -532,19 +841,120 @@ HTML;
 HTML;
 
         $content .= $this->relatedLinks([
-            ['href' => '/post/co-che-bao-ve-go-cua-lop-phu-nano', 'label' => 'Vì sao lớp phủ nano bảo vệ được gỗ mà sơn tạo màng thì không'],
-            ['href' => '/post/giai-phap-phu-go-ngoai-troi-khang-uv', 'label' => 'Giải pháp phủ gỗ ngoài trời: kháng UV và để gỗ thở được'],
+            ['href' => '/post/vi-sao-lop-phu-nano-bao-ve-duoc-go-ma-son-tao-mang-thi-khong', 'label' => 'Vì sao lớp phủ nano bảo vệ được gỗ mà sơn tạo màng thì không'],
+            ['href' => '/post/go-ngoai-troi-vi-sao-moi-lop-son-deu-bong-va-giai-phap-nam-o-dau', 'label' => 'Giải pháp phủ gỗ ngoài trời: kháng UV và để gỗ thở được'],
             ['href' => '/category/noi-that', 'label' => 'Xem sản phẩm — Nội thất'],
             ['href' => '/category/ngoai-that', 'label' => 'Xem sản phẩm — Ngoại thất'],
         ]);
 
+        $contentEn = <<<'HTML'
+<p><em>Editorial note: replace <code>[BRAND]</code>, <code>[PRODUCT NAME]</code>, <code>[CLEAR LINE]</code>, <code>[TINTED LINE]</code>, <code>[PHONE NUMBER]</code> before publishing.</em></p>
+
+<h2>The problem every wood owner runs into</h2>
+<p>A fine wood dining set, a poolside deck, a solid wood door — all beautiful on handover day. The problem starts around month eighteen.</p>
+<p>PU paint develops fine cracks then peels off in sheets. Varnish yellows. Oil finish smells and needs redoing every year. And the wood underneath, trapped under a sealed film, is usually already spongy before anyone notices.</p>
+<p>The common cause: all three traditional methods coat the wood. Wood is still alive — still absorbing and releasing moisture with the seasons, still expanding and contracting. No film keeps up with that movement over ten years.</p>
+
+<h2>A different approach: protection from inside</h2>
+<p>[PRODUCT NAME] doesn't form a film. Nanometre-scale active molecules penetrate into the wood's pores and capillaries, then cure into a high-density cross-linked network right inside the fibre structure.</p>
+<p>The result is a surface with three properties at once — something a film can't deliver:</p>
+<ul>
+<li><strong>Blocks liquid water.</strong> Rain, standing water, spilled drinks don't soak into the wood.</li>
+<li><strong>Blocks UV.</strong> The cross-linked network acts as a barrier, preventing UV-A/UV-B from destroying the lignin that causes greying.</li>
+<li><strong>Lets vapour escape.</strong> The wood keeps breathing. No moisture buildup, no blistering, no rotting from inside.</li>
+</ul>
+<p>And because the protection lives <em>inside</em> the wood rather than <em>on</em> it, the real grain and surface feel are preserved.</p>
+
+<h2>Product lines</h2>
+<h3>[CLEAR LINE] — keeps the original beauty</h3>
+<p>Fully transparent, keeping the wood's natural grain and tone. Gloss level adjustable from high gloss to matte depending on the additive.</p>
+<p><strong>Best for:</strong> fine wood, high-end furniture, heritage items and artefacts needing preservation as-is, new wood with attractive grain.</p>
+<h3>[TINTED LINE] — actively shapes the look</h3>
+<p>A nano tinting system with a wide colour range, custom-mixable. The difference from ordinary wood stain: colour particles penetrate deep into the pores and fibre instead of sitting on the surface, so the grain shows through more clearly rather than being covered.</p>
+<p>A standout use case is upgrading low-grade wood: dull-grained, pale, soft timber can be brought to an antique-wood look with pronounced grain and deep colour — while the wood still breathes.</p>
+<p><strong>Best for:</strong> upgrading engineered and budget wood, restoring greyed furniture, creating an aged-wood effect on new construction.</p>
+
+<h2>Which wood substrates it works on</h2>
+<table border="1" cellpadding="6" cellspacing="0">
+<thead><tr><th>Material group</th><th>Detail</th></tr></thead>
+<tbody>
+<tr><td>Natural wood</td><td>Hardwood and softwood, fine and common species alike</td></tr>
+<tr><td>Engineered wood</td><td>MDF, plywood, veneer board</td></tr>
+<tr><td>Aged, degraded wood</td><td>Greyed, rotted, weathered — restorable close to original condition</td></tr>
+<tr><td>Previously coated surfaces</td><td>Oxidised epoxy, polyurethane or latex layers (after correct surface prep)</td></tr>
+</tbody>
+</table>
+
+<h2>Supporting data</h2>
+<table border="1" cellpadding="6" cellspacing="0">
+<thead><tr><th>Property</th><th>Method</th><th>Result</th></tr></thead>
+<tbody>
+<tr><td>Accelerated weathering</td><td>SASO ISO 16474-2, 5,000 hours</td><td>Colour and gloss change &lt; 2%</td></tr>
+<tr><td>UV resistance</td><td>ASTM D4587 (QUV), 1,500 hours</td><td>Retains 99–100% gloss</td></tr>
+<tr><td>Xenon weathering</td><td>ASTM G155, 4,000 hours</td><td>Retains gloss; ΔE = 0.63 (imperceptible to the naked eye)</td></tr>
+<tr><td>Salt spray</td><td>ASTM B117</td><td>4,000 – 5,000 hours, no blistering</td></tr>
+<tr><td>Surface hardness</td><td>ASTM D3363</td><td>4H (up to 7H with matting additive)</td></tr>
+<tr><td>Adhesion</td><td>ISO 2409 / ASTM D3359</td><td>Grade 0 / 5B (100%)</td></tr>
+<tr><td>Fire resistance</td><td>ASTM E84</td><td>Class A</td></tr>
+<tr><td>VOC</td><td>—</td><td>156 g/L</td></tr>
+<tr><td>Biodegradability</td><td>—</td><td>&gt; 95%</td></tr>
+</tbody>
+</table>
+<p>Warranty 5–10 years. Field-reported protective effectiveness: over 10 years.</p>
+
+<h2>[BRAND] for your business</h2>
+<p>Three customer groups, three different problems.</p>
+<h3>Owners of fine furniture, temples, heritage buildings</h3>
+<p><strong>What you need:</strong> preserving real value — not losing the grain, not using harmful chemicals on artefacts, not turning a century-old piece into something that looks brand new.</p>
+<p><strong>The solution:</strong> penetrating technology resupplies the natural resin the wood lost over time, restoring colour and vitality from within. The real surface is preserved — no film sits over it. The clear line is the default choice for this group.</p>
+<h3>Carpenters and interior/exterior workshops</h3>
+<p><strong>What you need:</strong> margin — upgrading cheap wood into a sellable product, fast turnaround, fewer warranty complaints.</p>
+<p><strong>The solution:</strong> the tinted nano line turns common wood into an antique-look product. Applies with standard HVLP or Airless equipment, no new investment needed. Touch dry in 20–40 minutes, workable after 3–4 hours — a much faster shop turnaround than multi-coat PU.</p>
+<h3>Export wood processors</h3>
+<p><strong>What you need:</strong> clearing the environmental-standard bar in your import market, and cargo that arrives mould-free after four weeks at sea.</p>
+<p><strong>The solution:</strong> VOC 156 g/L, silicone-free, &gt; 95% biodegradable — a profile that can replace PU in your line. Salt resistance beyond 4,000 test hours protects cargo through long sea-freight cycles. A 10+ year lifespan is a sales argument you can use with your own customers downstream.</p>
+
+<h2>How it's applied</h2>
+<p>The process fits equipment already in most wood workshops: sand for profile (400 grit on painted or oxidised surfaces), degrease and dry completely, spray 3–4 wet coats with HVLP (1.3–1.5 mm tip, 29–30 PSI) or Airless (417/517/617 tip, ~800 PSI), 2–5 minutes flash-off between coats. Touch dry 20–40 minutes · hard dry 24 hours · full cure 48 hours.</p>
+<p>Reference coverage: about 8.1 m²/L at 2-mil dry film thickness. On bare, untreated wood the first coat absorbs more, so add 20–35% when estimating. Full detail is in the <em>Standard Application Process</em> guide.</p>
+
+<h2>Packaging and storage</h2>
+<table border="1" cellpadding="6" cellspacing="0">
+<thead><tr><th>Packaging</th><th>Volume</th><th>Weight</th></tr></thead>
+<tbody>
+<tr><td>Gallon</td><td>3.8 L</td><td>3.63 kg</td></tr>
+<tr><td>Pail</td><td>19 L</td><td>18.14 kg</td></tr>
+<tr><td>Drum</td><td>208 L</td><td>~198 kg</td></tr>
+</tbody>
+</table>
+<p>Moisture-sensitive. Stored at 4–22 °C, shelf life is 12 months unopened; at 27 °C, 6 months. After opening, use within 2 months and reseal the lid tightly after every pour.</p>
+
+<h2>Test it before you decide</h2>
+<p>Every wood species responds differently — porosity, natural oil content and surface treatment history all affect the outcome. We always recommend running a sample on your own material before committing to a full-scale job.</p>
+<p>Get free technical advice and a sample. Full TDS/MSDS documentation is provided for enterprise customers and design consultants.</p>
+<p><strong>Hotline: [PHONE NUMBER]</strong> · Or leave your details on the Contact page.</p>
+HTML;
+
+        $contentEn .= $this->relatedLinksEn([
+            ['href' => '/post/how-nano-coating-protects-wood-not-film-forming-paint', 'label' => 'Why Nano Coating Protects Wood While Film-Forming Paint Does Not'],
+            ['href' => '/post/outdoor-wood-coating-solution-uv-resistant', 'label' => 'Outdoor Wood Coating: UV Resistance While Letting Wood Breathe'],
+            ['href' => '/category/interior', 'label' => 'Browse Products — Interior'],
+            ['href' => '/category/exterior', 'label' => 'Browse Products — Exterior'],
+        ]);
+
         return [
-            'slug' => 'gioi-thieu-dong-san-pham-nano-cho-go',
+            'slug' => 'thuong-hieu-cho-vat-lieu-go-bao-ve-tu-ben-trong-tho-go',
             'title' => '[THƯƠNG HIỆU] cho vật liệu gỗ: bảo vệ từ bên trong thớ gỗ',
             'excerpt' => 'Dòng phủ nano cho gỗ nội và ngoại thất — thẩm thấu vào thớ gỗ, kháng UV, giữ vân gỗ tự nhiên, gỗ vẫn thở được.',
             'meta_title' => 'Sơn nano cho gỗ — bảo vệ từ bên trong',
             'meta_description' => 'Dòng phủ nano cho gỗ nội và ngoại thất - thẩm thấu vào thớ gỗ, kháng UV, giữ vân gỗ tự nhiên, gỗ vẫn thở được. VOC thấp, bảo hành 5–10 năm.',
             'content' => $content,
+            'slug_en' => 'nano-coating-product-line-for-wood',
+            'title_en' => '[BRAND] for Wood Materials: Protection From Inside the Fibre',
+            'excerpt_en' => 'A nano coating line for interior and exterior wood — penetrates the fibre, resists UV, keeps the natural grain, and lets the wood breathe.',
+            'meta_title_en' => 'Nano Coating for Wood — Protection From Within',
+            'meta_description_en' => 'A nano coating line for interior and exterior wood - penetrates the wood fibre, resists UV, keeps natural grain, wood still breathes. Low VOC, 5-10 year warranty.',
+            'content_en' => $contentEn,
         ];
     }
 
@@ -615,18 +1025,95 @@ HTML;
 HTML;
 
         $content .= $this->relatedLinks([
-            ['href' => '/post/co-che-bao-ve-go-cua-lop-phu-nano', 'label' => 'Vì sao lớp phủ nano bảo vệ được gỗ mà sơn tạo màng thì không'],
-            ['href' => '/post/giai-phap-nano-theo-hang-muc-go-ngoai-troi', 'label' => 'Giải pháp nano theo từng hạng mục gỗ ngoài trời'],
+            ['href' => '/post/vi-sao-lop-phu-nano-bao-ve-duoc-go-ma-son-tao-mang-thi-khong', 'label' => 'Vì sao lớp phủ nano bảo vệ được gỗ mà sơn tạo màng thì không'],
+            ['href' => '/post/giai-phap-nano-theo-tung-hang-muc-go-ngoai-troi', 'label' => 'Giải pháp nano theo từng hạng mục gỗ ngoài trời'],
             ['href' => '/post-category/case-study', 'label' => 'Ví dụ thực tế / Case study'],
         ]);
 
+        $contentEn = <<<'HTML'
+<p><em>Editorial note: replace <code>[BRAND]</code>, <code>[PRODUCT NAME]</code>, <code>[PHONE NUMBER]</code> before publishing.</em></p>
+
+<h2>Three months beautiful, three years of repairs</h2>
+<p>A poolside wood deck is handed over in March. By June it starts dulling. By September there are grey patches where the sun hits directly. In year two, board edges crack and the paint starts flaking around screw heads.</p>
+<p>This script repeats on almost every outdoor wood project in Vietnam, regardless of wood species or coating used. The reason is two compounding climate factors: year-round high UV radiation and large seasonal humidity swings. Central Vietnam and coastal projects add sea salt to the mix.</p>
+
+<h2>Outdoor wood fails in three directions at once</h2>
+<h3>UV eats away the lignin</h3>
+<p>Lignin is the binder holding cellulose fibres together, and also the strongest UV absorber in wood. UV photons break chemical bonds in the lignin molecule, turning it into water-soluble fragments that rain washes away. The grey wood you see on an old deck is bare cellulose that's lost its binder.</p>
+<h3>Moisture cycles break down the structure</h3>
+<p>Sun heats the surface and dries it faster than the core. Rain reverses it — and carries dissolved CO₂, SOₓ, NOₓ that form weak acids. After a few hundred uneven expansion-contraction cycles, accumulated stress exceeds the threshold and the surface cracks. On painted wood, those cracks are exactly where water gets in under the film.</p>
+<h3>Micro-organisms finish the job</h3>
+<p>Fungi, mould and algae feed on wood, releasing sulphuric and nitric acid that breaks down the fibre. The only condition they need is standing moisture — and a sealed paint film creates exactly that on its underside.</p>
+
+<h2>Why a sealed film makes everything worse</h2>
+<p>This is the paradox the wood-coating industry took years to admit: the more sealed it is, the faster the wood fails.</p>
+<p>Outdoor wood in Vietnam equilibrates at 14–20% moisture depending on season. When the top is sealed by PU or varnish, vapour accumulates right under the film, pressure builds, bubbles form, then blistering, then peeling — and the whole time, the moist wood trapped underneath is the perfect environment for rot fungi.</p>
+<p>Double the damage: the surface still looks fine while the wood underneath is already spongy. By the time it's discovered, the cost is no longer repainting but replacing the board. The maintenance cycle is expensive too: every repaint means sanding the old layer completely off. After three or four cycles, the board is visibly thinner, screw heads show, and the grain is gone.</p>
+
+<h2>The solution: protect inside the wood, not on top of it</h2>
+<p>Nano coating technology reverses the approach. Nanometre-scale active molecules penetrate the wood's pores and capillaries, curing into a high-density cross-linked network — 2.17 × 10³ mol/m³ — right inside the fibre structure.</p>
+<p>Three properties at once: blocks liquid water — rain and standing water don't soak in. Blocks UV through a structural barrier — the dense cross-linked network absorbs and dissipates UV-A/UV-B energy before it reaches the lignin. Unlike additive UV absorbers, which deplete over time and migrate out of the film, a structural barrier doesn't wear out — it is the coating's own framework. And it lets vapour escape — because the coating sits in the pores rather than forming a continuous film, water vapour molecules still have a way out, so the wood stays dry, no pressure buildup, no blistering, and mould has no foothold.</p>
+<p>One more important consequence for outdoor projects: because the coating lives <em>inside</em> the wood, it expands and contracts with it — there's no film/substrate boundary to delaminate.</p>
+
+<h2>The numbers</h2>
+<table border="1" cellpadding="6" cellspacing="0">
+<thead><tr><th>Test</th><th>Condition</th><th>Result</th></tr></thead>
+<tbody>
+<tr><td>Accelerated weathering SASO ISO 16474-2</td><td>5,000 hours</td><td>Colour and gloss change &lt; 2%</td></tr>
+<tr><td>UV resistance QUV — ASTM D4587</td><td>1,500 hours</td><td>Retains 99–100% of original gloss</td></tr>
+<tr><td>Xenon WOM — ASTM G155</td><td>4,000 hours</td><td>Retains gloss; ΔE = 0.63</td></tr>
+<tr><td>Salt spray — ASTM B117 / SASO ISO 11997</td><td>4,000 – 5,000 hours</td><td>No blistering, no corrosion</td></tr>
+<tr><td>Working temperature range</td><td>DMA cycle</td><td>−50 °C to 200 °C</td></tr>
+<tr><td>Glass transition temperature (Tg)</td><td>DMA</td><td>57.7 – 96.1 °C</td></tr>
+</tbody>
+</table>
+<p>Two numbers worth flagging for technical audiences: <strong>ΔE = 0.63 after 4,000 hours of Xenon exposure</strong> — below the 1.0 threshold where the average human eye can't tell the colour has shifted. And <strong>Tg of 57.7 – 96.1 °C</strong> — outdoor wood surfaces in Vietnam can reach 55–65 °C at midday in summer, so the coating doesn't soften and adhesion doesn't degrade under direct sun.</p>
+
+<h2>Comparison for the investment decision</h2>
+<table border="1" cellpadding="6" cellspacing="0">
+<thead><tr><th>Criterion</th><th>Nano coating</th><th>PU paint / Varnish / Oil finish</th></tr></thead>
+<tbody>
+<tr><td>Mechanism</td><td>Penetrating, no film</td><td>Forms a sealed surface film</td></tr>
+<tr><td>Moisture escape</td><td>Yes — surface stays dry</td><td>No — moisture accumulates under the film</td></tr>
+<tr><td>Failure mode</td><td>Gradual, even wear</td><td>Blistering, cracking, peeling in sheets</td></tr>
+<tr><td>Protective lifespan</td><td>Over 10 years</td><td>Short, degrades quickly</td></tr>
+<tr><td>Maintenance</td><td>Recoat over the top</td><td>Sand off completely, then repaint</td></tr>
+<tr><td>Wood material loss</td><td>None</td><td>Loses a layer of wood every cycle</td></tr>
+<tr><td>Handling greyed wood</td><td>Restores close to original condition</td><td>Only covers it — the wood keeps rotting underneath</td></tr>
+<tr><td>Wood grain</td><td>Keeps the real surface</td><td>Covered up</td></tr>
+<tr><td>Life-cycle cost</td><td>Low</td><td>High due to repeated maintenance</td></tr>
+</tbody>
+</table>
+
+<h2>Vietnam's climate and coastal areas</h2>
+<p><strong>Hot, humid tropics.</strong> The extremely high cross-link density lets the coating withstand −50 °C to 200 °C without becoming brittle or degrading. Harsh sun in central and southern Vietnam sits well within the safe range.</p>
+<p><strong>Coastal.</strong> Salt resistance reaches 4,000–5,000 hours of continuous salt spray. For resorts, piers and seafront projects, this is the deciding metric — airborne sea salt is a far stronger corrosive agent than ordinary sun and rain.</p>
+<p><strong>Northern Vietnam's humid season.</strong> A dry, well-ventilated surface is what prevents moss and mould during the weeks when air humidity exceeds 90%.</p>
+
+<h2>Where to start</h2>
+<p>Every wood species has different porosity and natural oil content, and the surface treatment history of an existing structure also affects results. The only reliable way to know is to test on your own material.</p>
+<p>Get free technical advice and a sample — <strong>Hotline [PHONE NUMBER]</strong>. Full TDS/MSDS documentation is provided for developers and design consultants.</p>
+HTML;
+
+        $contentEn .= $this->relatedLinksEn([
+            ['href' => '/post/how-nano-coating-protects-wood-not-film-forming-paint', 'label' => 'Why Nano Coating Protects Wood While Film-Forming Paint Does Not'],
+            ['href' => '/post/nano-solutions-by-outdoor-wood-category', 'label' => 'Nano Solutions by Outdoor Wood Category'],
+            ['href' => '/post-category/case-study', 'label' => 'Case Studies'],
+        ]);
+
         return [
-            'slug' => 'giai-phap-phu-go-ngoai-troi-khang-uv',
+            'slug' => 'go-ngoai-troi-vi-sao-moi-lop-son-deu-bong-va-giai-phap-nam-o-dau',
             'title' => 'Gỗ ngoài trời: vì sao mọi lớp sơn đều bong, và giải pháp nằm ở đâu',
             'excerpt' => 'Sàn deck bạc màu, lan can bong sơn, facade nứt chân chim — nguyên nhân và giải pháp phủ nano kháng UV cho gỗ ngoài trời, giữ cho gỗ thở được.',
             'meta_title' => 'Sơn gỗ ngoài trời chống UV',
             'meta_description' => 'Sàn deck bạc màu, lan can bong sơn, facade nứt chân chim - nguyên nhân và giải pháp phủ nano kháng UV cho gỗ ngoài trời, giữ cho gỗ thở được.',
             'content' => $content,
+            'slug_en' => 'outdoor-wood-coating-solution-uv-resistant',
+            'title_en' => 'Outdoor Wood: Why Every Paint Job Peels, and Where the Real Solution Is',
+            'excerpt_en' => 'Greyed decking, peeling railings, cracked facades — causes and the UV-resistant nano coating solution for outdoor wood that still lets it breathe.',
+            'meta_title_en' => 'UV-Resistant Outdoor Wood Coating',
+            'meta_description_en' => 'Greyed decking, peeling railings, cracked facades - causes and the nano coating solution for outdoor wood: UV resistant, still lets the wood breathe.',
+            'content_en' => $contentEn,
         ];
     }
 
@@ -716,18 +1203,113 @@ HTML;
 HTML;
 
         $content .= $this->relatedLinks([
-            ['href' => '/post/giai-phap-phu-go-ngoai-troi-khang-uv', 'label' => 'Gỗ ngoài trời: vì sao mọi lớp sơn đều bong, và giải pháp nằm ở đâu'],
-            ['href' => '/post/quy-trinh-thi-cong-lop-phu-nano-tren-go', 'label' => 'Quy trình thi công chuẩn: từ chuẩn bị bề mặt đến nghiệm thu QC'],
+            ['href' => '/post/go-ngoai-troi-vi-sao-moi-lop-son-deu-bong-va-giai-phap-nam-o-dau', 'label' => 'Gỗ ngoài trời: vì sao mọi lớp sơn đều bong, và giải pháp nằm ở đâu'],
+            ['href' => '/post/quy-trinh-thi-cong-chuan-tu-chuan-bi-be-mat-den-nghiem-thu-qc', 'label' => 'Quy trình thi công chuẩn: từ chuẩn bị bề mặt đến nghiệm thu QC'],
             ['href' => '/category/ngoai-that', 'label' => 'Xem sản phẩm — Ngoại thất'],
         ]);
 
+        $contentEn = <<<'HTML'
+<p><em>Editorial note: replace <code>[CLEAR LINE]</code>, <code>[TINTED LINE]</code>, <code>[PHONE NUMBER]</code> before publishing. The "Reference projects" section at the end lists projects from the source brand's reference material — only keep it if you are an authorized distributor with permission to use those project names; otherwise remove it and replace with your own.</em></p>
+
+<p>Outdoor wood covers very different use cases: a resort deck under constant foot traffic is a different problem from a 200-year-old temple column. This article is organised by category so you can find the right configuration for your project.</p>
+
+<h2>1. Outdoor decking</h2>
+<p><strong>Working conditions:</strong> direct sun all day, standing rainwater, constant foot traffic, chairs and luggage dragged across the surface, pool chemicals.</p>
+<p><strong>Main problem:</strong> mechanical abrasion combined with UV fading — decking is the fastest-failing element on any outdoor wood project.</p>
+<p><strong>Recommended configuration:</strong> [CLEAR LINE] if the wood grain is attractive and worth keeping; [TINTED LINE] when colour needs to be consistent across replacement boards. 4 wet coats, target DFT at the upper end of the range: 2.0–2.5 mil. Apply with a purpose-built applicator pad for large areas, or HVLP where a very flat finish is required.</p>
+<p><strong>Acceptance criteria:</strong> Taber abrasion loss 8.4–19.85 mg per ASTM D4060, minimum pencil hardness 4H.</p>
+<p><strong>Application note:</strong> keep off the surface for 48 hours; no heavy furniture or cart traffic for the first 7 days.</p>
+
+<h2>2. Facades and outdoor wood cladding</h2>
+<p><strong>Working conditions:</strong> large-area direct sun exposure, wind, wind-driven rain, constant day/night humidity swings.</p>
+<p><strong>Main problem:</strong> keeping colour uniform across a large surface without peeling — a single patch of fading ruins the look of an entire facade viewed from tens of metres away.</p>
+<p><strong>Recommended configuration:</strong> [CLEAR LINE] to preserve the natural material, or [TINTED LINE] when colour needs to match a design tone. Apply each full elevation in a single day from the same product batch to avoid batch-to-batch colour drift.</p>
+<p><strong>Deciding metric:</strong> ΔE = 0.63 after 4,000 hours of Xenon exposure (ASTM G155) and gloss retention above 99% after 1,500 hours of QUV.</p>
+<p><strong>Application note:</strong> check the dew point before spraying — east-facing elevations in early morning are prone to condensation, which causes adhesion defects.</p>
+
+<h2>3. Railings, staircases, outdoor pergolas</h2>
+<p><strong>Working conditions:</strong> constant hand contact, direct sun and rain, plus sea-salt exposure at coastal resorts.</p>
+<p><strong>Main problem:</strong> balancing weather durability with a pleasant hand-feel — this is the category with the most direct user contact.</p>
+<p><strong>Recommended configuration:</strong> [TINTED LINE] for restoring already-degraded colour; [CLEAR LINE] for new wood. Adjust gloss level to design intent — high gloss is easier to clean, matte feels more natural.</p>
+<p><strong>Deciding metric:</strong> 4,000–5,000 hours salt resistance (ASTM B117) for coastal projects.</p>
+
+<h2>4. Docks, marinas, saltwater-exposed elements</h2>
+<p><strong>Working conditions:</strong> the harshest in this group — constant sea salt, near-saturation humidity, UV reflected off the water surface adds to the total dose received.</p>
+<p><strong>Main problem:</strong> salt corrosion combined with constant moisture-driven decay.</p>
+<p><strong>Recommended configuration:</strong> DFT at the upper end of the recommended range. Prioritise vapour permeability — a sealed film fails within a single season in this environment.</p>
+<p><strong>Deciding metric:</strong> 4,000–5,000 hours salt spray with no blistering (ASTM B117 / SASO ISO 11997); 240 hours water immersion at 50 °C with no colour change (ISO 2812-2).</p>
+
+<h2>5. Temples, wooden churches, heritage religious architecture</h2>
+<p><strong>Working conditions:</strong> wood structures decades to centuries old, most of their natural resin already gone, often already faded or locally decayed.</p>
+<p><strong>Main problem:</strong> restoring without altering the material's character, avoiding toxic chemicals in spaces used regularly by people, and preserving the aged appearance.</p>
+<p><strong>Recommended configuration:</strong> [CLEAR LINE] is the default choice. Always test on a hidden area first. Sand only the minimum needed — the goal is an adhesion profile, not resurfacing.</p>
+<p>To make the case to heritage management: VOC 156 g/L, silicone-free, over 95% biodegradable, and a non-film-forming penetrating mechanism means the intervention is as reversible as this category of treatment gets, compared with surface coatings.</p>
+
+<h2>6. Conservation-grade wood relics and artifacts</h2>
+<p><strong>Working conditions:</strong> irreplaceable material value, every intervention must be carefully weighed.</p>
+<p><strong>Main problem:</strong> preserving material integrity — this is the category where mistakes cannot be undone.</p>
+<p><strong>Recommended configuration:</strong> [CLEAR LINE] only. The process must include before/after photo documentation and testing on an equivalent sample. Coordinate with a conservation specialist — this article does not replace professional heritage-conservation assessment.</p>
+
+<h2>7. Engineered and mixed-grade wood used outdoors</h2>
+<p><strong>Working conditions:</strong> base material with naturally low durability, faint grain, pale colour.</p>
+<p><strong>Main problem:</strong> upgrading appearance while extending service life — a margin problem for the installer.</p>
+<p><strong>Recommended configuration:</strong> [TINTED LINE]. Nano colour particles penetrate into the pores, making the grain stand out rather than covering it, giving low-grade wood an aged-hardwood look. Outdoor MDF and plywood need careful treatment of cut edges — the point of highest moisture uptake.</p>
+
+<h2>Quick reference table</h2>
+<table border="1" cellpadding="6" cellspacing="0">
+<thead><tr><th>Category</th><th>Recommended line</th><th>Deciding metric</th></tr></thead>
+<tbody>
+<tr><td>Decking</td><td>Clear or tinted</td><td>Taber abrasion, 4H hardness</td></tr>
+<tr><td>Facade</td><td>Clear or tinted</td><td>ΔE &lt; 1 after Xenon, QUV gloss retention</td></tr>
+<tr><td>Railings, pergola</td><td>Tinted (restoration) / clear (new wood)</td><td>Salt resistance, surface feel</td></tr>
+<tr><td>Docks</td><td>Prioritise vapour permeability</td><td>4,000–5,000 h salt spray, water immersion</td></tr>
+<tr><td>Temples</td><td>Clear</td><td>Low VOC, non-toxic, preserves aged look</td></tr>
+<tr><td>Heritage relics</td><td>Clear</td><td>Material integrity</td></tr>
+<tr><td>Engineered wood</td><td>Tinted</td><td>Aesthetic upgrade + cut-edge treatment</td></tr>
+</tbody>
+</table>
+
+<h2>Reference projects</h2>
+<p><strong>Editorial warning — read before publishing:</strong> the list below comes from the source brand's reference material in the wood-industry documentation, not your own projects. Only publish it if you are an authorized distributor with written permission to use these project names. Otherwise, remove this section entirely and replace it with your own projects.</p>
+<table border="1" cellpadding="6" cellspacing="0">
+<thead><tr><th>Project</th><th>Category</th><th>Work performed</th></tr></thead>
+<tbody>
+<tr><td>Amanoi, Ninh Thuan</td><td>Outdoor decking</td><td>Restoration and protection of decking faded by sun and sea wind</td></tr>
+<tr><td>Hoiana, Quang Nam</td><td>Outdoor decking</td><td>Surface protection for high-traffic wood areas</td></tr>
+<tr><td>InterContinental, Da Nang</td><td>Outdoor railings, staircases</td><td>Restoration using nano tinting technology, salt resistant</td></tr>
+<tr><td>Van Don International Airport</td><td>Outdoor wood seating</td><td>Surface treatment and protection</td></tr>
+<tr><td>Cam My wooden church, Dong Nai</td><td>~200-year-old wood structure</td><td>Restoration of a deteriorated structure</td></tr>
+<tr><td>Dinh–Le Kings Temple</td><td>Heritage wood structure</td><td>Conservation, material integrity</td></tr>
+<tr><td>Chien Dan Cham Towers</td><td>Heritage wood elements</td><td>Conservation</td></tr>
+<tr><td>Bo Thao Duoc Restaurant, Ha Giang</td><td>Mixed-grade wood interior</td><td>Nano tinting for an aged-hardwood look</td></tr>
+<tr><td>Projects in Belgium and Denmark</td><td>Wood facade</td><td>Colour retention and anti-peeling on elevations</td></tr>
+</tbody>
+</table>
+
+<h2>Next step</h2>
+<p>Send us your project details, wood species and current condition — we'll propose a specific configuration and send a sample so you can verify it on your own material.</p>
+<p><strong>Hotline: [PHONE NUMBER]</strong> · Full TDS/MSDS documentation provided for business customers.</p>
+HTML;
+
+        $contentEn .= $this->relatedLinksEn([
+            ['href' => '/post/outdoor-wood-coating-solution-uv-resistant', 'label' => 'Outdoor Wood: Why Every Paint Job Peels, and Where the Real Solution Is'],
+            ['href' => '/post/application-process-nano-coating-on-wood', 'label' => 'Standard Application Process: From Surface Prep to QC Sign-Off'],
+            ['href' => '/category/exterior', 'label' => 'View Products — Exterior'],
+        ]);
+
         return [
-            'slug' => 'giai-phap-nano-theo-hang-muc-go-ngoai-troi',
+            'slug' => 'giai-phap-nano-theo-tung-hang-muc-go-ngoai-troi',
             'title' => 'Giải pháp nano theo từng hạng mục gỗ ngoài trời',
             'excerpt' => 'Sàn deck, facade gỗ, lan can, cầu cảng, đình chùa, di tích — mỗi hạng mục gỗ ngoài trời có một bài toán riêng và cấu hình phủ nano tương ứng.',
             'meta_title' => 'Sơn sàn gỗ ngoài trời',
             'meta_description' => 'Sàn deck, facade gỗ, lan can, cầu cảng, đình chùa, di tích - mỗi hạng mục gỗ ngoài trời có một bài toán riêng. Giải pháp phủ nano tương ứng cho từng loại.',
             'content' => $content,
+            'slug_en' => 'nano-solutions-by-outdoor-wood-category',
+            'title_en' => 'Nano Solutions by Outdoor Wood Category',
+            'excerpt_en' => 'Decking, wood facades, railings, docks, temples, heritage relics — every outdoor wood category has its own problem and matching nano coating configuration.',
+            'meta_title_en' => 'Outdoor Wood Deck Coating',
+            'meta_description_en' => 'Decking, wood facades, railings, docks, temples, heritage relics - every outdoor wood category has its own problem. Matching nano coating solutions for each.',
+            'content_en' => $contentEn,
         ];
     }
 }
