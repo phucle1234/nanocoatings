@@ -354,6 +354,12 @@ class ProductService
 
         $query = Product::query()
             ->where('is_active', true)
+            // Bỏ sản phẩm chưa có slug ở locale hiện tại (không dựng được link product.detail)
+            ->whereHas('translations', function ($q) use ($locale) {
+                $q->where('language', $locale)
+                    ->whereNotNull('slug')
+                    ->where('slug', '!=', '');
+            })
             ->with([
                 'translations' => function ($q) use ($locale) {
                     $q->where('language', $locale);
