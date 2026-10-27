@@ -34,4 +34,14 @@ return [
         ['section_type' => 'media', 'title_vi' => 'Truyền thông / Tin tức', 'title_en' => 'Media / News', 'sort_order' => 9],
         ['section_type' => 'footer', 'title_vi' => 'Footer', 'title_en' => 'Footer', 'sort_order' => 10],
     ],
+
+    // Hàng số liệu nhảy số trong block application_slider_2, key = slug tiếng Anh của ngành
+    'stats' => [
+        'wood-materials' => [
+            ['value' => 500, 'suffix' => '+', 'label' => 'messages.stat_projects_completed'],
+            ['value' => 25, 'suffix' => '+', 'label' => 'messages.stat_experience'],
+            ['value' => 10, 'suffix' => '+', 'label' => 'messages.stat_application_fields'],
+            ['value' => 100, 'suffix' => '+', 'label' => 'messages.stat_global_partners'],
+        ],
+    ],
 ];

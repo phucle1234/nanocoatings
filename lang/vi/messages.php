@@ -145,6 +145,10 @@ return [
     'stat_dealers_label' => 'Đối tác ủy quyền',
     'stat_stores_label' => 'Showroom',
     'stat_customers_label' => 'Khách hàng',
+    'stat_projects_completed' => 'Dự án hoàn thành',
+    'stat_experience' => 'Kinh nghiệm',
+    'stat_application_fields' => 'Lĩnh vực ứng dụng',
+    'stat_global_partners' => 'Đối tác toàn cầu',
     'select_address' => 'Chọn địa chỉ',
     // Product Category
     'featured_products' => 'Sản phẩm nổi bật',

@@ -145,6 +145,10 @@ return [
     'stat_dealers_label' => 'Authorized Partners',
     'stat_stores_label' => 'Showrooms',
     'stat_customers_label' => 'Customers',
+    'stat_projects_completed' => 'Projects completed',
+    'stat_experience' => 'Experience',
+    'stat_application_fields' => 'Application fields',
+    'stat_global_partners' => 'Global partners',
     'no_data' => 'No data',
     // Product Category
     'featured_products' => 'Featured Products',

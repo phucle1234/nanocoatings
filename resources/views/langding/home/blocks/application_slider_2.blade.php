@@ -2,6 +2,20 @@
         <div class="bg-slider no-slider"
             style="background: url('{{ $homeSliderBanners3['category_bg_image'] ?? '' }}') no-repeat center center;background-size: cover;">
         </div>
+        @if (!empty($sectorStats))
+            <div class="app-stats-row scroll-animate" data-animate="fadeInUp">
+                @foreach ($sectorStats as $stat)
+                    @if (!$loop->first)
+                        <div class="app-stat-divider"></div>
+                    @endif
+                    <div class="app-stat-item">
+                        <div class="app-stat-number" data-count-to="{{ $stat['value'] }}"
+                            data-count-suffix="{{ $stat['suffix'] ?? '' }}">{{ $stat['value'] }}{{ $stat['suffix'] ?? '' }}</div>
+                        <div class="app-stat-label">{{ __($stat['label']) }}</div>
+                    </div>
+                @endforeach
+            </div>
+        @endif
         <div class="box-slider-head scroll-animate animated" data-animate="fadeInUp">
             @if (!empty($isSectorPage))
                 @include('langding.components.block-banner-heading', [

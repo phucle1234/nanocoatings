@@ -154,6 +154,43 @@ window.dealerApp = {
       });
     }
 
+    // Đếm số nhảy (stat counters) khi cuộn tới
+    function animateStatNumber($el) {
+      const target = parseFloat($el.data("count-to"));
+      const suffix = $el.data("count-suffix") || "";
+      const duration = 1500;
+      const startTime = performance.now();
+
+      function step(now) {
+        const progress = Math.min((now - startTime) / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        $el.text(Math.round(target * eased) + suffix);
+        if (progress < 1) {
+          requestAnimationFrame(step);
+        }
+      }
+      requestAnimationFrame(step);
+    }
+
+    const $statNumbers = $(".app-stat-number[data-count-to]");
+    if ($statNumbers.length && "IntersectionObserver" in window) {
+      $statNumbers.each(function () {
+        $(this).text("0" + ($(this).data("count-suffix") || ""));
+      });
+
+      const statObserver = new IntersectionObserver(function (entries, observer) {
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting) return;
+          observer.unobserve(entry.target);
+          animateStatNumber($(entry.target));
+        });
+      }, { threshold: 0.5 });
+
+      $statNumbers.each(function () {
+        statObserver.observe(this);
+      });
+    }
+
     // Throttle scroll event
     let ticking = false;
     $(window).on("scroll", function () {

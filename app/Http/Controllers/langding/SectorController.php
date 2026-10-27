@@ -83,6 +83,9 @@ class SectorController extends Controller
 
         $newsCategories = $this->loadNewsCategories($sector, $currentLocale);
 
+        $sectorStatsKey = $sector->translations->firstWhere('language', 'en')?->slug;
+        $sectorStats = config('sector_layout.stats.'.$sectorStatsKey, []);
+        
         return view('langding.sectors.show', array_merge($bannerData, [
             'sector' => $sector,
             'sectorTranslation' => $translation,
@@ -93,6 +96,7 @@ class SectorController extends Controller
             'rootCategories' => $rootCategories,
             'allCategoryRows' => $allCategoryRows,
             'newsCategories' => $newsCategories,
+            'sectorStats' => $sectorStats,
         ]));
     }
 
