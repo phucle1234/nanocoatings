@@ -2532,14 +2532,14 @@ footer .footer-call {
     display: none;
 }
 
-.search-widget .search-form .list-btn-icon .btn:hover svg,
-.search-widget .search-form .list-btn-icon .btn:hover svg path {
-    fill: var(--primary-yellow);
+.search-widget .search-form .list-btn-icon .btn svg path {
+    fill: #23A367;
+    transition: fill 0.2s ease;
 }
 
-.search-widget .search-form .list-btn-icon .btn.active svg,
+.search-widget .search-form .list-btn-icon .btn:hover svg path,
 .search-widget .search-form .list-btn-icon .btn.active svg path {
-    fill: var(--primary-yellow);
+    fill: #FFFFFF;
 }
 
 .search-widget .search-form .box {
