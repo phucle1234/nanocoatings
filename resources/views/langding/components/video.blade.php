@@ -5,7 +5,13 @@
 <div id="box-video" class="box-video" style="background: url('{{ $videoBg }}') no-repeat center center;background-size: cover;">
     <div class="container-fluid">
         <div class="scroll-animate" data-animate="fadeInUp">
-            @if(isset($introductionBanners['category']) && $introductionBanners['category'])
+            @if (!empty($isSectorPage) && !empty($introductionBanners['category']))
+            @include('langding.components.block-banner-heading', [
+                'banner' => $introductionBanners,
+                'fallbackTitle' => __('messages.' . 'casu' . 'mina'),
+                'ctaUrl' => ($introductionBanners['category']->url ?? null) ?: route('about'),
+            ])
+            @elseif(isset($introductionBanners['category']) && $introductionBanners['category'])
             @if (empty($isSectorPage))
             <!-- <div class="title-with-line fw-500 fs-18 text-center text-light-red text-uppercase">
                 {!! $introductionBanners['category']->category_name ?? __('messages.introduction') !!}
