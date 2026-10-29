@@ -5,39 +5,19 @@
 <div id="box-video" class="box-video" style="background: url('{{ $videoBg }}') no-repeat center center;background-size: cover;">
     <div class="container-fluid">
         <div class="scroll-animate" data-animate="fadeInUp">
-            @if (!empty($isSectorPage) && !empty($introductionBanners['category']))
+            @if (!empty($introductionBanners['category']))
             @include('langding.components.block-banner-heading', [
                 'banner' => $introductionBanners,
                 'fallbackTitle' => __('messages.' . 'casu' . 'mina'),
-                'ctaUrl' => ($introductionBanners['category']->url ?? null) ?: route('about'),
+                // Đang ở trang /about thì không hiện nút "Chi tiết" trỏ về chính nó
+                'ctaUrl' => ($introductionBanners['category']->url ?? null) ?: (request()->routeIs('about') ? null : route('about')),
             ])
-            @elseif(isset($introductionBanners['category']) && $introductionBanners['category'])
-            @if (empty($isSectorPage))
-            <!-- <div class="title-with-line fw-500 fs-18 text-center text-light-red text-uppercase">
-                {!! $introductionBanners['category']->category_name ?? __('messages.introduction') !!}
-            </div> -->
-            @endif
-            <h2 class="font-hanzel fs-32 fw-400 text-center mt-2 mb-0 text-white">
-                {{ $introductionBanners['category']->meta_title ?? __('messages.' . 'casu' . 'mina') }}
-            </h2>
-            <div class="video-intro fw-400 fs-14 text-center mt-3 mx-auto text-white">
-                {!! $introductionBanners['category']->meta_description ?? __('messages.introduction_description') !!} 
-                <!-- <a href="{{ route('about') }}" class="text-white fw-500">({{ __('messages.detail') }})</a> -->
-                <a class="text-white fw-500" href="{{ ($introductionBanners['category']->url ?? null) ?: route('about') }}">
-                    <span>{{ __('messages.detail') }}</span>
-                    <svg width="11" height="12" viewBox="0 0 11 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M2.00109 1.37635L9.28725 0.738899M9.28725 0.738899L9.92471 8.02506M9.28725 0.738899L0.738909 10.9264"
-                            stroke="#ffffff" stroke-width="1.47765" stroke-linecap="round" stroke-linejoin="round" />
-                    </svg>
-                </a>
-            </div>
-
             @else
-            <div class="title-with-line fw-500 fs-18 text-center text-light-red">{{ __('messages.introduction') }}</div>
-            <h2 class="font-hanzel fs-32 fw-400 text-center mt-2 mb-0 text-white">{{ __('messages.' . 'casu' . 'mina') }}</h2>
-            <div class="video-intro fw-400 fs-14 text-center mt-3 mx-auto text-white line-3">
-                {{ __('messages.introduction_description') }}
-            </div>
+            @include('langding.components.block-banner-heading', [
+                'banner' => [],
+                'fallbackTitle' => __('messages.' . 'casu' . 'mina'),
+                'fallbackDescription' => e(__('messages.introduction_description')),
+            ])
             @endif
         </div>
 

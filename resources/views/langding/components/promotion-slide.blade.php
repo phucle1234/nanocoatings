@@ -10,9 +10,11 @@
                     'uppercaseSubtitle' => true,
                 ])
             @else
-                <div class="title-with-line fw-500 fs-18 text-center text-light-red text-uppercase">
-                    {!! $promotionBanners['category']->category_name ?? __('messages.promotion_info') !!}
-                </div>
+                {{-- Ngoài trang ngành: meta_title/meta_description của danh mục này không dùng được, lấy tên danh mục làm tiêu đề --}}
+                @include('langding.components.block-banner-heading', [
+                    'banner' => [],
+                    'fallbackTitle' => strip_tags($promotionBanners['category']->category_name ?? __('messages.promotion_info')),
+                ])
             @endif
         </div>
 
