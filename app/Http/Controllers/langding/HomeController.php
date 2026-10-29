@@ -49,6 +49,7 @@ class HomeController extends Controller
 
         // Lấy sản phẩm bán chạy
         $bestsellerProducts = $this->productService->getBestsellerProducts(10, $currentLocale);
+        $latestProducts = $this->productService->getLatestProducts(20, $currentLocale);
 
         $categories = $this->categoryService->getFeaturedCategories($currentLocale);
 
@@ -131,6 +132,7 @@ class HomeController extends Controller
 
         return view('langding.home', compact(
             'bestsellerProducts',
+            'latestProducts',
             'categories',
             'rootCategories',
             'allCategoryRows',

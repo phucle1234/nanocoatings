@@ -164,6 +164,33 @@ class ProductService
             });
     }
 
+    public function getLatestProducts(int $limit = 20, ?string $locale = null): Collection
+    {
+        $locale = $locale ?? app()->getLocale();
+        $fallbackLocale = $this->resolveAlternateLocale($locale);
+
+        return Product::query()
+            ->where('is_active', true)
+            ->with([
+                'translations' => fn ($query) => $query->whereIn('language', [$locale, $fallbackLocale]),
+                'category.translations',
+                'primaryCategory.translations',
+            ])
+            ->orderByDesc('created_at')
+            ->orderByDesc('id')
+            ->limit($limit)
+            ->get()
+            ->map(function (Product $product) use ($locale) {
+                $category = $product->primaryCategory->first() ?? $product->category;
+                $translation = $category?->translations->firstWhere('language', $locale);
+
+                return array_merge($this->formatProduct($product, $locale), [
+                    'category_name' => $translation?->name,
+                    'category_slug' => $translation?->slug,
+                ]);
+            });
+    }
+
     /**
      * Lấy tất cả sản phẩm (có limit)
      * 

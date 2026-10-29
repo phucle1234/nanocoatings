@@ -68,6 +68,7 @@ class SectorController extends Controller
         $bannerData = $this->resolveSectorBannerData($sector);
 
         $bestsellerProducts = $this->productService->getBestsellerProducts(10, $currentLocale, $sector->id);
+        $latestProducts = $this->productService->getLatestProducts(20, $currentLocale);
         $categories = $this->categoryService->getFeaturedCategories($currentLocale, $sector->id);
         $rootCategories = $this->categoryService->getRootCategories($currentLocale, $sector->id);
 
@@ -92,6 +93,7 @@ class SectorController extends Controller
             'sectorBlocks' => $sectorBlocks,
             'isSectorPage' => true,
             'bestsellerProducts' => $bestsellerProducts,
+            'latestProducts' => $latestProducts,
             'categories' => $categories,
             'rootCategories' => $rootCategories,
             'allCategoryRows' => $allCategoryRows,
